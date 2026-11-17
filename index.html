@@ -4,23 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Honey Cream | Postres Fríos y Pastelería</title>
-    <!-- Tailwind CSS para diseño moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .bg-honey { background-color: #f3d584; }
-        .text-honey { color: #85581A; }
-        .border-honey { border-color: #f3d584; }
-    </style>
+    <!-- PapaParse para leer Google Sheets en CSV sin errores de comas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
-<body class="bg-amber-50 text-gray-800 font-sans pb-24">
+<body class="bg-amber-50 text-gray-800 font-sans pb-28">
 
     <!-- Header / Logotipo -->
-    <header class="bg-white shadow-md text-center py-6 px-4 sticky top-0 z-50">
+    <header class="bg-white shadow-md text-center py-5 px-4 sticky top-0 z-50">
         <div class="max-w-md mx-auto flex items-center justify-center space-x-3">
-            <div class="w-14 h-14 rounded-full overflow-hidden shadow-md border-2 border-amber-400">
-                <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=200&q=80" alt="Honey Cream Logo" class="w-full h-full object-cover">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md border-2 border-amber-400 bg-white flex-shrink-0">
+                <!-- Sube el logo a tu repo como logo.jpg o deja el respaldo automático -->
+                <img src="logo.jpg" onerror="this.src='https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=200&q=80'" alt="Honey Cream Logo" class="w-full h-full object-cover">
             </div>
             <div class="text-left">
                 <h1 class="text-2xl font-black text-amber-900 tracking-wide">HONEY CREAM</h1>
@@ -32,13 +28,13 @@
     <!-- Información y Zonas de Delivery -->
     <section class="max-w-md mx-auto px-4 mt-4">
         <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 text-sm">
-            <p class="flex items-center text-gray-600 mb-2">
-                <i class="fa-solid fa-location-dot text-amber-600 w-6"></i> 
+            <p class="flex items-start text-gray-600 mb-2">
+                <i class="fa-solid fa-location-dot text-amber-600 w-6 mt-1"></i> 
                 <span>Ciudadela, Zona 18, Edif. 4, Apto 3-6</span>
             </p>
-            <p class="flex items-center text-gray-600 mb-2">
-                <i class="fa-solid fa-motorcycle text-amber-600 w-6"></i> 
-                <span><strong>Delivery en:</strong> San Felipe, Corotico, Marín y Albarico</span>
+            <p class="flex items-start text-gray-600 mb-2">
+                <i class="fa-solid fa-motorcycle text-amber-600 w-6 mt-1"></i> 
+                <span><strong>Delivery en:</strong> Casco de San Felipe, Corotico, Marín y Albarico</span>
             </p>
             <p class="flex items-center text-gray-600">
                 <i class="fa-solid fa-clock text-amber-600 w-6"></i> 
@@ -48,18 +44,22 @@
     </section>
 
     <!-- Selector de Modalidad (Detal / Al Mayor) -->
-    <section class="max-w-md mx-auto px-4 mt-6">
+    <section class="max-w-md mx-auto px-4 mt-5">
         <div class="flex bg-amber-200/60 p-1 rounded-xl">
-            <button id="btnDetal" onclick="cambiarModo('detal')" class="flex-1 py-2 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition">Al Detal ($4.00)</button>
-            <button id="btnMayor" onclick="cambiarModo('mayor')" class="flex-1 py-2 font-bold rounded-lg text-sm text-amber-800 transition">Al Mayor ($2.50)</button>
+            <button id="btnDetal" onclick="cambiarModo('detal')" class="flex-1 py-2.5 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition">
+                Al Detal
+            </button>
+            <button id="btnMayor" onclick="cambiarModo('mayor')" class="flex-1 py-2.5 font-bold rounded-lg text-sm text-amber-800 transition">
+                Al Mayor
+            </button>
         </div>
     </section>
 
-    <!-- Catálogo de Productos (Dinámico) -->
+    <!-- Catálogo de Productos (Dinámico desde Google Sheets) -->
     <main class="max-w-md mx-auto px-4 mt-4 space-y-3" id="lista-productos">
         <div class="text-center py-8 text-amber-700">
             <i class="fa-solid fa-spinner fa-spin text-2xl"></i>
-            <p class="text-sm mt-2">Cargando el dulce menú...</p>
+            <p class="text-sm mt-2">Cargando menú actualizado...</p>
         </div>
     </main>
 
@@ -67,7 +67,7 @@
     <div id="barra-pedido" class="fixed bottom-0 left-0 right-0 bg-white border-t border-amber-200 shadow-lg p-4 z-50 hidden">
         <div class="max-w-md mx-auto flex items-center justify-between">
             <div>
-                <p class="text-xs text-gray-500">Total Estimado:</p>
+                <p class="text-xs text-gray-500">Total Estimado (<span id="etiqueta-modo">Detal</span>):</p>
                 <p id="total-precio" class="text-xl font-black text-amber-900">$0.00</p>
             </div>
             <button onclick="enviarWhatsApp()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-3 rounded-xl shadow-md flex items-center space-x-2 text-sm transition">
@@ -77,28 +77,66 @@
         </div>
     </div>
 
-    <!-- Script de Conexión con Google Sheets y Lógica de Compra -->
     <script>
-        // PEGA AQUÍ EL ENLACE PÚBLICO DE TU GOOGLE SHEET (formato CSV o publicado en la web)
-        // O usa un array de respaldo temporal mientras configuras tu hoja:
-        let productos = [
-            { producto: "Torta Tres Leches", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" },
-            { producto: "Triple Chocolate", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" },
-            { producto: "Pastel Imposible", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" },
-            { producto: "Choco Quesillo", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" },
-            { producto: "Torta Samba", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" }
-        ];
+        // Conexión directa a la hoja "Inventario Honey Cream"
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/11gpTcGFAPMcElmUwwHpCeKTWIDSCBjZZxbFTtOLIrzc/gviz/tq?tqx=out:csv&sheet=Hoja%201";
 
-        let modoActual = 'detal'; // 'detal' o 'mayor'
-        let carrito = {}; // { nombreProducto: cantidad }
+        let productos = [];
+        let modoActual = 'detal';
+        let carrito = {};
+
+        function cargarDatosDesdeSheets() {
+            Papa.parse(SHEET_CSV_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    productos = results.data.map(fila => {
+                        // Limpia espacios extra en los encabezados o valores
+                        const limpia = {};
+                        for (let clave in fila) {
+                            limpia[clave.trim().toLowerCase()] = fila[clave].trim();
+                        }
+                        return {
+                            producto: limpia.producto || '',
+                            precio_detal: parseFloat((limpia.precio_detal || '0').replace(',', '.')),
+                            precio_mayor: parseFloat((limpia.precio_mayor || '0').replace(',', '.')),
+                            disponible: (limpia.disponible || 'NO').toLowerCase()
+                        };
+                    }).filter(item => item.producto !== '');
+
+                    renderizarMenu();
+                },
+                error: function(err) {
+                    console.error("Error cargando Google Sheet:", err);
+                    document.getElementById('lista-productos').innerHTML = `
+                        <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-sm text-center">
+                            No se pudo cargar el menú. Verifica que la hoja de Google Sheets esté compartida como "Cualquier persona con el enlace".
+                        </div>`;
+                }
+            });
+        }
+
+        function normalizarSi(valor) {
+            return valor === 'si' || valor === 'sí' || valor === 'yes' || valor === 'true';
+        }
 
         function renderizarMenu() {
             const contenedor = document.getElementById('lista-productos');
             contenedor.innerHTML = '';
 
-            productos.forEach((item, index) => {
-                if (item.disponible.toUpperCase() !== 'SI') return;
+            const disponibles = productos.filter(item => normalizarSi(item.disponible));
 
+            if (disponibles.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="bg-white p-6 rounded-2xl text-center text-gray-500 text-sm shadow-sm">
+                        Por el momento no hay postres disponibles en el menú. ¡Vuelve pronto!
+                    </div>`;
+                actualizarTotal();
+                return;
+            }
+
+            disponibles.forEach((item, index) => {
                 let precio = modoActual === 'detal' ? item.precio_detal : item.precio_mayor;
                 let cantidad = carrito[item.producto] || 0;
 
@@ -109,9 +147,9 @@
                             <p class="text-amber-700 font-black text-sm">$${precio.toFixed(2)} <span class="text-xs font-normal text-gray-500">${modoActual === 'detal' ? 'c/u (Detal)' : 'c/u (Al Mayor)'}</span></p>
                         </div>
                         <div class="flex items-center space-x-3">
-                            <button onclick="cambiarCantidad('${item.producto}', -1)" class="w-8 h-8 rounded-full bg-amber-100 text-amber-900 font-bold flex items-center justify-center active:scale-95">-</button>
+                            <button onclick="cambiarCantidad('${item.producto.replace(/'/g, "\\'")}', -1)" class="w-8 h-8 rounded-full bg-amber-100 text-amber-900 font-bold flex items-center justify-center active:scale-95">-</button>
                             <span id="cant-${index}" class="font-bold w-4 text-center">${cantidad}</span>
-                            <button onclick="cambiarCantidad('${item.producto}', 1)" class="w-8 h-8 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center active:scale-95">+</button>
+                            <button onclick="cambiarCantidad('${item.producto.replace(/'/g, "\\'")}', 1)" class="w-8 h-8 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center active:scale-95">+</button>
                         </div>
                     </div>
                 `;
@@ -122,12 +160,13 @@
 
         function cambiarModo(modo) {
             modoActual = modo;
-            if(modo === 'detal') {
-                document.getElementById('btnDetal').className = "flex-1 py-2 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition";
-                document.getElementById('btnMayor').className = "flex-1 py-2 font-bold rounded-lg text-sm text-amber-800 transition";
+            document.getElementById('etiqueta-modo').innerText = modo === 'detal' ? 'Detal' : 'Al Mayor';
+            if (modo === 'detal') {
+                document.getElementById('btnDetal').className = "flex-1 py-2.5 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition";
+                document.getElementById('btnMayor').className = "flex-1 py-2.5 font-bold rounded-lg text-sm text-amber-800 transition";
             } else {
-                document.getElementById('btnMayor').className = "flex-1 py-2 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition";
-                document.getElementById('btnDetal').className = "flex-1 py-2 font-bold rounded-lg text-sm text-amber-800 transition";
+                document.getElementById('btnMayor').className = "flex-1 py-2.5 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition";
+                document.getElementById('btnDetal').className = "flex-1 py-2.5 font-bold rounded-lg text-sm text-amber-800 transition";
             }
             renderizarMenu();
         }
@@ -145,7 +184,7 @@
             let totalItems = 0;
 
             productos.forEach(item => {
-                if (carrito[item.producto]) {
+                if (carrito[item.producto] && normalizarSi(item.disponible)) {
                     let precio = modoActual === 'detal' ? item.precio_detal : item.precio_mayor;
                     total += precio * carrito[item.producto];
                     totalItems += carrito[item.producto];
@@ -163,12 +202,13 @@
         }
 
         function enviarWhatsApp() {
-            let telefono = "584245284850"; // Número de Honey Cream
-            let mensaje = `¡Hola! 👋, quiero hacer el siguiente pedido (${modoActual.toUpperCase()}):\n\n`;
+            let telefono = "584245284850";
+            let modoTexto = modoActual === 'detal' ? 'AL DETAL' : 'AL MAYOR';
+            let mensaje = `¡Hola! 👋 Quiero hacer el siguiente pedido en *Honey Cream* (${modoTexto}):\n\n`;
             let total = 0;
 
             productos.forEach(item => {
-                if (carrito[item.producto]) {
+                if (carrito[item.producto] && normalizarSi(item.disponible)) {
                     let cant = carrito[item.producto];
                     let precio = modoActual === 'detal' ? item.precio_detal : item.precio_mayor;
                     let subtotal = precio * cant;
@@ -177,14 +217,13 @@
                 }
             });
 
-            mensaje += `\n*Total a pagar: $${total.toFixed(2)}*\n\nPor favor confirmar disponibilidad y método de pago. ¡Gracias!`;
+            mensaje += `\n*Total estimado: $${total.toFixed(2)}*\n\nPor favor confirmar disponibilidad y método de pago. ¡Gracias!`;
 
             let url = `https://api.whatsapp.com/send?phone=${telefono}&text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');
         }
 
-        // Carga inicial
-        renderizarMenu();
+        cargarDatosDesdeSheets();
     </script>
 </body>
 </html>

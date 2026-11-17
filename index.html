@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honey Cream | Postres Fríos y Pastelería</title>
+    <!-- Tailwind CSS para diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .bg-honey { background-color: #f3d584; }
+        .text-honey { color: #85581A; }
+        .border-honey { border-color: #f3d584; }
+    </style>
+</head>
+<body class="bg-amber-50 text-gray-800 font-sans pb-24">
+
+    <!-- Header / Logotipo -->
+    <header class="bg-white shadow-md text-center py-6 px-4 sticky top-0 z-50">
+        <div class="max-w-md mx-auto flex items-center justify-center space-x-3">
+            <div class="w-14 h-14 rounded-full overflow-hidden shadow-md border-2 border-amber-400">
+                <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=200&q=80" alt="Honey Cream Logo" class="w-full h-full object-cover">
+            </div>
+            <div class="text-left">
+                <h1 class="text-2xl font-black text-amber-900 tracking-wide">HONEY CREAM</h1>
+                <p class="text-xs text-amber-700 italic">"Como la miel pero más rico..."</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Información y Zonas de Delivery -->
+    <section class="max-w-md mx-auto px-4 mt-4">
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 text-sm">
+            <p class="flex items-center text-gray-600 mb-2">
+                <i class="fa-solid fa-location-dot text-amber-600 w-6"></i> 
+                <span>Ciudadela, Zona 18, Edif. 4, Apto 3-6</span>
+            </p>
+            <p class="flex items-center text-gray-600 mb-2">
+                <i class="fa-solid fa-motorcycle text-amber-600 w-6"></i> 
+                <span><strong>Delivery en:</strong> San Felipe, Corotico, Marín y Albarico</span>
+            </p>
+            <p class="flex items-center text-gray-600">
+                <i class="fa-solid fa-clock text-amber-600 w-6"></i> 
+                <span>Lunes a Sábado: 8:00 a.m. - 5:00 p.m.</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Selector de Modalidad (Detal / Al Mayor) -->
+    <section class="max-w-md mx-auto px-4 mt-6">
+        <div class="flex bg-amber-200/60 p-1 rounded-xl">
+            <button id="btnDetal" onclick="cambiarModo('detal')" class="flex-1 py-2 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition">Al Detal ($4.00)</button>
+            <button id="btnMayor" onclick="cambiarModo('mayor')" class="flex-1 py-2 font-bold rounded-lg text-sm text-amber-800 transition">Al Mayor ($2.50)</button>
+        </div>
+    </section>
+
+    <!-- Catálogo de Productos (Dinámico) -->
+    <main class="max-w-md mx-auto px-4 mt-4 space-y-3" id="lista-productos">
+        <div class="text-center py-8 text-amber-700">
+            <i class="fa-solid fa-spinner fa-spin text-2xl"></i>
+            <p class="text-sm mt-2">Cargando el dulce menú...</p>
+        </div>
+    </main>
+
+    <!-- Barra Inferior Flotante para Enviar Pedido por WhatsApp -->
+    <div id="barra-pedido" class="fixed bottom-0 left-0 right-0 bg-white border-t border-amber-200 shadow-lg p-4 z-50 hidden">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div>
+                <p class="text-xs text-gray-500">Total Estimado:</p>
+                <p id="total-precio" class="text-xl font-black text-amber-900">$0.00</p>
+            </div>
+            <button onclick="enviarWhatsApp()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-3 rounded-xl shadow-md flex items-center space-x-2 text-sm transition">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Pedir por WhatsApp</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Script de Conexión con Google Sheets y Lógica de Compra -->
+    <script>
+        // PEGA AQUÍ EL ENLACE PÚBLICO DE TU GOOGLE SHEET (formato CSV o publicado en la web)
+        // O usa un array de respaldo temporal mientras configuras tu hoja:
+        let productos = [
+            { producto: "Torta Tres Leches", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" },
+            { producto: "Triple Chocolate", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" },
+            { producto: "Pastel Imposible", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" },
+            { producto: "Choco Quesillo", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" },
+            { producto: "Torta Samba", precio_detal: 4, precio_mayor: 2.5, disponible: "SI" }
+        ];
+
+        let modoActual = 'detal'; // 'detal' o 'mayor'
+        let carrito = {}; // { nombreProducto: cantidad }
+
+        function renderizarMenu() {
+            const contenedor = document.getElementById('lista-productos');
+            contenedor.innerHTML = '';
+
+            productos.forEach((item, index) => {
+                if (item.disponible.toUpperCase() !== 'SI') return;
+
+                let precio = modoActual === 'detal' ? item.precio_detal : item.precio_mayor;
+                let cantidad = carrito[item.producto] || 0;
+
+                let html = `
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-base">${item.producto}</h3>
+                            <p class="text-amber-700 font-black text-sm">$${precio.toFixed(2)} <span class="text-xs font-normal text-gray-500">${modoActual === 'detal' ? 'c/u (Detal)' : 'c/u (Al Mayor)'}</span></p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="cambiarCantidad('${item.producto}', -1)" class="w-8 h-8 rounded-full bg-amber-100 text-amber-900 font-bold flex items-center justify-center active:scale-95">-</button>
+                            <span id="cant-${index}" class="font-bold w-4 text-center">${cantidad}</span>
+                            <button onclick="cambiarCantidad('${item.producto}', 1)" class="w-8 h-8 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center active:scale-95">+</button>
+                        </div>
+                    </div>
+                `;
+                contenedor.innerHTML += html;
+            });
+            actualizarTotal();
+        }
+
+        function cambiarModo(modo) {
+            modoActual = modo;
+            if(modo === 'detal') {
+                document.getElementById('btnDetal').className = "flex-1 py-2 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition";
+                document.getElementById('btnMayor').className = "flex-1 py-2 font-bold rounded-lg text-sm text-amber-800 transition";
+            } else {
+                document.getElementById('btnMayor').className = "flex-1 py-2 font-bold rounded-lg text-sm bg-white text-amber-900 shadow-sm transition";
+                document.getElementById('btnDetal').className = "flex-1 py-2 font-bold rounded-lg text-sm text-amber-800 transition";
+            }
+            renderizarMenu();
+        }
+
+        function cambiarCantidad(nombre, cambio) {
+            if (!carrito[nombre]) carrito[nombre] = 0;
+            carrito[nombre] += cambio;
+            if (carrito[nombre] < 0) carrito[nombre] = 0;
+            if (carrito[nombre] === 0) delete carrito[nombre];
+            renderizarMenu();
+        }
+
+        function actualizarTotal() {
+            let total = 0;
+            let totalItems = 0;
+
+            productos.forEach(item => {
+                if (carrito[item.producto]) {
+                    let precio = modoActual === 'detal' ? item.precio_detal : item.precio_mayor;
+                    total += precio * carrito[item.producto];
+                    totalItems += carrito[item.producto];
+                }
+            });
+
+            document.getElementById('total-precio').innerText = `$${total.toFixed(2)}`;
+            
+            const barra = document.getElementById('barra-pedido');
+            if (totalItems > 0) {
+                barra.classList.remove('hidden');
+            } else {
+                barra.classList.add('hidden');
+            }
+        }
+
+        function enviarWhatsApp() {
+            let telefono = "584245284850"; // Número de Honey Cream
+            let mensaje = `¡Hola! 👋, quiero hacer el siguiente pedido (${modoActual.toUpperCase()}):\n\n`;
+            let total = 0;
+
+            productos.forEach(item => {
+                if (carrito[item.producto]) {
+                    let cant = carrito[item.producto];
+                    let precio = modoActual === 'detal' ? item.precio_detal : item.precio_mayor;
+                    let subtotal = precio * cant;
+                    total += subtotal;
+                    mensaje += `• ${cant}x ${item.producto} ($${subtotal.toFixed(2)})\n`;
+                }
+            });
+
+            mensaje += `\n*Total a pagar: $${total.toFixed(2)}*\n\nPor favor confirmar disponibilidad y método de pago. ¡Gracias!`;
+
+            let url = `https://api.whatsapp.com/send?phone=${telefono}&text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        // Carga inicial
+        renderizarMenu();
+    </script>
+</body>
+</html>

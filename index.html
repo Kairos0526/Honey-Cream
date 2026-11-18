@@ -78,7 +78,6 @@ h1,h2,h3,p{margin:0}
 .pestana[aria-selected="true"] .dibujo{color:inherit}
 .pestana img{border-radius:50%;object-fit:cover}
 
-/* Selector Detal / Mayor */
 .selector-modo{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(12,13,18,.8);padding:6px;border-radius:999px;border:1.5px solid var(--linea);margin-bottom:6px}
 .modo-btn{min-height:42px;border-radius:999px;border:0;background:transparent;font-weight:700;cursor:pointer;color:var(--tenue)}
 .modo-btn[aria-selected="true"]{background:var(--luz);color:var(--sobre-luz)}
@@ -108,16 +107,9 @@ h1,h2,h3,p{margin:0}
 .otros-pagos .fila:last-child{border-bottom:0;padding-bottom:0}
 .nota{font-size:.9375rem;color:var(--tenue)}
 
-.novedad{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:13px 0;border-bottom:1px solid var(--linea)}
-.novedad:first-child{padding-top:0}
-.novedad:last-child{border-bottom:0;padding-bottom:0}
-.novedad time{grid-column:2;font-size:.875rem;color:var(--tenue)}
-.novedad h3{grid-column:2;font-size:1.125rem;font-weight:700}
-.novedad p{grid-column:2;font-size:.9375rem;color:var(--tenue)}
 .bloque-opiniones{display:flex;flex-direction:column;gap:10px}
 .opinion{margin:0;padding:14px 16px;border-radius:18px;border:1px solid var(--linea)}
 .opinion cite{display:block;margin-top:6px;font-style:normal;font-size:.875rem;color:var(--tenue)}
-.opinion.plantilla{border-style:dashed;color:var(--tenue)}
 .boton-secundario{display:flex;align-items:center;justify-content:center;min-height:50px;padding:0 20px;border-radius:999px;border:1.5px solid var(--linea);font-weight:700;text-decoration:none}
 #filas-contacto .fila:first-child{padding-top:0}
 .mapa{position:relative;height:170px;border-radius:18px;border:1px solid var(--linea);overflow:hidden;background:rgba(5,5,7,.7)}
@@ -127,22 +119,14 @@ h1,h2,h3,p{margin:0}
 .mapa .punto{fill:var(--luz)}
 .mapa .onda{fill:none;stroke:var(--luz);stroke-width:1.5;transform-box:fill-box;transform-origin:center}
 .mapa text{fill:var(--tinta);font:700 14px var(--font-body)}
-.plegable{border-top:1px solid var(--linea)}
-.plegable summary{display:flex;align-items:center;justify-content:space-between;min-height:48px;font-weight:700;color:var(--tinta);cursor:pointer;list-style:none}
-.plegable summary::-webkit-details-marker{display:none}
-.plegable summary::after{content:"+";font-size:1.3rem;font-weight:400;color:var(--tenue)}
-.plegable[open] summary::after{content:"\2212"}
-.plegable ul{margin:0 0 12px;padding-left:1.1rem;display:flex;flex-direction:column;gap:6px;font-size:.9375rem}
 
 .item{display:grid;grid-template-columns:auto 1fr auto;gap:1px 10px;align-items:center;padding:13px 0;border-bottom:1px solid var(--linea);transform-origin:50% 0}
 .item:last-child{border-bottom:0}
 .item .nombre-item{grid-column:2;font-weight:700;font-size:1.125rem}
 .item .detalle{grid-column:2;font-size:.9375rem;color:var(--tenue)}
 .item .precio{grid-column:2;font-weight:600;font-variant-numeric:tabular-nums}
-.item .precio .bs{font-weight:400;color:var(--tenue)}
 .cantidad{grid-column:3;grid-row:1 / span 3;display:inline-flex;align-items:center;gap:6px}
 .miniatura{grid-column:1;grid-row:1 / span 3;width:56px;height:56px;padding:0;border-radius:16px;border:1px solid var(--linea);display:grid;place-items:center;overflow:hidden;background:color-mix(in srgb, var(--tinte) 13%, transparent);color:var(--tinte)}
-button.miniatura{cursor:pointer}
 .miniatura .dibujo{width:32px;height:32px;filter:drop-shadow(0 0 6px color-mix(in srgb, var(--tinte) 55%, transparent))}
 .miniatura img{display:block;width:100%;height:100%;object-fit:cover}
 .cantidad button{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--linea);background:transparent;font-size:1.35rem;line-height:1;cursor:pointer}
@@ -157,7 +141,6 @@ button.miniatura{cursor:pointer}
 .linea-pedido:first-child{padding-top:0}
 .datos-linea{display:flex;flex-direction:column;min-width:0}
 .nombre-linea{font-weight:700;font-size:1.0625rem}
-.nota-linea{font-size:.9375rem;color:var(--tenue)}
 .precio-linea{font-weight:600;font-variant-numeric:tabular-nums}
 .total-pedido{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:-6px}
 .total-pedido strong{font-size:1.5rem;font-variant-numeric:tabular-nums}
@@ -175,7 +158,7 @@ button.miniatura{cursor:pointer}
 .horario{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;font-variant-numeric:tabular-nums;color:var(--tenue)}
 .horario .hoy{color:var(--tinta);font-weight:700}
 .pie{display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid var(--linea);font-size:1rem;color:var(--tenue)}
-.pie a{color:var(--tinta);font-weight:600}
+.pie p{margin:0}
 
 .pedido{position:fixed;left:50%;bottom:12px;z-index:5;transform:translateX(-50%);width:min(calc(100% - 24px), 28.5rem);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 8px 8px 20px;border-radius:999px;background:rgba(20,22,30,.94);border:1px solid var(--linea)}
 .pedido .resumen{font-size:.9375rem;line-height:1.2;color:var(--tenue)}
@@ -261,7 +244,6 @@ button.miniatura{cursor:pointer}
     <section class="catalogo" id="catalogo" aria-labelledby="titulo-menu">
       <div class="pestanas" id="pestanas" role="tablist" aria-label="Catálogos del menú"></div>
       
-      <!-- Selector Al Detal / Al Mayor -->
       <div class="selector-modo" role="tablist" aria-label="Tipo de compra">
         <button type="button" class="modo-btn" id="btn-detal" aria-selected="true">Al Detal</button>
         <button type="button" class="modo-btn" id="btn-mayor" aria-selected="false">Al Mayor</button>
@@ -285,11 +267,6 @@ button.miniatura{cursor:pointer}
       <div class="otros-pagos" id="otros-pagos"></div>
     </section>
 
-    <section class="panel" id="novedades-panel" aria-labelledby="titulo-novedades">
-      <h2 id="titulo-novedades">Novedades</h2>
-      <div id="novedades"></div>
-    </section>
-
     <section class="panel" aria-labelledby="titulo-opiniones">
       <h2 id="titulo-opiniones">Opiniones</h2>
       <div class="bloque-opiniones" id="opiniones"></div>
@@ -304,12 +281,11 @@ button.miniatura{cursor:pointer}
     </section>
 
     <section class="panel" aria-labelledby="titulo-horario">
-      <h2 id="titulo-horario">Horario</h2>
+      <h2 id="titulo-horario">Horario y Delivery</h2>
       <div class="horario" id="horario"></div>
-      <footer class="pie">
+      <p class="nota" style="margin-top:12px;">🚚 **Delivery disponible hacia:** Casco de San Felipe, Corotico, Marín y Albarico.</p>
+      <footer class="pie" style="margin-top:14px;">
         <p id="direccion"></p>
-        <details class="plegable"><summary>Política de privacidad</summary><ul id="privacidad"></ul></details>
-        <details class="plegable"><summary>Accesibilidad</summary><ul id="accesibilidad"></ul></details>
       </footer>
     </section>
   </main>
@@ -319,6 +295,8 @@ button.miniatura{cursor:pointer}
   <p class="resumen" id="resumen" aria-live="polite"></p>
   <button type="button" id="abrir-pedido" aria-haspopup="dialog">Ver mi pedido</button>
 </div>
+
+<!-- Botón y panel de ayuda arreglados -->
 <button type="button" class="chat-boton" id="chat-boton" aria-expanded="false" aria-controls="chat">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
   Ayuda
@@ -339,6 +317,7 @@ button.miniatura{cursor:pointer}
     <button type="submit">Enviar</button>
   </form>
 </section>
+
 <div class="hoja-pedido" id="hoja-pedido" hidden>
   <section class="pedido-panel" id="pedido-panel" role="dialog" aria-modal="true" aria-labelledby="pedido-titulo">
     <header class="pedido-cabecera">
@@ -359,13 +338,11 @@ button.miniatura{cursor:pointer}
       <div class="dos-columnas">
         <div class="campo">
           <label for="f-nombre">Nombre</label>
-          <input id="f-nombre" type="text" autocomplete="given-name" autocapitalize="words" required aria-describedby="e-nombre">
-          <p class="error" id="e-nombre" hidden></p>
+          <input id="f-nombre" type="text" autocomplete="given-name" autocapitalize="words" required>
         </div>
         <div class="campo">
           <label for="f-apellido">Apellido</label>
-          <input id="f-apellido" type="text" autocomplete="family-name" autocapitalize="words" required aria-describedby="e-apellido">
-          <p class="error" id="e-apellido" hidden></p>
+          <input id="f-apellido" type="text" autocomplete="family-name" autocapitalize="words" required>
         </div>
       </div>
       <div class="campo">
@@ -375,37 +352,30 @@ button.miniatura{cursor:pointer}
             <option value="V">V</option>
             <option value="E">E</option>
           </select>
-          <input id="f-cedula" type="text" inputmode="numeric" autocomplete="off" required aria-describedby="e-cedula">
+          <input id="f-cedula" type="text" inputmode="numeric" autocomplete="off" required value="20890298">
         </div>
-        <p class="error" id="e-cedula" hidden></p>
       </div>
       <div class="campo">
         <label for="f-telefono">Teléfono</label>
-        <input id="f-telefono" type="tel" inputmode="tel" autocomplete="tel" required aria-describedby="e-telefono">
-        <p class="error" id="e-telefono" hidden></p>
+        <input id="f-telefono" type="tel" inputmode="tel" autocomplete="tel" required>
       </div>
       <div class="campo">
         <label for="f-referencia">Referencia del pago móvil</label>
-        <input id="f-referencia" type="text" inputmode="numeric" autocomplete="off" required aria-describedby="ayuda-referencia e-referencia">
-        <p class="nota" id="ayuda-referencia">Número de confirmación o referencia bancaria.</p>
-        <p class="error" id="e-referencia" hidden></p>
+        <input id="f-referencia" type="text" inputmode="numeric" autocomplete="off" required>
       </div>
     </form>
 
     <div class="paso">
       <h3 class="subtitulo">3. Envía tu pedido</h3>
       <a class="copiar-todo enlace-pago" id="enviar-pedido" href="#" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
-      <p class="nota" id="estado-envio" role="status"></p>
     </div>
   </section>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<input type="file" id="selector-foto" accept="image/*" aria-label="Elegir una foto" hidden>
 
 <script>
 /* ============================================================
-   BLOQUE DE CONFIGURACIÓN DEL NEGOCIO (HONEY CREAM)
-   Edita o conecta aquí fácilmente todos tus datos.
+   CONFIGURACIÓN HONEY CREAM (DATOS DE MAMÁ)
    ============================================================ */
 const NEGOCIO = {
   nombre: "Honey Cream",
@@ -416,12 +386,12 @@ const NEGOCIO = {
   coloresDelMar: ["#e3b04b", "#ffe5a3", "#9e7019"],
   whatsapp: "584245284850",
   telefono: "+58 424-5284850",
-  correo: "joseabdel@gmail.com",
+  correo: "yoseabdel@gmail.com",
+  cedulaMama: "20.890.298",
   redes: [],
   mapaIncrustado: null,
   direccion: "Ciudadela, Zona 18, Edif. 4, Apto 3-6, San Felipe, Yaracuy",
   resenaUrl: "https://maps.google.com",
-  tasaBsPorDolar: null,
   horario: {
     1: ["08:00", "17:00"],
     2: ["08:00", "17:00"],
@@ -429,14 +399,12 @@ const NEGOCIO = {
     4: ["08:00", "17:00"],
     5: ["08:00", "17:00"],
     6: ["08:00", "17:00"],
-    0: null // Domingo cerrado
+    0: null
   },
   pagoMovil: [
     { etiqueta: "Banco de Venezuela", valor: "0424-5284850 - C.I: 32.500.123", copia: "04245284850" },
     { etiqueta: "Bizum",             valor: "Escribe al WhatsApp para verificar", copia: "584245284850" }
   ],
-  otrosPagos: [],
-  modoDemo: true,
   catalogos: [
     { 
       nombre: "Tortas", 
@@ -453,32 +421,24 @@ const NEGOCIO = {
       ]
     }
   ],
-  novedades: [
-    { fecha: "2026-11-18", titulo: "¡Nuevas tortas de temporada!", dibujo: "torta", texto: "Disfruta de nuestros sabores especiales para celebraciones y pedidos al mayor." }
-  ],
   opiniones: [],
   ayuda: {
     saludo: "Hola. Soy el asistente automático de Honey Cream. ¿En qué puedo ayudarte?",
     preguntas: [
       { pregunta: "¿Cuál es el horario?", tipo: "horario", claves: ["horario", "hora", "abren", "abierto", "cierran"] },
       { pregunta: "¿Dónde están ubicados?", tipo: "direccion", claves: ["donde", "direccion", "ubicacion", "llegar"] },
-      { pregunta: "¿Cómo puedo pagar?", claves: ["pago", "pagar", "movil", "bizum"], respuesta: "Aceptamos Pago Móvil y Bizum. Revisa los datos en la sección Paga aquí." },
-      { pregunta: "¿Tienen delivery?", claves: ["delivery", "domicilio", "envio"], respuesta: "Sí, cubrimos Casco de San Felipe, Corotico, Marín y Albarico." }
+      { pregunta: "¿Hacen delivery?", claves: ["delivery", "domicilio", "envio", "lugares"], respuesta: "Sí, hacemos delivery hacia Casco de San Felipe, Corotico, Marín y Albarico." }
     ]
-  },
-  creador: { marca: "Honey Cream Web", whatsapp: "584245284850" }
+  }
 };
 
-/* ============================================================
-   MOTOR DE LA APLICACIÓN (Basado en el diseño de Giro)
-   ============================================================ */
 const DIAS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-const FIGURAS = { vapor: 0, plato: 1, luna: 2, dona: 3, ola: 4 };
 const formato = new Intl.NumberFormat("es-VE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const dolares = n => "$" + formato.format(n);
-const bolivares = n => "Bs " + formato.format(n);
 const porId = id => document.getElementById(id);
-let escena = null, catalogoActivo = 0, tipoPrecio = "detal"; // 'detal' o 'mayor'
+let catalogoActivo = 0, tipoPrecio = "detal";
+const lineas = [], filasVisibles = [];
+const precioReal = item => tipoPrecio === "mayor" ? item.precioMayor : item.precioDetal;
 
 function crear(etiqueta, props, ...hijos) {
   const nodo = document.createElement(etiqueta);
@@ -495,25 +455,24 @@ function enlaceWhatsApp(numero, mensaje) {
   return "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensaje);
 }
 
-function aMinutos(hhmm) { const [h, m] = hhmm.split(":").map(Number); return h * 60 + m; }
 function hora12(hhmm) {
   let [h, m] = hhmm.split(":").map(Number);
   const sufijo = h >= 12 ? "pm" : "am";
   h = h % 12 || 12;
   return h + ":" + String(m).padStart(2, "0") + " " + sufijo;
 }
+
 function estadoAhora(horario, fecha) {
   const dia = fecha.getDay();
   const ahora = fecha.getHours() * 60 + fecha.getMinutes();
   const hoy = horario[dia];
   if (!hoy) return { abierto: false, texto: "Cerrado hoy" };
-  if (ahora >= aMinutos(hoy[0]) && ahora < aMinutos(hoy[1])) {
+  const [h1, m1] = hoy[0].split(":").map(Number);
+  const [h2, m2] = hoy[1].split(":").map(Number);
+  if (ahora >= h1 * 60 + m1 && ahora < h2 * 60 + m2) {
     return { abierto: true, texto: "Abierto hasta las " + hora12(hoy[1]) };
   }
-  if (ahora < aMinutos(hoy[0])) {
-    return { abierto: false, texto: "Cerrado, abre hoy a las " + hora12(hoy[0]) };
-  }
-  return { abierto: false, texto: "Cerrado por hoy" };
+  return { abierto: false, texto: "Cerrado en este momento" };
 }
 
 let relojToast;
@@ -525,13 +484,9 @@ function avisar(mensaje) {
   relojToast = setTimeout(() => toast.classList.remove("visible"), 2200);
 }
 async function copiar(texto, aviso) {
-  try {
-    await navigator.clipboard.writeText(texto);
-    avisar(aviso);
-  } catch (error) {
-    avisar("No se pudo copiar automáticamente.");
-  }
+  try { await navigator.clipboard.writeText(texto); avisar(aviso); } catch (e) { avisar("No se pudo copiar."); }
 }
+
 function filaDeDato(dato) {
   const boton = crear("button", { type: "button", class: "copiar", text: "Copiar" });
   boton.addEventListener("click", () => copiar(dato.copia, dato.etiqueta + " copiado"));
@@ -556,85 +511,62 @@ function dibujo(nombre) {
   return svg;
 }
 
-let fotosGuardadas = {};
-try { fotosGuardadas = JSON.parse(localStorage.getItem("honey-fotos") || "{}") || {}; } catch (e) { fotosGuardadas = {}; }
-function imagenDe(cosa) {
-  const fuente = fotosGuardadas[cosa.nombre] || cosa.foto;
-  if (!fuente) return dibujo(cosa.dibujo);
-  const img = crear("img", { src: fuente, alt: "", loading: "lazy" });
-  img.addEventListener("error", () => img.replaceWith(dibujo(cosa.dibujo)));
-  return img;
-}
 function miniatura(item) {
   const caja = crear("span", { class: "miniatura" });
-  caja.append(imagenDe(item));
+  const fuente = item.foto;
+  if (!fuente) { caja.append(dibujo(item.dibujo)); }
+  else {
+    const img = crear("img", { src: fuente, alt: "" });
+    img.addEventListener("error", () => img.replaceWith(dibujo(item.dibujo)));
+    caja.append(img);
+  }
   return caja;
 }
 
-/* Control de Pedido y Precios Detal / Mayor */
-const lineas = [];
-const filasVisibles = [];
-const precioReal = item => tipoPrecio === "mayor" ? item.precioMayor : item.precioDetal;
-
-const cantidadDe = item => lineas.reduce((suma, l) => suma + (l.item === item ? l.cantidad : 0), 0);
-const unidadesDelPedido = () => lineas.reduce((suma, l) => suma + l.cantidad, 0);
-const totalDelPedido = () => lineas.reduce((suma, l) => suma + precioReal(l.item) * l.cantidad, 0);
+const unidadesDelPedido = () => lineas.reduce((s, l) => s + l.cantidad, 0);
+const totalDelPedido = () => lineas.reduce((s, l) => s + precioReal(l.item) * l.cantidad, 0);
 
 function agregarUnidad(item) {
-  const linea = lineas.find(l => l.item === item);
-  if (linea) linea.cantidad += 1;
-  else lineas.push({ item, cantidad: 1 });
+  const lin = lineas.find(l => l.item === item);
+  if (lin) lin.cantidad += 1; else lineas.push({ item, cantidad: 1 });
   actualizarPedido();
 }
 function quitarUnidad(item) {
-  const linea = lineas.find(l => l.item === item);
-  if (linea) {
-    linea.cantidad -= 1;
-    if (linea.cantidad <= 0) lineas.splice(lineas.indexOf(linea), 1);
-  }
+  const lin = lineas.find(l => l.item === item);
+  if (lin) { lin.cantidad -= 1; if (lin.cantidad <= 0) lineas.splice(lineas.indexOf(lin), 1); }
   actualizarPedido();
 }
 
 function actualizarPedido() {
   const unidades = unidadesDelPedido(), total = totalDelPedido();
-  const resumen = porId("resumen");
-  resumen.textContent = "";
+  porId("resumen").textContent = "";
   porId("pedido").hidden = !unidades;
   document.body.classList.toggle("con-pedido", unidades > 0);
   filasVisibles.forEach(f => f.mostrar());
-  if (unidades) {
-    resumen.append(crear("strong", { text: dolares(total) }), unidades + (unidades === 1 ? " producto" : " productos"));
-  }
-  if (!porId("hoja-pedido").hidden) {
-    if (unidades) { pintarLineas(); actualizarEnlaceDeEnvio(); }
-    else cerrarHoja();
-  }
+  if (unidades) { porId("resumen").append(crear("strong", { text: dolares(total) }), unidades + (unidades === 1 ? " producto" : " productos")); }
+  if (!porId("hoja-pedido").hidden) { if (unidades) { pintarLineas(); actualizarEnlaceDeEnvio(); } else cerrarHoja(); }
 }
 
 function pintarLineas() {
   const caja = porId("lineas-pedido");
   caja.textContent = "";
-  lineas.forEach((linea, n) => {
+  lineas.forEach(l => {
     const menos = crear("button", { type: "button", text: "−" });
     const mas = crear("button", { type: "button", class: "mas", text: "+" });
-    menos.addEventListener("click", () => { quitarUnidad(linea.item); pintarLineas(); });
-    mas.addEventListener("click", () => { agregarUnidad(linea.item); pintarLineas(); });
+    menos.addEventListener("click", () => { quitarUnidad(l.item); pintarLineas(); });
+    mas.addEventListener("click", () => { agregarUnidad(l.item); pintarLineas(); });
     caja.append(crear("div", { class: "linea-pedido" },
       crear("div", { class: "datos-linea" },
-        crear("span", { class: "nombre-linea", text: linea.item.nombre }),
-        crear("span", { class: "precio-linea", text: dolares(precioReal(linea.item) * linea.cantidad) })),
-      crear("div", { class: "cantidad con-pedido" }, menos, crear("output", { text: String(linea.cantidad) }), mas)));
+        crear("span", { class: "nombre-linea", text: l.item.nombre }),
+        crear("span", { class: "precio-linea", text: dolares(precioReal(l.item) * l.cantidad) })),
+      crear("div", { class: "cantidad con-pedido" }, menos, crear("output", { text: String(l.cantidad) }), mas)));
   });
   porId("total-pedido").textContent = dolares(totalDelPedido());
 }
 
-function datosDelComprador() {
-  const val = id => porId(id).value;
-  return { nombre: val("f-nombre"), apellido: val("f-apellido"), tipo: val("f-tipo"), cedula: val("f-cedula"), telefono: val("f-telefono"), referencia: val("f-referencia") };
-}
-
 function textoDelPedido() {
-  const d = datosDelComprador();
+  const val = id => porId(id).value;
+  const d = { nombre: val("f-nombre"), apellido: val("f-apellido"), tipo: val("f-tipo"), cedula: val("f-cedula"), telefono: val("f-telefono"), referencia: val("f-referencia") };
   const renglones = lineas.map(l => `• ${l.cantidad} × ${l.item.nombre} — ${dolares(precioReal(l.item) * l.cantidad)}`);
   const modo = tipoPrecio === "mayor" ? "Al Mayor" : "Al Detal";
   return `Hola, quiero hacer un pedido (${modo}) en ${NEGOCIO.nombre}:\n` + renglones.join("\n") +
@@ -652,10 +584,7 @@ function abrirHoja() {
   pintarLineas();
   actualizarEnlaceDeEnvio();
 }
-function cerrarHoja() {
-  porId("hoja-pedido").hidden = true;
-  document.body.style.overflow = "";
-}
+function cerrarHoja() { porId("hoja-pedido").hidden = true; document.body.style.overflow = ""; }
 
 function filaDeItem(item, orden) {
   const menos = crear("button", { type: "button", text: "−" });
@@ -664,15 +593,12 @@ function filaDeItem(item, orden) {
   const caja = crear("div", { class: "cantidad" }, menos, cuenta, mas);
   const precio = crear("span", { class: "precio" });
 
-  function mostrarPrecio() {
-    precio.textContent = dolares(precioReal(item));
-  }
   function mostrar() {
-    const cant = cantidadDe(item);
+    const cant = lineas.reduce((s, l) => s + (l.item === item ? l.cantidad : 0), 0);
     cuenta.textContent = String(cant);
     menos.hidden = cuenta.hidden = cant === 0;
     caja.classList.toggle("con-pedido", cant > 0);
-    mostrarPrecio();
+    precio.textContent = dolares(precioReal(item));
   }
   menos.addEventListener("click", () => { quitarUnidad(item); });
   mas.addEventListener("click", () => { agregarUnidad(item); });
@@ -696,7 +622,6 @@ function elegirCatalogo(indice) {
   porId("catalogo").style.setProperty("--tinte", cat.color);
   porId("titulo-menu").textContent = cat.nombre;
   porId("nota-catalogo").textContent = cat.cuando;
-
   const lista = porId("lista");
   lista.textContent = "";
   filasVisibles.length = 0;
@@ -713,84 +638,42 @@ function ajustarNombre() {
   titulo.style.fontSize = Math.max(40, Math.min(150, 100 * disponible / ancho)).toFixed(1) + "px";
 }
 
-/* Escena 3D WebGL (Partículas de Giro optimizadas) */
-function aRgb(hex) {
-  const n = parseInt(hex.slice(1), 16);
-  return [(n >> 16) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
-}
-const VERTICES = `
-attribute vec4 a_semilla;
-uniform float u_tiempo, u_bajada, u_proporcion, u_escala, u_pulso, u_agita;
-varying mediump vec3 v_color;
-varying mediump float v_alfa;
-void main() {
-  float t = u_tiempo;
-  float ancho = u_proporcion * 1.42;
-  float alto = 5.0;
-  float ySuelto = mod(a_semilla.y * alto + t * 0.04 * (0.3 + a_semilla.x) + u_bajada * 1.1 + alto * 0.5, alto) - alto * 0.5;
-  vec3 p = vec3((a_semilla.x * 2.0 - 1.0) * ancho * 1.5 + sin(ySuelto * 1.3 + t * 0.25) * 0.18, ySuelto, (a_semilla.z * 2.0 - 1.0) * 1.6);
-  float fuga = 2.4 / (3.4 - p.z);
-  vec2 pantalla = vec2(p.x * fuga / u_proporcion, p.y * fuga);
-  v_color = vec3(0.89, 0.69, 0.29);
-  v_alfa = 0.8 * (0.5 + 0.5 * sin(t + a_semilla.x * 10.0));
-  gl_PointSize = u_escala * 6.0 * fuga;
-  gl_Position = vec4(pantalla, 0.0, 1.0);
-}`;
-const FRAGMENTOS = `
-precision mediump float;
-varying mediump vec3 v_color;
-varying mediump float v_alfa;
-void main() {
-  float r = length(gl_PointCoord - 0.5);
-  if(r > 0.5) discard;
-  gl_FragColor = vec4(v_color * v_alfa, v_alfa);
-}`;
-
-function crearEscena() {
-  const lienzo = porId("mar");
-  let gl = null;
-  try { gl = lienzo.getContext("webgl", { alpha: true, antialias: false }); } catch (e) { gl = null; }
-  if (!gl) return;
-  const v = gl.createShader(gl.VERTEX_SHADER); gl.shaderSource(v, VERTICES); gl.compileShader(v);
-  const f = gl.createShader(gl.FRAGMENT_SHADER); gl.shaderSource(f, FRAGMENTOS); gl.compileShader(f);
-  const prog = gl.createProgram(); gl.attachShader(prog, v); gl.attachShader(prog, f); gl.linkProgram(prog);
-  gl.useProgram(prog);
-
-  const total = 4000;
-  const semillas = new Float32Array(total * 4);
-  for (let i = 0; i < semillas.length; i++) semillas[i] = Math.random();
-  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-  gl.bufferData(gl.ARRAY_BUFFER, semillas, gl.STATIC_DRAW);
-  const lugar = gl.getAttribLocation(prog, "a_semilla");
-  gl.enableVertexAttribArray(lugar);
-  gl.vertexAttribPointer(lugar, 4, gl.FLOAT, false, 0, 0);
-
-  const uTiempo = gl.getUniformLocation(prog, "u_tiempo");
-  const uBajada = gl.getUniformLocation(prog, "u_bajada");
-  const uProporcion = gl.getUniformLocation(prog, "u_proporcion");
-  const uEscala = gl.getUniformLocation(prog, "u_escala");
-
-  function medir() {
-    lienzo.width = window.innerWidth;
-    lienzo.height = window.innerHeight;
-    gl.viewport(0, 0, lienzo.width, lienzo.height);
+/* Panel de Ayuda Reparado */
+function prepararAyuda() {
+  const boton = porId("chat-boton"), panel = porId("chat"), mensajes = porId("chat-mensajes");
+  function burbuja(texto, mia) {
+    mensajes.append(crear("p", { class: mia ? "burbuja mia" : "burbuja", text: texto }));
+    mensajes.scrollTop = mensajes.scrollHeight;
   }
-  window.addEventListener("resize", medir);
-  medir();
-
-  let inicio = performance.now();
-  function cuadro(ahora) {
-    const t = (ahora - inicio) / 1000;
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.uniform1f(uTiempo, t);
-    gl.uniform1f(uBajada, window.scrollY / Math.max(1, window.innerHeight));
-    gl.uniform1f(uProporcion, window.innerWidth / Math.max(1, window.innerHeight));
-    gl.uniform1f(uEscala, 1.2);
-    gl.drawArrays(gl.POINTS, 0, total);
-    requestAnimationFrame(cuadro);
+  function abrir(abierto) {
+    panel.hidden = !abierto;
+    boton.hidden = abierto;
+    if (abierto) {
+      if (!mensajes.children.length) burbuja(NEGOCIO.ayuda.saludo, false);
+      porId("chat-cerrar").focus();
+    } else boton.focus();
   }
-  requestAnimationFrame(cuadro);
+  boton.addEventListener("click", () => abrir(true));
+  porId("chat-cerrar").addEventListener("click", () => abrir(false));
+
+  const preguntas = porId("chat-preguntas");
+  NEGOCIO.ayuda.preguntas.forEach(p => {
+    const chip = crear("button", { type: "button", text: p.pregunta });
+    chip.addEventListener("click", () => {
+      burbuja(p.pregunta, true);
+      burbuja(p.respuesta || (p.tipo === "horario" ? "Abrimos de lunes a sábado de 8:00 am a 5:00 pm." : NEGOCIO.direccion), false);
+    });
+    preguntas.append(chip);
+  });
+
+  porId("chat-forma").addEventListener("submit", e => {
+    e.preventDefault();
+    const campo = porId("chat-texto"), texto = campo.value.trim();
+    if (!texto) return;
+    burbuja(texto, true);
+    campo.value = "";
+    burbuja("Escríbenos directamente por WhatsApp para atenderte mejor.", false);
+  });
 }
 
 function pintar() {
@@ -806,7 +689,6 @@ function pintar() {
   porId("enlace-telefono").href = "tel:" + NEGOCIO.telefono;
   porId("enlace-resena").href = NEGOCIO.resenaUrl;
 
-  // Botones Detal / Mayor
   porId("btn-detal").addEventListener("click", () => {
     tipoPrecio = "detal";
     porId("btn-detal").setAttribute("aria-selected", "true");
@@ -824,7 +706,6 @@ function pintar() {
   NEGOCIO.pagoMovil.forEach(d => filasPago.append(filaDeDato(d)));
   porId("copiar-todo").addEventListener("click", () => copiar(NEGOCIO.pagoMovil.map(d => `${d.etiqueta}: ${d.copia}`).join("\n"), "Todos los datos de pago copiados"));
 
-  // Horario
   const horario = porId("horario");
   const hoy = new Date().getDay();
   [1, 2, 3, 4, 5, 6, 0].forEach(dia => {
@@ -834,34 +715,16 @@ function pintar() {
       crear("span", { class: dia === hoy ? "hoy" : "", text: tramo ? hora12(tramo[0]) + " a " + hora12(tramo[1]) : "Cerrado" })
     );
   });
-  porId("direccion").textContent = NEGOCIO.direccion;
+  porId("direccion").textContent = "📍 " + NEGOCIO.direccion;
 
-  // Novedades y Opiniones
-  const nov = porId("novedades");
-  NEGOCIO.novedades.forEach(n => nov.append(crear("article", { class: "novedad" }, crear("span", { class: "miniatura" }, dibujo(n.dibujo)), crear("time", { text: n.fecha }), crear("h3", { text: n.titulo }), crear("p", { text: n.texto }))));
-  
-  const op = porId("opiniones");
-  if (!NEGOCIO.opiniones.length) {
-    op.append(crear("p", { class: "nota", text: "Todavía no hay opiniones publicadas." }));
-  }
-  porId("enlace-opinar").href = NEGOCIO.resenaUrl;
-
-  // Contacto
   const contacto = porId("filas-contacto");
   contacto.append(filaDeDato({ etiqueta: "WhatsApp", valor: NEGOCIO.telefono, copia: NEGOCIO.whatsapp }));
   contacto.append(filaDeDato({ etiqueta: "Correo", valor: NEGOCIO.correo, copia: NEGOCIO.correo }));
 
-  // Pedidos hoja
   porId("abrir-pedido").addEventListener("click", abrirHoja);
   porId("cerrar-pedido").addEventListener("click", cerrarHoja);
-  porId("enviar-pedido").addEventListener("click", () => {
-    const d = datosDelComprador();
-    if (!d.nombre || !d.cedula || !d.telefono || !d.referencia) {
-      avisar("Por favor completa tus datos y la referencia del pago.");
-      return;
-    }
-  });
 
+  prepararAyuda();
   elegirCatalogo(0);
 }
 
@@ -869,7 +732,6 @@ iniciar();
 function iniciar() {
   pintar();
   ajustarNombre();
-  crearEscena();
 }
 </script>
 </body>

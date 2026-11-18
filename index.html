@@ -27,7 +27,6 @@
 
         .container { max-width: 550px; margin: 0 auto; padding-bottom: 40px; }
 
-        /* Cabecera Estilizada */
         header { 
             text-align: center; 
             padding: 24px 16px; 
@@ -48,7 +47,6 @@
         h1 { color: var(--accent-gold); font-size: 1.6em; margin: 0 0 4px 0; font-weight: 700; letter-spacing: 0.5px; }
         .subtitulo-slogan { color: var(--text-muted); font-style: italic; font-size: 0.9em; margin: 0; }
 
-        /* Tarjeta de Información */
         .info-card { 
             background: var(--bg-card); 
             border: 1px solid var(--border-color); 
@@ -62,7 +60,6 @@
         }
         .info-card p { margin: 6px 0; display: flex; align-items: flex-start; gap: 8px; }
 
-        /* Pestañas de Precios */
         .tabs-container { display: flex; gap: 8px; margin-bottom: 20px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1px solid var(--border-color); }
         .tab-btn { 
             flex: 1; 
@@ -79,7 +76,6 @@
         }
         .tab-btn.active { background: var(--accent-gold); color: #000; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
 
-        /* Catálogo de Productos */
         .productos-grid { display: flex; flex-direction: column; gap: 12px; }
         .producto-card { 
             background: var(--bg-card); 
@@ -90,16 +86,13 @@
             justify-content: space-between; 
             align-items: center; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
-            transition: border-color 0.2s;
         }
-        .producto-card:hover { border-color: rgba(245, 158, 11, 0.4); }
         .producto-info { flex: 1; padding-right: 12px; }
         .producto-info h3 { margin: 0 0 6px 0; color: var(--text-main); font-size: 1.05em; font-weight: 600; }
         .precio { font-size: 1.1em; font-weight: 700; color: var(--accent-gold); margin: 0; }
         .stock-txt { font-size: 0.8em; color: var(--text-muted); margin-top: 4px; }
         .agotado { color: #ef4444; font-weight: 500; }
 
-        /* Controles de cantidad (+ / -) */
         .contador-container { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 10px; border: 1px solid var(--border-color); }
         .btn-control { 
             background-color: var(--accent-gold); 
@@ -114,13 +107,10 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            transition: background 0.2s;
         }
-        .btn-control:hover:not(:disabled) { background-color: var(--accent-hover); }
         .btn-control:disabled { background-color: #27272a; color: #52525b; cursor: not-allowed; }
         .cantidad-display { font-size: 1.05em; font-weight: 700; min-width: 20px; text-align: center; color: var(--text-main); }
 
-        /* Carrito flotante / sección inferior */
         .carrito { 
             margin-top: 30px; 
             background: var(--bg-card); 
@@ -129,7 +119,7 @@
             border: 1px solid var(--accent-gold); 
             box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
         }
-        .carrito h2 { color: var(--accent-gold); margin-top: 0; font-size: 1.2em; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .carrito h2 { color: var(--accent-gold); margin-top: 0; font-size: 1.2em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
         .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 0.9em; }
         .total-container { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; font-size: 1.2em; font-weight: bold; color: var(--text-main); }
         .total-precio { color: var(--accent-gold); }
@@ -147,10 +137,8 @@
             text-align: center; 
             margin-top: 15px;
             box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-            transition: opacity 0.2s;
         }
-        .btn-whatsapp:hover { opacity: 0.9; }
-        .btn-whatsapp:disabled { background-color: #27272a; color: var(--text-muted); box-shadow: none; cursor: not-allowed; }
+        .btn-whatsapp:disabled { background-color: #27272a; color: var(--text-muted); cursor: not-allowed; box-shadow: none; }
     </style>
 </head>
 <body>
@@ -164,11 +152,10 @@
 
     <div class="info-card">
         <p>📍 <strong>Dirección:</strong> Ciudadela, Zona 18, Edif. 4, Apto 3-6</p>
-        <p>🛵 <strong>Delivery:</strong> Casco de San Felipe, Cocorotico, Marín y Albarico</p>
+        <p>🛵 <strong>Delivery:</strong> Casco de San Felipe, Corotico, Marín y Albarico</p>
         <p>⏰ <strong>Horario:</strong> Lunes a Sábado: 8:00 a.m. - 5:00 p.m.</p>
     </div>
 
-    <!-- Pestañas de modo de compra -->
     <div class="tabs-container">
         <button class="tab-btn active" id="btn-detal" onclick="cambiarModo('detal')">Al Detal</button>
         <button class="tab-btn" id="btn-mayor" onclick="cambiarModo('mayor')">Al Mayor</button>
@@ -217,13 +204,17 @@
             
             inventario = filas.map(fila => {
                 const columnas = fila.split(",");
-                if (columnas.length >= 6) {
+                // Mapeo exacto a tus 4 columnas:
+                // Columna A (0): Producto
+                // Columna B (1): Precio detal
+                // Columna C (2): Precio mayor
+                // Columna D (3): Stock disponible
+                if (columnas.length >= 4) {
                     return {
                         producto: columnas[0].trim(),
-                        descripcion: columnas[1].trim(),
-                        precioDetal: parseFloat(columnas[2].trim()) || 0,
-                        precioMayor: parseFloat(columnas[3].trim()) || 0,
-                        disponible: parseInt(columnas[5].trim()) || 0
+                        precioDetal: parseFloat(columnas[1].trim()) || 0,
+                        precioMayor: parseFloat(columnas[2].trim()) || 0,
+                        disponible: parseInt(columnas[3].trim()) || 0
                     };
                 }
                 return null;

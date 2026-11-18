@@ -4,288 +4,322 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050507">
-<title>Honey Cream · Holographic Floating UI</title>
+<title>Honey Cream · 3D Holographic UI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 :root{
   --bg: #050507;
-  --surface: rgba(16, 18, 24, 0.78);
-  --surface-card: rgba(22, 25, 35, 0.85);
-  --line: rgba(192, 192, 192, 0.18);
-  --line-bright: rgba(227, 176, 75, 0.55);
+  --glass: rgba(14, 15, 20, 0.58);
+  --glass-card: rgba(20, 22, 30, 0.65);
+  --silver: #e2e8f0;
+  --silver-line: rgba(226, 232, 240, 0.28);
+  --silver-glow: rgba(226, 232, 240, 0.35);
   --gold: #e3b04b;
-  --gold-bright: #ffe29a;
-  --gold-deep: #a87920;
-  --gold-glow: rgba(227, 176, 75, 0.3);
-  --silver: #cbd5e1;
-  --silver-glow: rgba(192, 192, 192, 0.22);
+  --gold-bright: #ffe5a3;
+  --gold-deep: #9e7019;
+  --gold-glow: rgba(227, 176, 75, 0.4);
   --pearl: #f8fafc;
-  --muted: #94a3b8;
-  --danger: #ff5470;
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Outfit", system-ui, sans-serif;
+  --muted: #9ca3af;
+  --danger: #fb7185;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "Outfit", system-ui, sans-serif;
 }
 
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-html{background:var(--bg);perspective:1800px}
+html{background:var(--bg);perspective:1600px}
 body{
-  font-family:var(--font-sans);color:var(--pearl);
-  background:
-    radial-gradient(circle at 50% -15%, rgba(192, 192, 192, 0.06) 0%, transparent 55%),
-    radial-gradient(circle at 50% 110%, rgba(227, 176, 75, 0.07) 0%, transparent 50%),
-    var(--bg);
-  min-height:100vh;padding:env(safe-area-inset-top) 0 calc(140px + env(safe-area-inset-bottom));
-  line-height:1.6;overflow-x:hidden;position:relative;
+  font-family:var(--sans);color:var(--pearl);
+  background:radial-gradient(circle at 50% 15%, #12131a 0%, #050507 70%);
+  min-height:100vh;padding:env(safe-area-inset-top) 0 calc(135px + env(safe-area-inset-bottom));
+  line-height:1.55;overflow-x:hidden;position:relative;
 }
 
-/* Ondas de luz suave holográfica flotando en el aire */
-.holo-waves{
+/* Lienzo 3D de fondo con holograma, ondas de luz y estelas de partículas */
+#holo-canvas{
+  position:fixed;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;
+}
+
+/* Ondas de luz holográficas translúcidas en movimiento */
+.light-waves{
   position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;
 }
-.holo-wave{
-  position:absolute;width:220%;height:220%;top:-60%;left:-60%;
-  background:radial-gradient(ellipse at center, rgba(192,192,192,0.05) 0%, rgba(227,176,75,0.03) 35%, transparent 70%);
-  animation: waveMotion 24s ease-in-out infinite alternate;
-  opacity:0.7;
+.wave{
+  position:absolute;width:180%;height:180%;top:-40%;left:-40%;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(226,232,240,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(227,176,75,0.06) 0%, transparent 50%);
+  filter:blur(30px);
+  animation:driftWave 18s ease-in-out infinite alternate;
 }
-@keyframes waveMotion {
-  0% { transform: translate(-3%, -3%) rotate(0deg) scale(1); }
-  50% { transform: translate(3%, 4%) rotate(180deg) scale(1.08); }
-  100% { transform: translate(-2%, 2%) rotate(360deg) scale(1); }
-}
-
-/* Estelas de partículas brillantes plateadas y doradas */
-.particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
-.particle{
-  position:absolute;width:2.5px;height:12px;
-  background:linear-gradient(transparent, var(--silver));
-  box-shadow:0 0 10px var(--silver-glow);
-  opacity:0;animation:particleStream linear infinite;
-}
-@keyframes particleStream{
-  0%{transform:translateY(-15vh) translateX(0) scale(0.4);opacity:0}
-  25%{opacity:0.7}
-  75%{opacity:0.4}
-  100%{transform:translateY(115vh) translateX(25px) scale(1.1);opacity:0}
+@keyframes driftWave{
+  0%{transform:translate(-4%, -3%) rotate(0deg) scale(1)}
+  50%{transform:translate(4%, 5%) rotate(12deg) scale(1.08)}
+  100%{transform:translate(-2%, 2%) rotate(-8deg) scale(0.98)}
 }
 
-.app{max-width:480px;margin:0 auto;padding:0 16px;position:relative;z-index:2}
+.app{
+  max-width:480px;margin:0 auto;padding:0 16px;
+  position:relative;z-index:2;
+  transform-style:preserve-3d;
+}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-/* Cabecera con efecto Holográfico Suspendido */
-header{text-align:center;padding:42px 0 24px;perspective:1000px}
-.holo-container{
-  width:130px;height:130px;margin:0 auto 20px;position:relative;
-  transform-style:preserve-3d;animation:holoFloat 6s ease-in-out infinite;
+/* Cabecera Holográfica Flotando en el Aire */
+header{
+  text-align:center;padding:34px 0 22px;
+  perspective:1200px;position:relative;
 }
-@keyframes holoFloat{
-  0%,100%{transform:translateY(0) rotateX(6deg) rotateY(-6deg)}
-  50%{transform:translateY(-12px) rotateX(-6deg) rotateY(6deg)}
+.holo-stage{
+  width:140px;height:140px;margin:0 auto 14px;position:relative;
+  transform-style:preserve-3d;
+  animation:levitateUI 5.5s ease-in-out infinite;
 }
-.holo-ring-outer{
+@keyframes levitateUI{
+  0%,100%{transform:translateY(0px) rotateX(6deg) rotateY(-5deg)}
+  50%{transform:translateY(-14px) rotateX(-5deg) rotateY(6deg)}
+}
+.ring-silver{
   position:absolute;inset:-14px;border-radius:50%;
-  border:1.5px dashed var(--gold);opacity:0.65;
-  animation:spinRing 14s linear infinite;
-  box-shadow:0 0 18px var(--gold-glow);
+  border:1.5px solid var(--silver-line);
+  border-top-color:var(--silver);
+  border-bottom-color:var(--silver);
+  box-shadow:0 0 22px var(--silver-glow), inset 0 0 14px var(--silver-glow);
+  animation:spin3D 10s linear infinite;
 }
-.holo-ring-inner{
+.ring-gold{
   position:absolute;inset:-6px;border-radius:50%;
-  border:1px solid var(--silver);opacity:0.5;
-  animation:spinRingReverse 18s linear infinite;
-  box-shadow:0 0 12px var(--silver-glow);
+  border:1.5px dashed var(--gold);
+  box-shadow:0 0 20px var(--gold-glow);
+  animation:spin3DRev 15s linear infinite;
 }
-@keyframes spinRing{to{transform:rotate(360deg)}}
-@keyframes spinRingReverse{to{transform:rotate(-360deg)}}
+@keyframes spin3D{to{transform:rotateZ(360deg) rotateX(18deg)}}
+@keyframes spin3DRev{to{transform:rotateZ(-360deg) rotateY(18deg)}}
 
 .logo{
-  width:100%;height:100%;border-radius:50%;display:grid;place-items:center;
-  background:radial-gradient(circle at 35% 30%, #1a1a24, #08080c 75%);
-  border:2px solid var(--gold);
-  box-shadow:0 0 35px var(--gold-glow), inset 0 0 20px var(--silver-glow);
+  width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(35,38,48,0.85), rgba(8,9,12,0.92));
+  border:1.5px solid var(--silver);
+  box-shadow:
+    0 20px 45px rgba(0,0,0,0.9),
+    0 0 30px var(--gold-glow),
+    inset 0 0 20px var(--silver-glow);
   overflow:hidden;position:relative;
   backdrop-filter:blur(12px);
 }
 .logo::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(rgba(192,192,192,0), rgba(192,192,192,0.25) 50%, rgba(192,192,192,0));
-  animation:scanline 3s linear infinite;pointer-events:none;
+  background:linear-gradient(180deg, transparent 0%, rgba(226,232,240,0.35) 50%, transparent 100%);
+  animation:holoScan 2.8s linear infinite;
 }
-@keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
-.logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+@keyframes holoScan{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+.logo img{width:100%;height:100%;object-fit:cover;border-radius:50%;opacity:0.94}
 
 h1{
-  font-family:var(--font-serif);font-size:44px;font-weight:700;letter-spacing:0.5px;color:var(--pearl);
-  text-shadow:0 4px 20px rgba(0,0,0,0.9), 0 0 25px var(--gold-glow);
+  font-family:var(--serif);font-size:44px;font-weight:700;letter-spacing:0.8px;color:var(--pearl);
+  text-shadow:0 6px 24px rgba(0,0,0,0.95), 0 0 25px var(--silver-glow);
 }
 .tagline{
-  font-family:var(--font-serif);font-style:italic;font-size:21px;color:var(--gold);margin-top:6px;
-  text-shadow:0 0 12px var(--gold-glow);
+  font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold);margin-top:4px;
+  text-shadow:0 0 15px var(--gold-glow);
 }
 
-/* Panel de Información en Vidrio Esmerilado (Glassmorphism) */
-.info{
-  background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border:1px solid var(--line);border-radius:24px;padding:14px 20px;margin-bottom:24px;
-  box-shadow:0 20px 45px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.06);
+/* Paneles UI Flotantes en Vidrio Esmerilado */
+.floating-panel{
+  background:var(--glass);
+  backdrop-filter:blur(22px) saturate(135%);
+  -webkit-backdrop-filter:blur(22px) saturate(135%);
+  border:1px solid var(--silver-line);
+  border-top:1px solid rgba(255,255,255,0.45);
+  border-radius:24px;padding:14px 20px;margin-bottom:22px;
+  box-shadow:
+    0 25px 50px -12px rgba(0,0,0,0.9),
+    0 0 25px rgba(226,232,240,0.08),
+    inset 0 1px 1px rgba(255,255,255,0.2);
+  transform-style:preserve-3d;
+  transition:transform 0.2s ease-out, box-shadow 0.3s ease;
   position:relative;overflow:hidden;
 }
-.info::before{
-  content:"HOLO_UI // 8K_RENDER";position:absolute;top:6px;right:14px;
-  font-size:8px;color:var(--silver);opacity:0.5;letter-spacing:2px;font-family:monospace;
+.floating-panel::before{
+  content:"HOLOGRAPHIC INTERFACE // LIVE 3D";position:absolute;top:6px;right:16px;
+  font-size:8px;letter-spacing:2px;color:var(--silver);opacity:0.55;
 }
-.row{display:flex;gap:14px;padding:13px 0;align-items:flex-start}
-.row+.row{border-top:1px solid rgba(192,192,192,0.1)}
-.row svg{flex:none;width:19px;height:19px;margin-top:3px;stroke:var(--gold);fill:none;stroke-width:1.8;filter:drop-shadow(0 0 6px var(--gold))}
-.row b{display:block;font-weight:600;font-size:14px;color:var(--pearl);letter-spacing:0.3px}
-.row p{font-size:13.5px;color:var(--muted)}
+.row{display:flex;gap:14px;padding:12px 0;align-items:flex-start}
+.row+.row{border-top:1px solid rgba(226,232,240,0.12)}
+.row svg{
+  flex:none;width:19px;height:19px;margin-top:3px;
+  stroke:var(--gold);fill:none;stroke-width:1.8;
+  filter:drop-shadow(0 0 8px var(--gold-glow));
+}
+.row b{display:block;font-weight:600;font-size:14px;color:var(--pearl)}
+.row p{font-size:13.5px;color:var(--silver);opacity:0.8}
 
-/* Pestañas de Navegación Holográfica */
-.tabs-wrap{position:sticky;top:8px;z-index:20;padding:8px 0;background:linear-gradient(var(--bg) 80%,transparent)}
+/* Pestañas Flotantes Plateadas y Doradas */
+.tabs-wrap{position:sticky;top:10px;z-index:20;padding:6px 0}
 .seg{
   position:relative;display:grid;grid-template-columns:1fr 1fr;
-  background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border:1px solid var(--line);border-radius:16px;padding:5px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.7);
+  background:rgba(12, 13, 18, 0.78);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--silver-line);
+  border-top:1px solid rgba(255,255,255,0.35);
+  border-radius:16px;padding:5px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.85), 0 0 20px rgba(226,232,240,0.08);
 }
 .seg .thumb{
   position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);border-radius:12px;
   background:linear-gradient(135deg, var(--gold-bright), var(--gold), var(--gold-deep));
-  border:1px solid var(--gold-bright);
-  box-shadow:0 0 20px var(--gold-glow);
+  border:1px solid #fff3c4;
+  box-shadow:0 0 22px var(--gold-glow);
   transition:transform .35s cubic-bezier(.3,.8,.3,1);
 }
 .seg[data-mode="mayor"] .thumb{transform:translateX(100%)}
 .seg button{
-  position:relative;z-index:1;padding:12px 0;font-weight:600;font-size:13.5px;
-  color:var(--muted);letter-spacing:0.5px;transition:color .25s;
+  position:relative;z-index:1;padding:11px 0;font-weight:600;font-size:13.5px;
+  color:var(--silver);letter-spacing:0.5px;transition:color .25s;
 }
-.seg button[aria-selected="true"]{color:#050507;font-weight:700;text-shadow:none}
-.hint{font-size:13px;color:var(--muted);text-align:center;margin:8px 0 20px;letter-spacing:0.3px}
+.seg button[aria-selected="true"]{color:#050507;font-weight:700}
+.hint{font-size:13px;color:var(--silver);opacity:0.75;text-align:center;margin:8px 0 18px}
 
-/* Tarjetas de Producto con Vidrio Esmerilado y Perspectiva 3D */
-.list{display:grid;gap:20px;perspective:1000px}
+/* Tarjetas Holográficas Flotantes con Vidrio Esmerilado */
+.list{display:grid;gap:20px;perspective:1200px}
 .card{
-  position:relative;display:grid;grid-template-columns:102px 1fr;gap:16px;
-  background:var(--surface-card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border:1px solid var(--line);border-radius:24px;padding:16px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.82);
+  position:relative;display:grid;grid-template-columns:100px 1fr;gap:16px;
+  background:var(--glass-card);
+  backdrop-filter:blur(22px) saturate(140%);
+  -webkit-backdrop-filter:blur(22px) saturate(140%);
+  border:1px solid var(--silver-line);
+  border-top:1px solid rgba(255,255,255,0.42);
+  border-radius:24px;padding:16px;
+  box-shadow:
+    0 22px 45px -10px rgba(0,0,0,0.9),
+    0 0 20px rgba(226,232,240,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.22);
   transform-style:preserve-3d;
-  transition:transform 0.2s ease-out, border-color 0.3s, box-shadow 0.3s;
+  transition:transform 0.16s ease-out, border-color 0.3s, box-shadow 0.3s;
   overflow:hidden;
 }
-.card::after{
-  content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;
-  background:linear-gradient(90deg, transparent, rgba(192,192,192,0.12), transparent);
-  transform:skewX(-25deg);transition:0.6s;pointer-events:none;
+.card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(226,232,240,0.22), rgba(227,176,75,0.08) 40%, transparent 70%);
+  opacity:0;transition:opacity 0.25s;
 }
-.card:hover::after{left:150%}
+.card:hover::before,.card:active::before{opacity:1}
 .card:hover{
-  border-color:var(--line-bright);
-  box-shadow:0 25px 55px rgba(0,0,0,0.92), 0 0 30px var(--gold-glow);
+  border-color:var(--gold);
+  box-shadow:
+    0 28px 55px -8px rgba(0,0,0,0.95),
+    0 0 32px var(--gold-glow),
+    inset 0 1px 0 rgba(255,255,255,0.35);
 }
 .card.out{opacity:.55}
 
 .thumb-img{
-  width:102px;height:102px;border-radius:16px;
-  background:radial-gradient(circle at 35% 30%, #1e1e28, #0a0a0f);
-  border:1px solid rgba(227,176,75,0.35);
+  width:100px;height:100px;border-radius:18px;
+  background:radial-gradient(circle at 30% 30%, rgba(45,48,60,0.8), rgba(10,11,15,0.95));
+  border:1px solid rgba(226,232,240,0.35);
   display:grid;place-items:center;overflow:hidden;
-  font-family:var(--font-serif);font-size:38px;font-style:italic;color:var(--gold);
-  box-shadow:inset 0 0 20px var(--silver-glow);
-  transform:translateZ(24px);
+  font-family:var(--serif);font-size:38px;font-style:italic;color:var(--gold);
+  box-shadow:0 10px 25px rgba(0,0,0,0.6), inset 0 0 18px var(--silver-glow);
+  transform:translateZ(26px);
 }
 .thumb-img img{width:100%;height:100%;object-fit:cover}
 
-.body{display:flex;flex-direction:column;min-width:0;transform:translateZ(16px)}
-.body h3{font-family:var(--font-serif);font-size:24px;line-height:1.15;font-weight:700;color:var(--pearl)}
-.desc{font-size:13.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:4px}
+.body{display:flex;flex-direction:column;min-width:0;transform:translateZ(18px)}
+.body h3{font-family:var(--serif);font-size:24px;line-height:1.15;font-weight:700;color:var(--pearl)}
+.desc{font-size:13px;color:var(--silver);opacity:0.8;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:4px}
 .foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:14px;gap:8px}
-.price{font-weight:700;font-size:19px;color:var(--gold);text-shadow:0 0 12px var(--gold-glow)}
-.stock{font-size:12px;color:var(--muted)}
-.stock.low{color:var(--danger);font-weight:600}
+.price{font-weight:700;font-size:19px;color:var(--gold-bright);text-shadow:0 0 14px var(--gold-glow)}
+.stock{font-size:12px;color:var(--silver);opacity:0.75}
+.stock.low{color:var(--danger);font-weight:600;opacity:1}
 
-/* Botones de Alta Gama con Resplandor Plateado/Dorado */
+/* Botones Holográficos */
 .add{
   background:linear-gradient(135deg, var(--gold-bright), var(--gold));
   color:#050507;font-weight:700;font-size:13px;padding:10px 18px;border-radius:12px;
-  box-shadow:0 0 20px var(--gold-glow);transition:all 0.25s;letter-spacing:0.5px;
+  border:1px solid rgba(255,255,255,0.5);
+  box-shadow:0 6px 20px var(--gold-glow);transition:all 0.2s;
 }
-.add:hover{box-shadow:0 0 30px var(--gold);transform:translateY(-2px)}
-.add:disabled{background:var(--surface);border:1px solid rgba(255,255,255,0.06);color:var(--muted);cursor:not-allowed;box-shadow:none;transform:none}
+.add:hover{box-shadow:0 8px 28px var(--gold);transform:translateY(-2px)}
+.add:disabled{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:var(--muted);box-shadow:none;cursor:not-allowed}
 
 .step{
-  display:flex;align-items:center;background:rgba(0,0,0,0.7);
-  border:1px solid var(--gold);border-radius:12px;overflow:hidden;
-  box-shadow:0 0 15px var(--gold-glow);
+  display:flex;align-items:center;background:rgba(8,9,13,0.8);
+  border:1px solid var(--silver-line);border-radius:12px;overflow:hidden;
+  box-shadow:0 0 16px var(--silver-glow);
 }
 .step button{width:38px;height:38px;font-size:19px;font-weight:700;color:var(--gold);transition:background 0.2s}
-.step button:hover:not(:disabled){background:rgba(227,176,75,0.25)}
+.step button:hover:not(:disabled){background:rgba(226,232,240,0.15)}
 .step button:disabled{opacity:.3;cursor:not-allowed}
 .step output{min-width:28px;text-align:center;font-weight:700;font-size:14px;color:var(--pearl)}
 
-/* Estados de Carga */
-.skel{height:130px;border-radius:24px;background:linear-gradient(90deg, var(--surface) 25%, rgba(192,192,192,0.06) 50%, var(--surface) 75%);background-size:200% 100%;animation:sh 1.4s infinite}
+/* Skeleton & Mensajes */
+.skel{height:132px;border-radius:24px;background:linear-gradient(90deg, rgba(20,22,30,0.6) 25%, rgba(226,232,240,0.1) 50%, rgba(20,22,30,0.6) 75%);background-size:200% 100%;animation:sh 1.4s infinite}
 @keyframes sh{to{background-position:-200% 0}}
-.msg{text-align:center;color:var(--muted);padding:40px 12px;font-size:14px}
-.msg button{margin-top:16px;color:var(--gold);border:1px solid var(--gold);border-radius:12px;padding:10px 22px;font-weight:600;box-shadow:0 0 15px var(--gold-glow)}
+.msg{text-align:center;color:var(--silver);padding:40px 12px;font-size:14px}
+.msg button{margin-top:16px;color:var(--gold);border:1px solid var(--gold);border-radius:12px;padding:10px 22px;font-weight:600}
 
-/* Carrito Flotante Estilo Interfaz Cinemática */
+/* Carrito Flotante */
 .bar{
   position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));
   transform:translate(-50%,190%);width:calc(100% - 32px);max-width:448px;z-index:30;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 24px;border-radius:20px;
-  background:rgba(12, 15, 22, 0.95);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);
-  border:1px solid var(--gold);box-shadow:0 25px 55px rgba(0,0,0,0.95), 0 0 35px var(--gold-glow);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 24px;border-radius:22px;
+  background:rgba(14, 16, 24, 0.88);
+  backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
+  border:1px solid var(--silver-line);
+  border-top:1px solid rgba(255,255,255,0.45);
+  box-shadow:0 25px 55px rgba(0,0,0,0.95), 0 0 30px var(--gold-glow);
   transition:transform .4s cubic-bezier(.3,.8,.3,1);
 }
 .bar.show{transform:translate(-50%,0)}
-.bar b{font-weight:600;font-size:13px;color:var(--muted);letter-spacing:1px}
-.bar .tot{font-family:var(--font-serif);font-size:28px;font-weight:700;color:var(--gold);text-shadow:0 0 15px var(--gold-glow)}
+.bar b{font-weight:600;font-size:13px;color:var(--silver);letter-spacing:0.8px}
+.bar .tot{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--gold-bright);text-shadow:0 0 15px var(--gold-glow)}
 
-/* Modal / Sheet Holográfico Desplegable */
-.sheet-bg{position:fixed;inset:0;background:rgba(2, 2, 5, 0.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s}
+/* Modal / Sheet Holográfico */
+.sheet-bg{position:fixed;inset:0;background:rgba(3, 4, 7, 0.82);backdrop-filter:blur(12px);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s}
 .sheet-bg.open{opacity:1;pointer-events:auto}
 .sheet{
   position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:100%;max-width:480px;max-height:88vh;overflow:auto;z-index:50;
-  background:rgba(14, 18, 28, 0.98);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
-  border:1px solid var(--gold);border-top:2px solid var(--gold);
+  background:rgba(15, 17, 25, 0.92);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border:1px solid var(--silver-line);border-top:1.5px solid var(--gold);
   border-radius:30px 30px 0 0;padding:26px 22px calc(26px + env(safe-area-inset-bottom));
-  box-shadow:0 -25px 65px rgba(0,0,0,0.95), 0 0 45px var(--gold-glow);
+  box-shadow:0 -25px 65px rgba(0,0,0,0.95), 0 0 40px var(--gold-glow);
   transition:transform .4s cubic-bezier(.3,.8,.3,1);
 }
 .sheet.open{transform:translate(-50%,0)}
-.sheet h2{font-family:var(--font-serif);font-size:32px;color:var(--pearl);margin-bottom:10px;text-shadow:0 0 15px var(--gold-glow)}
-.line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 0;border-top:1px solid rgba(192,192,192,0.12)}
+.sheet h2{font-family:var(--serif);font-size:32px;color:var(--pearl);margin-bottom:10px}
+.line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 0;border-top:1px solid rgba(226,232,240,0.12)}
 .line .n{font-size:14.5px;font-weight:600;color:var(--pearl)}
-.line .s{font-size:13px;color:var(--muted)}
+.line .s{font-size:13px;color:var(--silver);opacity:0.8}
 .field{
-  width:100%;margin-top:14px;background:rgba(0,0,0,0.7);color:var(--pearl);
-  border:1px solid var(--line);border-radius:14px;padding:15px;font:inherit;font-size:15px;
+  width:100%;margin-top:14px;background:rgba(5,6,9,0.75);color:var(--pearl);
+  border:1px solid var(--silver-line);border-radius:14px;padding:15px;font:inherit;font-size:15px;
 }
 .field:focus{border-color:var(--gold);box-shadow:0 0 15px var(--gold-glow);outline:none}
 .total{display:flex;justify-content:space-between;align-items:baseline;margin:20px 0;font-size:15px}
-.total strong{font-family:var(--font-serif);font-size:34px;color:var(--gold);text-shadow:0 0 15px var(--gold-glow)}
+.total strong{font-family:var(--serif);font-size:34px;color:var(--gold-bright)}
 
 .wa{
   width:100%;padding:18px;border-radius:16px;
   background:linear-gradient(135deg, #25d366, #1ebe5d);color:#050507;
-  font-weight:700;font-size:15px;letter-spacing:0.5px;
+  font-weight:700;font-size:15px;
   display:flex;justify-content:center;align-items:center;gap:10px;
   box-shadow:0 0 30px rgba(37, 211, 102, 0.45);transition:all 0.25s;
 }
 .wa:hover{box-shadow:0 0 45px rgba(37, 211, 102, 0.75);transform:translateY(-2px)}
 .wa svg{width:22px;height:22px;fill:currentColor}
-.close{float:right;color:var(--muted);font-size:28px;line-height:1;padding:4px 8px;cursor:pointer}
+.close{float:right;color:var(--silver);font-size:28px;line-height:1;padding:4px 8px;cursor:pointer}
 .close:hover{color:var(--gold)}
 
 .toast{
   position:fixed;top:calc(20px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-200%);
-  background:rgba(14, 18, 28, 0.98);border:1px solid var(--gold);
+  background:rgba(15, 17, 25, 0.95);border:1px solid var(--silver);
   padding:13px 24px;border-radius:999px;font-size:14px;z-index:60;transition:transform .35s;
-  max-width:90%;box-shadow:0 0 30px var(--gold-glow);letter-spacing:0.5px;color:var(--gold);
+  max-width:90%;box-shadow:0 0 30px var(--silver-glow);color:var(--pearl);
   font-weight:600;backdrop-filter:blur(20px);
 }
 .toast.show{transform:translate(-50%,0)}
@@ -293,14 +327,14 @@ h1{
 </style>
 </head>
 <body>
-<div class="holo-waves"><div class="holo-wave"></div></div>
-<div class="particles" id="particles" aria-hidden="true"></div>
+<canvas id="holo-canvas"></canvas>
+<div class="light-waves"><div class="wave"></div></div>
 
 <div class="app">
   <header>
-    <div class="holo-container">
-      <div class="holo-ring-outer"></div>
-      <div class="holo-ring-inner"></div>
+    <div class="holo-stage">
+      <div class="ring-silver"></div>
+      <div class="ring-gold"></div>
       <div class="logo" role="img" aria-label="Logotipo de Honey Cream">
         <img src="logo.jpg" alt="Honey Cream Logo">
       </div>
@@ -309,7 +343,7 @@ h1{
     <p class="tagline">Como la miel pero más rico...</p>
   </header>
 
-  <section class="info" aria-label="Información de la tienda">
+  <section class="floating-panel" id="infoPanel" aria-label="Información de la tienda">
     <div class="row">
       <svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
       <div><b>Ubicación</b><p>Ciudadela, Zona 18, Edif. 4, Apto 3-6</p></div>
@@ -354,7 +388,7 @@ h1{
     <option>Marín</option>
     <option>Albarico</option>
   </select>
-  <div class="total"><span id="sheetMode" style="color:var(--muted)">Total</span><strong id="sheetTotal">$0.00</strong></div>
+  <div class="total"><span id="sheetMode" style="color:var(--silver)">Total</span><strong id="sheetTotal">$0.00</strong></div>
   <button class="wa" id="send">
     <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.2 14.8l-.4-.2-2.600.8.8-2.500-.3-.4A8 8 0 0 1 12 4zm-3 4c-.3 0-.7.2-.9.6-.3.5-.5 1.100-.1 2 .6 1.500 2.300 3.500 4.500 4.500 1 .4 1.700.4 2.200.3.500-.1 1.100-.6 1.300-1.200.1-.3.100-.6 0-.7l-1.700-.8c-.2-.1-.4 0-.5.100l-.6.800c-.1.100-.3.100-.4.100-.6-.3-1.600-.9-2.300-2-.1-.2 0-.3.100-.4l.4-.5c.1-.1.100-.3 0-.5l-.7-1.600c-.1-.2-.3-.3-.5-.3z"/></svg>
     Enviar pedido por WhatsApp
@@ -368,34 +402,165 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyo7__4Q6VsGWTTcaGJg
 const WHATSAPP   = "584245284850";
 const MONEDA     = "$";
 
-/* ===== Estelas de partículas brillantes ===== */
-(function initParticles(){
-  const wrap = document.getElementById("particles");
-  for(let i = 0; i < 28; i++){
-    const p = document.createElement("span");
-    p.className = "particle";
-    p.style.left = (Math.random() * 100) + "%";
-    p.style.animationDuration = (Math.random() * 4 + 3) + "s";
-    p.style.animationDelay = (Math.random() * 5) + "s";
-    wrap.appendChild(p);
+/* ===== Motor 3D Three.js: Holograma Cristalino Flotante + Estelas de Partículas Plata y Oro ===== */
+(function initHolo3D(){
+  const canvas = document.getElementById("holo-canvas");
+  if(!window.THREE) return;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 26;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // Grupo Holográfico Central (Cristal Octaedro / Joya Translúcida Flotante)
+  const holoGroup = new THREE.Group();
+  holoGroup.position.set(0, 4.5, -4);
+  scene.add(holoGroup);
+
+  // Núcleo translúcido dorado champán
+  const coreGeo = new THREE.OctahedronGeometry(4.2, 1);
+  const coreMat = new THREE.MeshBasicMaterial({
+    color: 0xe3b04b,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.16
+  });
+  const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+  holoGroup.add(coreMesh);
+
+  // Malla externa plateada (Silver)
+  const outerGeo = new THREE.IcosahedronGeometry(5.6, 1);
+  const outerMat = new THREE.MeshBasicMaterial({
+    color: 0xe2e8f0,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.12
+  });
+  const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+  holoGroup.add(outerMesh);
+
+  // Anillos orbitales holográficos plateados y dorados
+  const ringGeo1 = new THREE.TorusGeometry(7.2, 0.035, 16, 100);
+  const ringMat1 = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.28 });
+  const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
+  ring1.rotation.x = Math.PI / 2.6;
+  holoGroup.add(ring1);
+
+  const ringGeo2 = new THREE.TorusGeometry(8.5, 0.025, 16, 100);
+  const ringMat2 = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.24 });
+  const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+  ring2.rotation.x = -Math.PI / 3;
+  ring2.rotation.y = Math.PI / 5;
+  holoGroup.add(ring2);
+
+  // Estelas de partículas brillantes (Plata y Dorado Champán)
+  const pCount = 260;
+  const pGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(pCount * 3);
+  const colors = new Float32Array(pCount * 3);
+  const velocities = [];
+
+  const silverColor = new THREE.Color(0xe2e8f0);
+  const goldColor = new THREE.Color(0xe3b04b);
+
+  for(let i = 0; i < pCount; i++){
+    positions[i * 3]     = (Math.random() - 0.5) * 42;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 48;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 24 - 4;
+
+    const c = i % 2 === 0 ? silverColor : goldColor;
+    colors[i * 3]     = c.r;
+    colors[i * 3 + 1] = c.g;
+    colors[i * 3 + 2] = c.b;
+
+    velocities.push({
+      y: 0.015 + Math.random() * 0.03,
+      x: (Math.random() - 0.5) * 0.01,
+      phase: Math.random() * Math.PI * 2
+    });
   }
+  pGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  pGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+  const pMat = new THREE.PointsMaterial({
+    size: 0.22,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.75,
+    blending: THREE.AdditiveBlending
+  });
+  const particleSystem = new THREE.Points(pGeo, pMat);
+  scene.add(particleSystem);
+
+  let mouseX = 0, mouseY = 0;
+  window.addEventListener("mousemove", e => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, {passive:true});
+  window.addEventListener("touchmove", e => {
+    if(e.touches[0]){
+      mouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+    }
+  }, {passive:true});
+
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  let clock = 0;
+  function animate(){
+    requestAnimationFrame(animate);
+    clock += 0.01;
+
+    // Rotación suave y levitación del holograma 3D
+    coreMesh.rotation.y += 0.006;
+    coreMesh.rotation.x += 0.003;
+    outerMesh.rotation.y -= 0.004;
+    outerMesh.rotation.z += 0.002;
+    ring1.rotation.z += 0.008;
+    ring2.rotation.z -= 0.006;
+
+    holoGroup.position.y = 4.5 + Math.sin(clock * 1.4) * 0.65;
+    holoGroup.rotation.y += (mouseX * 0.4 - holoGroup.rotation.y) * 0.05;
+    holoGroup.rotation.x += (mouseY * 0.3 - holoGroup.rotation.x) * 0.05;
+
+    // Movimiento ondulatorio de estelas de partículas
+    const posAttr = pGeo.attributes.position;
+    for(let i = 0; i < pCount; i++){
+      posAttr.array[i * 3 + 1] += velocities[i].y;
+      posAttr.array[i * 3]     += Math.sin(clock + velocities[i].phase) * 0.012;
+      if(posAttr.array[i * 3 + 1] > 24) posAttr.array[i * 3 + 1] = -24;
+    }
+    posAttr.needsUpdate = true;
+
+    renderer.render(scene, camera);
+  }
+  animate();
 })();
 
-/* ===== Tilt 3D Holográfico ===== */
+/* ===== Tilt 3D Interactivo en Paneles y Tarjetas ===== */
 function bind3DTilt(){
-  document.querySelectorAll(".card").forEach(card => {
+  const elements = document.querySelectorAll(".card, .floating-panel");
+  elements.forEach(el => {
     const move = (clientX, clientY) => {
-      const r = card.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
       const x = clientX - r.left, y = clientY - r.top;
-      const rx = ((y / r.height) - 0.5) * -14;
-      const ry = ((x / r.width) - 0.5) * 14;
-      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(12px)`;
+      const rx = ((y / r.height) - 0.5) * -12;
+      const ry = ((x / r.width) - 0.5) * 12;
+      el.style.setProperty("--mx", x + "px");
+      el.style.setProperty("--my", y + "px");
+      el.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(14px)`;
     };
-    const reset = () => { card.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px)"; };
-    card.addEventListener("mousemove", e => move(e.clientX, e.clientY));
-    card.addEventListener("mouseleave", reset);
-    card.addEventListener("touchmove", e => { if(e.touches[0]) move(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
-    card.addEventListener("touchend", reset);
+    const reset = () => { el.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px)"; };
+    el.addEventListener("mousemove", e => move(e.clientX, e.clientY));
+    el.addEventListener("mouseleave", reset);
+    el.addEventListener("touchmove", e => { if(e.touches[0]) move(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
+    el.addEventListener("touchend", reset);
   });
 }
 
@@ -523,6 +688,7 @@ $("send").onclick = () => {
   cart = {}; closeSheet(); render(); toast("Pedido enviado. Gracias por elegir Honey Cream");
 };
 
+bind3DTilt();
 load();
 </script>
 </body>

@@ -3,242 +3,268 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#030706">
-<title>Honey Cream · Cybernetic Interface</title>
+<meta name="theme-color" content="#080605">
+<title>Honey Cream · Luxury Holographic UI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#030706; --surface:rgba(10, 20, 16, 0.75); --surface2:rgba(15, 30, 24, 0.85); 
-  --line:rgba(0, 255, 136, 0.25); --line-bright:rgba(0, 255, 136, 0.6);
-  --neon:#00ff88; --neon-glow:rgba(0, 255, 136, 0.35);
-  --amber:#ffb703; --amber-glow:rgba(255, 183, 3, 0.4);
-  --cream:#e0fbfc; --muted:#8d99ae; --danger:#ff5470;
+  --bg:#080605; --surface:rgba(23, 17, 12, 0.88); --surface2:rgba(33, 24, 17, 0.92); 
+  --line:rgba(227, 176, 75, 0.25); --line-bright:rgba(227, 176, 75, 0.7);
+  --gold:#e3b04b; --gold-bright:#ffd97d; --gold-deep:#b8832a;
+  --gold-glow:rgba(227, 176, 75, 0.45); --amber-glow:rgba(255, 183, 3, 0.5);
+  --cream:#f4e9d3; --muted:#a8977c; --danger:#e07a5f;
+  --font-serif:"Cormorant Garamond",Georgia,serif;
   --font-tech:"Orbitron", sans-serif;
   --font-mono:"Share Tech Mono", monospace;
 }
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-html{background:var(--bg);perspective:1400px}
+html{background:var(--bg);perspective:1500px}
 body{
   font-family:var(--font-mono);color:var(--cream);
-  background:radial-gradient(circle at 50% -20%, #082d20 0%, var(--bg) 70%), var(--bg);
-  min-height:100vh;padding:env(safe-area-inset-top) 0 calc(120px + env(safe-area-inset-bottom));
+  background:radial-gradient(circle at 50% -15%, #302010 0%, var(--bg) 75%), var(--bg);
+  min-height:100vh;padding:env(safe-area-inset-top) 0 calc(130px + env(safe-area-inset-bottom));
   line-height:1.5;overflow-x:hidden;position:relative;
 }
 
-/* Red cibernética de fondo y partículas */
+/* Red cibernética dorada de fondo */
 .cyber-grid{
   position:fixed;inset:0;pointer-events:none;z-index:1;
-  background-image: linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
-  background-size: 30px 30px;
-  animation: gridMove 20s linear infinite;
+  background-image: linear-gradient(rgba(227,176,75,0.035) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(227,176,75,0.035) 1px, transparent 1px);
+  background-size: 35px 35px;
+  animation: gridMove 25s linear infinite;
 }
 @keyframes gridMove {
   0% { background-position: 0 0; }
-  100% { background-position: 0 30px; }
+  100% { background-position: 0 35px; }
 }
+
+/* Partículas doradas flotantes en cascada */
 .particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
 .particle{
-  position:absolute;width:2px;height:2px;background:var(--neon);
-  box-shadow:0 0 8px var(--neon);opacity:0;animation:cyberRain linear infinite;
+  position:absolute;width:3px;height:14px;background:linear-gradient(transparent,var(--gold-bright));
+  box-shadow:0 0 10px var(--gold);opacity:0;animation:goldRain linear infinite;
 }
-@keyframes cyberRain{
-  0%{transform:translateY(-10vh);opacity:0}
-  20%{opacity:0.8}
+@keyframes goldRain{
+  0%{transform:translateY(-15vh) scale(0.6);opacity:0}
+  20%{opacity:0.9}
   80%{opacity:0.5}
-  100%{transform:translateY(110vh);opacity:0}
+  100%{transform:translateY(115vh) scale(1.2);opacity:0}
 }
 
 .app{max-width:480px;margin:0 auto;padding:0 16px;position:relative;z-index:2}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
-:focus-visible{outline:2px solid var(--neon);outline-offset:2px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-/* Cabecera Holográfica */
-header{text-align:center;padding:32px 0 20px;perspective:1000px}
+/* Cabecera Holográfica Dorada */
+header{text-align:center;padding:36px 0 22px;perspective:1000px}
 .holo-container{
-  width:110px;height:110px;margin:0 auto 16px;position:relative;
-  transform-style:preserve-3d;animation:holoFloat 5s ease-in-out infinite;
+  width:125px;height:125px;margin:0 auto 18px;position:relative;
+  transform-style:preserve-3d;animation:holoFloat 6s ease-in-out infinite;
 }
 @keyframes holoFloat{
-  0%,100%{transform:translateY(0) rotateX(6deg) rotateY(-6deg)}
-  50%{transform:translateY(-10px) rotateX(-6deg) rotateY(6deg)}
+  0%,100%{transform:translateY(0) rotateX(8deg) rotateY(-8deg)}
+  50%{transform:translateY(-12px) rotateX(-8deg) rotateY(8deg)}
 }
 .holo-ring{
-  position:absolute;inset:-8px;border-radius:50%;
-  border:2px dashed var(--neon);opacity:0.6;
-  animation:spinRing 12s linear infinite;
+  position:absolute;inset:-12px;border-radius:50%;
+  border:2px dashed var(--gold);opacity:0.7;
+  animation:spinRing 10s linear infinite;
+  box-shadow:0 0 15px var(--gold-glow);
+}
+.holo-ring-inner{
+  position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid var(--gold-bright);opacity:0.5;
+  animation:spinRingReverse 14s linear infinite;
 }
 @keyframes spinRing{to{transform:rotate(360deg)}}
+@keyframes spinRingReverse{to{transform:rotate(-360deg)}}
+
 .logo{
   width:100%;height:100%;border-radius:50%;display:grid;place-items:center;
-  background:rgba(5, 15, 11, 0.9);
-  border:2px solid var(--neon);
-  box-shadow:0 0 25px var(--neon-glow), inset 0 0 15px var(--neon-glow);
+  background:radial-gradient(circle at 35% 30%,#3a2a15,#0f0b08 70%);
+  border:2px solid var(--gold);
+  box-shadow:0 0 30px var(--gold-glow), inset 0 0 20px var(--gold-glow);
   overflow:hidden;position:relative;
 }
 .logo::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(rgba(0,255,136,0), rgba(0,255,136,0.3) 50%, rgba(0,255,136,0));
-  animation:scanline 2.5s linear infinite;pointer-events:none;
+  background:linear-gradient(rgba(227,176,75,0), rgba(227,176,75,0.4) 50%, rgba(227,176,75,0));
+  animation:scanline 2s linear infinite;pointer-events:none;
 }
 @keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
 .logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 
 h1{
-  font-family:var(--font-tech);font-size:32px;font-weight:900;letter-spacing:2px;color:#fff;
-  text-shadow:0 0 10px var(--neon-glow), 0 0 20px rgba(0,255,136,0.3);
+  font-family:var(--font-serif);font-size:42px;font-weight:700;letter-spacing:1px;color:var(--cream);
+  text-shadow:0 4px 15px rgba(0,0,0,0.8), 0 0 20px var(--gold-glow);
 }
-.tagline{font-size:14px;color:var(--amber);margin-top:6px;letter-spacing:1px;text-transform:uppercase}
+.tagline{
+  font-family:var(--font-serif);font-style:italic;font-size:20px;color:var(--gold);margin-top:4px;
+  text-shadow:0 0 10px var(--gold-glow);
+}
 
-/* Panel Holográfico / Info */
+/* Panel Holográfico de Información */
 .info{
-  background:var(--surface);backdrop-filter:blur(12px);
-  border:1px solid var(--line);border-radius:16px;padding:8px 16px;margin-bottom:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.7), inset 0 0 15px rgba(0,255,136,0.05);
+  background:var(--surface);backdrop-filter:blur(16px);
+  border:1px solid var(--line);border-radius:18px;padding:10px 18px;margin-bottom:22px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(227,176,75,0.05);
   position:relative;overflow:hidden;
 }
 .info::before{
-  content:"SYS_LOC // SEC-18";position:absolute;top:4px;right:10px;
-  font-size:9px;color:var(--neon);opacity:0.5;letter-spacing:1px;
+  content:"SYS_SECURE_LINK // HONEY_CORE";position:absolute;top:5px;right:12px;
+  font-size:8px;color:var(--gold);opacity:0.6;letter-spacing:1.5px;
 }
 .row{display:flex;gap:12px;padding:12px 0;align-items:flex-start}
-.row+.row{border-top:1px solid rgba(0,255,136,0.1)}
-.row svg{flex:none;width:18px;height:18px;margin-top:3px;stroke:var(--neon);fill:none;stroke-width:2;filter:drop-shadow(0 0 5px var(--neon))}
-.row b{display:block;font-weight:700;font-size:13px;color:var(--amber);letter-spacing:1px}
-.row p{font-size:13px;color:var(--muted)}
+.row+.row{border-top:1px solid rgba(227,176,75,0.15)}
+.row svg{flex:none;width:18px;height:18px;margin-top:3px;stroke:var(--gold);fill:none;stroke-width:2;filter:drop-shadow(0 0 6px var(--gold))}
+.row b{display:block;font-weight:600;font-size:14px;color:var(--cream);letter-spacing:0.5px}
+.row p{font-size:14px;color:var(--muted)}
 
-/* Selector / Pestañas cibernéticas */
-.tabs-wrap{position:sticky;top:0;z-index:20;padding:10px 0;background:linear-gradient(var(--bg) 80%,transparent)}
+/* Pestañas de Navegación */
+.tabs-wrap{position:sticky;top:0;z-index:20;padding:10px 0;background:linear-gradient(var(--bg) 82%,transparent)}
 .seg{
   position:relative;display:grid;grid-template-columns:1fr 1fr;
-  background:var(--surface);backdrop-filter:blur(10px);
-  border:1px solid var(--line);border-radius:12px;padding:4px;
+  background:var(--surface);backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:14px;padding:4px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.6);
 }
 .seg .thumb{
-  position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:8px;
-  background:linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,255,136,0.4));
-  border:1px solid var(--neon);
-  box-shadow:0 0 12px var(--neon-glow);
+  position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:10px;
+  background:linear-gradient(135deg, var(--gold-bright), var(--gold), var(--gold-deep));
+  border:1px solid var(--gold-bright);
+  box-shadow:0 0 15px var(--gold-glow);
   transition:transform .3s cubic-bezier(.3,.8,.3,1);
 }
 .seg[data-mode="mayor"] .thumb{transform:translateX(100%)}
-.seg button{position:relative;z-index:1;padding:10px 0;font-family:var(--font-tech);font-weight:700;font-size:13px;color:var(--muted);letter-spacing:1px;transition:color .2s}
-.seg button[aria-selected="true"]{color:var(--neon);text-shadow:0 0 8px var(--neon-glow)}
-.hint{font-size:12px;color:var(--muted);text-align:center;margin:4px 0 16px;letter-spacing:0.5px}
+.seg button{position:relative;z-index:1;padding:11px 0;font-family:var(--font-tech);font-weight:700;font-size:13px;color:var(--muted);letter-spacing:1px;transition:color .2s}
+.seg button[aria-selected="true"]{color:#080605;text-shadow:none}
+.hint{font-size:13px;color:var(--muted);text-align:center;margin:6px 0 18px;letter-spacing:0.5px}
 
-/* Tarjetas de productos 3D Tilt Cyber */
-.list{display:grid;gap:16px;perspective:1000px}
+/* Catálogo con Tarjetas Holográficas 3D Doradas */
+.list{display:grid;gap:18px;perspective:1000px}
 .card{
-  position:relative;display:grid;grid-template-columns:92px 1fr;gap:14px;
-  background:var(--surface);backdrop-filter:blur(12px);
-  border:1px solid var(--line);border-radius:18px;padding:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+  position:relative;display:grid;grid-template-columns:98px 1fr;gap:14px;
+  background:var(--surface);backdrop-filter:blur(16px);
+  border:1px solid var(--line);border-radius:20px;padding:14px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.7);
   transform-style:preserve-3d;
-  transition:transform 0.15s ease-out, border-color 0.2s, box-shadow 0.2s;
+  transition:transform 0.18s ease-out, border-color 0.25s, box-shadow 0.25s;
   overflow:hidden;
 }
+.card::after{
+  content:"";position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(227,176,75,0.1),transparent);
+  transform:skewX(-20deg);transition:0.5s;pointer-events:none;
+}
+.card:hover::after{left:150%}
 .card:hover{
   border-color:var(--line-bright);
-  box-shadow:0 15px 35px rgba(0,0,0,0.8), 0 0 20px var(--neon-glow);
+  box-shadow:0 20px 45px rgba(0,0,0,0.85), 0 0 25px var(--gold-glow);
 }
 .card.out{opacity:.5}
+
 .thumb-img{
-  width:92px;height:92px;border-radius:12px;
-  background:rgba(0,0,0,0.5);border:1px solid rgba(0,255,136,0.3);
+  width:98px;height:98px;border-radius:14px;
+  background:radial-gradient(circle at 35% 30%,#3a2a15,#140e0a);
+  border:1px solid rgba(227,176,75,0.4);
   display:grid;place-items:center;overflow:hidden;
-  font-family:var(--font-tech);font-size:30px;color:var(--neon);
-  box-shadow:inset 0 0 10px rgba(0,255,136,0.2);
-  transform:translateZ(15px);
+  font-family:var(--font-serif);font-size:36px;font-style:italic;color:var(--gold);
+  box-shadow:inset 0 0 15px rgba(227,176,75,0.2);
+  transform:translateZ(20px);
 }
 .thumb-img img{width:100%;height:100%;object-fit:cover}
-.body{display:flex;flex-direction:column;min-width:0;transform:translateZ(10px)}
-.body h3{font-family:var(--font-tech);font-size:18px;line-height:1.2;font-weight:700;color:#fff}
-.desc{font-size:12px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px}
-.foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:10px;gap:8px}
-.price{font-family:var(--font-tech);font-weight:700;font-size:17px;color:var(--amber);text-shadow:0 0 8px var(--amber-glow)}
-.stock{font-size:11px;color:var(--muted)}
-.stock.low{color:var(--danger)}
 
-/* Botones tecnológicos */
+.body{display:flex;flex-direction:column;min-width:0;transform:translateZ(14px)}
+.body h3{font-family:var(--font-serif);font-size:23px;line-height:1.15;font-weight:700;color:var(--cream)}
+.desc{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:3px}
+.foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:12px;gap:8px}
+.price{font-family:var(--font-tech);font-weight:700;font-size:18px;color:var(--gold);text-shadow:0 0 10px var(--gold-glow)}
+.stock{font-size:12px;color:var(--muted)}
+.stock.low{color:var(--danger);font-weight:700}
+
+/* Botones Dorados de Alta Gama */
 .add{
-  background:rgba(0,255,136,0.1);border:1px solid var(--neon);color:var(--neon);
-  font-family:var(--font-tech);font-weight:700;font-size:12px;padding:8px 14px;border-radius:8px;
-  box-shadow:0 0 10px rgba(0,255,136,0.15);transition:all 0.2s;
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+  color:#080605;font-family:var(--font-tech);font-weight:700;font-size:12px;padding:9px 16px;border-radius:10px;
+  box-shadow:0 0 15px var(--gold-glow);transition:all 0.25s;letter-spacing:1px;
 }
-.add:hover{background:var(--neon);color:#030706;box-shadow:0 0 15px var(--neon)}
-.add:disabled{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.1);color:var(--muted);cursor:not-allowed;box-shadow:none}
+.add:hover{box-shadow:0 0 25px var(--gold);transform:translateY(-2px)}
+.add:disabled{background:var(--surface2);border-color:rgba(255,255,255,0.1);color:var(--muted);cursor:not-allowed;box-shadow:none;transform:none}
 
 .step{
-  display:flex;align-items:center;background:rgba(0,0,0,0.6);
-  border:1px solid var(--neon);border-radius:8px;overflow:hidden;
+  display:flex;align-items:center;background:rgba(0,0,0,0.7);
+  border:1px solid var(--gold);border-radius:10px;overflow:hidden;
+  box-shadow:0 0 10px var(--gold-glow);
 }
-.step button{width:34px;height:34px;font-size:18px;font-weight:700;color:var(--neon);transition:background 0.2s}
-.step button:hover:not(:disabled){background:rgba(0,255,136,0.2)}
+.step button{width:36px;height:36px;font-size:18px;font-weight:700;color:var(--gold);transition:background 0.2s}
+.step button:hover:not(:disabled){background:rgba(227,176,75,0.25)}
 .step button:disabled{opacity:.3;cursor:not-allowed}
-.step output{min-width:24px;text-align:center;font-family:var(--font-tech);font-size:13px;font-weight:700;color:var(--cream)}
+.step output{min-width:26px;text-align:center;font-family:var(--font-tech);font-size:13px;font-weight:700;color:var(--cream)}
 
-/* Estados */
-.skel{height:114px;border-radius:18px;background:linear-gradient(90deg,var(--surface) 25%, rgba(0,255,136,0.05) 50%, var(--surface) 75%);background-size:200% 100%;animation:sh 1.4s infinite}
+/* Estados de Carga */
+.skel{height:124px;border-radius:20px;background:linear-gradient(90deg,var(--surface) 25%, rgba(227,176,75,0.08) 50%, var(--surface) 75%);background-size:200% 100%;animation:sh 1.4s infinite}
 @keyframes sh{to{background-position:-200% 0}}
-.msg{text-align:center;color:var(--muted);padding:30px 12px}
-.msg button{margin-top:12px;color:var(--neon);border:1px solid var(--neon);border-radius:8px;padding:8px 18px;font-family:var(--font-tech);font-size:12px}
+.msg{text-align:center;color:var(--muted);padding:35px 12px;font-family:var(--font-tech);font-size:13px;letter-spacing:1px}
+.msg button{margin-top:14px;color:var(--gold);border:1px solid var(--gold);border-radius:10px;padding:9px 20px;font-family:var(--font-tech);font-size:12px;box-shadow:0 0 10px var(--gold-glow)}
 
-/* Carrito Cibernético Flotante */
+/* Carrito Flotante Dorado */
 .bar{
-  position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));
-  transform:translate(-50%,170%);width:calc(100% - 32px);max-width:448px;z-index:30;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-radius:16px;
-  background:rgba(6, 22, 16, 0.9);backdrop-filter:blur(15px);
-  border:1px solid var(--neon);box-shadow:0 15px 35px rgba(0,0,0,0.8), 0 0 20px var(--neon-glow);
+  position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));
+  transform:translate(-50%,180%);width:calc(100% - 32px);max-width:448px;z-index:30;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-radius:18px;
+  background:rgba(20, 14, 10, 0.94);backdrop-filter:blur(20px);
+  border:1px solid var(--gold);box-shadow:0 20px 40px rgba(0,0,0,0.9), 0 0 25px var(--gold-glow);
   transition:transform .35s cubic-bezier(.3,.8,.3,1);
 }
 .bar.show{transform:translate(-50%,0)}
-.bar b{font-family:var(--font-tech);font-size:13px;color:var(--muted);letter-spacing:1px}
-.bar .tot{font-family:var(--font-tech);font-size:22px;font-weight:700;color:var(--amber);text-shadow:0 0 10px var(--amber-glow)}
+.bar b{font-family:var(--font-tech);font-size:12px;color:var(--muted);letter-spacing:1.5px}
+.bar .tot{font-family:var(--font-serif);font-size:26px;font-weight:700;color:var(--gold);text-shadow:0 0 12px var(--gold-glow)}
 
-/* Modal / Sheet Holográfico */
-.sheet-bg{position:fixed;inset:0;background:rgba(2, 6, 5, 0.8);backdrop-filter:blur(6px);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
+/* Modal / Sheet Holográfico Dorado */
+.sheet-bg{position:fixed;inset:0;background:rgba(2, 1, 1, 0.88);backdrop-filter:blur(8px);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
 .sheet-bg.open{opacity:1;pointer-events:auto}
 .sheet{
   position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:100%;max-width:480px;max-height:88vh;overflow:auto;z-index:50;
-  background:rgba(8, 24, 18, 0.95);backdrop-filter:blur(20px);
-  border:1px solid var(--neon);border-top:2px solid var(--neon);
-  border-radius:24px 24px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));
-  box-shadow:0 -15px 45px rgba(0,0,0,0.9), 0 0 25px var(--neon-glow);
+  background:rgba(18, 13, 9, 0.97);backdrop-filter:blur(25px);
+  border:1px solid var(--gold);border-top:2px solid var(--gold);
+  border-radius:28px 28px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:0 -20px 50px rgba(0,0,0,0.95), 0 0 30px var(--gold-glow);
   transition:transform .35s cubic-bezier(.3,.8,.3,1);
 }
 .sheet.open{transform:translate(-50%,0)}
-.sheet h2{font-family:var(--font-tech);font-size:24px;color:#fff;margin-bottom:6px;letter-spacing:1px}
-.line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid rgba(0,255,136,0.15)}
-.line .n{font-size:13px;font-weight:700;color:var(--cream)}
-.line .s{font-size:12px;color:var(--muted)}
+.sheet h2{font-family:var(--font-serif);font-size:30px;color:var(--cream);margin-bottom:8px;text-shadow:0 0 10px var(--gold-glow)}
+.line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0;border-top:1px solid rgba(227,176,75,0.2)}
+.line .n{font-size:14px;font-weight:600;color:var(--cream)}
+.line .s{font-size:13px;color:var(--muted)}
 .field{
-  width:100%;margin-top:10px;background:rgba(0,0,0,0.6);color:var(--cream);
-  border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;font-size:14px;
+  width:100%;margin-top:12px;background:rgba(0,0,0,0.7);color:var(--cream);
+  border:1px solid var(--line);border-radius:12px;padding:14px;font:inherit;font-size:15px;
 }
-.field:focus{border-color:var(--neon);box-shadow:0 0 10px var(--neon-glow);outline:none}
-.total{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0;font-size:14px}
-.total strong{font-family:var(--font-tech);font-size:28px;color:var(--amber);text-shadow:0 0 10px var(--amber-glow)}
+.field:focus{border-color:var(--gold);box-shadow:0 0 12px var(--gold-glow);outline:none}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin:18px 0;font-size:15px}
+.total strong{font-family:var(--font-serif);font-size:32px;color:var(--gold);text-shadow:0 0 12px var(--gold-glow)}
 
 .wa{
-  width:100%;padding:14px;border-radius:12px;
-  background:linear-gradient(135deg, #00ff88, #00b4d8);color:#030706;
+  width:100%;padding:16px;border-radius:14px;
+  background:#25d366;color:#07240f;
   font-family:var(--font-tech);font-weight:900;font-size:14px;letter-spacing:1px;
-  display:flex;justify-content:center;align-items:center;gap:8px;
-  box-shadow:0 0 20px var(--neon-glow);transition:all 0.2s;
+  display:flex;justify-content:center;align-items:center;gap:10px;
+  box-shadow:0 0 25px rgba(37, 211, 102, 0.4);transition:all 0.25s;
 }
-.wa:hover{box-shadow:0 0 30px var(--neon);transform:translateY(-2px)}
+.wa:hover{box-shadow:0 0 35px rgba(37, 211, 102, 0.7);transform:translateY(-2px)}
 .wa svg{width:20px;height:20px;fill:currentColor}
-.close{float:right;color:var(--muted);font-size:24px;line-height:1;padding:4px 8px;cursor:pointer}
-.close:hover{color:var(--neon)}
+.close{float:right;color:var(--muted);font-size:26px;line-height:1;padding:4px 8px;cursor:pointer}
+.close:hover{color:var(--gold)}
 
 .toast{
-  position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-180%);
-  background:rgba(8, 24, 18, 0.95);border:1px solid var(--neon);
-  padding:10px 20px;border-radius:999px;font-size:13px;z-index:60;transition:transform .35s;
-  max-width:90%;box-shadow:0 0 20px var(--neon-glow);letter-spacing:0.5px;color:var(--neon);
+  position:fixed;top:calc(18px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-190%);
+  background:rgba(18, 13, 9, 0.97);border:1px solid var(--gold);
+  padding:12px 22px;border-radius:999px;font-size:13px;z-index:60;transition:transform .35s;
+  max-width:90%;box-shadow:0 0 25px var(--gold-glow);letter-spacing:1px;color:var(--gold);
+  font-family:var(--font-tech);
 }
 .toast.show{transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -252,52 +278,53 @@ h1{
   <header>
     <div class="holo-container">
       <div class="holo-ring"></div>
+      <div class="holo-ring-inner"></div>
       <div class="logo" role="img" aria-label="Logotipo de Honey Cream">
         <img src="logo.jpg" alt="Honey Cream Logo">
       </div>
     </div>
-    <h1>HONEY CREAM</h1>
-    <p class="tagline">// Cybernetic Sweets & Honey</p>
+    <h1>Honey Cream</h1>
+    <p class="tagline">Como la miel pero más rico...</p>
   </header>
 
   <section class="info" aria-label="Información de la tienda">
     <div class="row">
       <svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-      <div><b>UBICACIÓN_SYS</b><p>Ciudadela, Zona 18, Edif. 4, Apto 3-6</p></div>
+      <div><b>Ubicación</b><p>Ciudadela, Zona 18, Edif. 4, Apto 3-6</p></div>
     </div>
     <div class="row">
       <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
-      <div><b>ZONAS_DE_ENVÍO</b><p>Casco de San Felipe, Corotico, Marín y Albarico</p></div>
+      <div><b>Zonas de delivery</b><p>Casco de San Felipe, Corotico, Marín y Albarico</p></div>
     </div>
     <div class="row">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-      <div><b>HORARIO_OPERATIVO</b><p>Lunes a Sábado: 8:00 a.m. - 5:00 p.m.</p></div>
+      <div><b>Horario</b><p>Lunes a Sábado: 8:00 a.m. - 5:00 p.m.</p></div>
     </div>
   </section>
 
   <div class="tabs-wrap">
     <div class="seg" id="seg" data-mode="detal" role="tablist" aria-label="Tipo de compra">
       <span class="thumb"></span>
-      <button role="tab" aria-selected="true" data-mode="detal">AL DETAL</button>
-      <button role="tab" aria-selected="false" data-mode="mayor">AL MAYOR</button>
+      <button role="tab" aria-selected="true" data-mode="detal">Al Detal</button>
+      <button role="tab" aria-selected="false" data-mode="mayor">Al Mayor</button>
     </div>
   </div>
-  <p class="hint" id="hint">MODO: Precios por unidad individual</p>
+  <p class="hint" id="hint">Precios para compras por unidad</p>
 
   <main class="list" id="list" aria-live="polite"></main>
 </div>
 
 <button class="bar" id="bar" aria-label="Ver pedido">
-  <span><b id="barCount">0 ITEMS</b><br><small style="color:var(--neon)">ACCEDER AL CARRITO</small></span>
+  <span><b id="barCount">0 productos</b><br><small style="color:var(--gold)">Ver pedido</small></span>
   <span class="tot" id="barTotal">$0.00</span>
 </button>
 
 <div class="sheet-bg" id="bg"></div>
 <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Resumen del pedido">
   <button class="close" id="close" aria-label="Cerrar">×</button>
-  <h2>// ORDEN_ACTUAL</h2>
+  <h2>Tu pedido</h2>
   <div id="lines"></div>
-  <input class="field" id="name" placeholder="Nombre de usuario" autocomplete="name">
+  <input class="field" id="name" placeholder="Tu nombre" autocomplete="name">
   <select class="field" id="zone" aria-label="Entrega">
     <option value="Retiro en tienda">Retiro en tienda</option>
     <option>Casco de San Felipe</option>
@@ -305,43 +332,42 @@ h1{
     <option>Marín</option>
     <option>Albarico</option>
   </select>
-  <div class="total"><span id="sheetMode" style="color:var(--muted)">TOTAL GENERAL</span><strong id="sheetTotal">$0.00</strong></div>
+  <div class="total"><span id="sheetMode" style="color:var(--muted)">Total</span><strong id="sheetTotal">$0.00</strong></div>
   <button class="wa" id="send">
     <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.2 14.8l-.4-.2-2.600.8.8-2.500-.3-.4A8 8 0 0 1 12 4zm-3 4c-.3 0-.7.2-.9.6-.3.5-.5 1.100-.1 2 .6 1.500 2.300 3.500 4.500 4.500 1 .4 1.700.4 2.200.3.500-.1 1.100-.6 1.300-1.200.1-.3.100-.6 0-.7l-1.700-.8c-.2-.1-.4 0-.5.100l-.6.800c-.1.100-.3.100-.4.100-.6-.3-1.600-.9-2.300-2-.1-.2 0-.3.100-.4l.4-.5c.1-.1.100-.3 0-.5l-.7-1.600c-.1-.2-.3-.3-.5-.3z"/></svg>
-    TRANSMITIR PEDIDO VIA WHATSAPP
+    Enviar pedido por WhatsApp
   </button>
 </section>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
-/* ===== Configuración ===== */
 const CSV_URL    = "https://docs.google.com/spreadsheets/d/11gpTcGFAPMcElmUwwHpCeKTWIDSCBjZZxbFTtOLIrzc/export?format=csv&gid=0";
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyo7__4Q6VsGWTTcaGJgPWw6w7Evt083ny3uxGUHnHqc2I869M2bPYHGQC8bqT5L2ojcQ/exec";
 const WHATSAPP   = "584245284850";
 const MONEDA     = "$";
 
-/* ===== Partículas cibernéticas ===== */
+/* ===== Partículas doradas flotantes ===== */
 (function initParticles(){
   const wrap = document.getElementById("particles");
-  for(let i = 0; i < 22; i++){
+  for(let i = 0; i < 24; i++){
     const p = document.createElement("span");
     p.className = "particle";
     p.style.left = (Math.random() * 100) + "%";
-    p.style.animationDuration = (Math.random() * 5 + 4) + "s";
+    p.style.animationDuration = (Math.random() * 4 + 3) + "s";
     p.style.animationDelay = (Math.random() * 5) + "s";
     wrap.appendChild(p);
   }
 })();
 
-/* ===== Tilt 3D Cibernético ===== */
+/* ===== Tilt 3D Holográfico ===== */
 function bind3DTilt(){
   document.querySelectorAll(".card").forEach(card => {
     const move = (clientX, clientY) => {
       const r = card.getBoundingClientRect();
       const x = clientX - r.left, y = clientY - r.top;
-      const rx = ((y / r.height) - 0.5) * -12;
-      const ry = ((x / r.width) - 0.5) * 12;
-      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+      const rx = ((y / r.height) - 0.5) * -14;
+      const ry = ((x / r.width) - 0.5) * 14;
+      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(10px)`;
     };
     const reset = () => { card.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px)"; };
     card.addEventListener("mousemove", e => move(e.clientX, e.clientY));
@@ -398,7 +424,7 @@ async function load(){
     if (!products.length) throw new Error("vacío");
     render();
   }catch(e){
-    $("list").innerHTML = '<div class="msg">ERROR DE CONEXIÓN CON EL SERVIDOR DE DATOS.<br><button id="retry">REINTENTAR</button></div>';
+    $("list").innerHTML = '<div class="msg">No se pudo cargar el catálogo. Revisa tu conexión.<br><button id="retry">Reintentar</button></div>';
     $("retry").onclick = load;
   }
 }
@@ -407,10 +433,10 @@ const price = p => mode === "mayor" ? p.mayor : p.detal;
 function render(){
   $("list").innerHTML = products.map(p => {
     const q = cart[p.id] || 0, out = p.stock <= 0;
-    const ctl = out ? '<button class="add" disabled>AGOTADO</button>'
-      : q === 0 ? `<button class="add" data-act="add" data-id="${esc(p.id)}">+ AÑADIR</button>`
+    const ctl = out ? '<button class="add" disabled>Agotado</button>'
+      : q === 0 ? `<button class="add" data-act="add" data-id="${esc(p.id)}">Agregar</button>`
       : `<div class="step"><button data-act="minus" data-id="${esc(p.id)}">−</button><output>${q}</output><button data-act="plus" data-id="${esc(p.id)}" ${q >= p.stock ? "disabled" : ""}>+</button></div>`;
-    const stk = out ? "" : `<span class="stock ${p.stock <= 5 ? "low" : ""}">${p.stock <= 5 ? "¡ÚLTIMOS " + p.stock + "!" : "Stock: " + p.stock}</span>`;
+    const stk = out ? "" : `<span class="stock ${p.stock <= 5 ? "low" : ""}">${p.stock <= 5 ? "Quedan " + p.stock : p.stock + " disponibles"}</span>`;
     const img = p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy" onerror="this.remove()">` : "";
     return `<article class="card ${out ? "out" : ""}">
       <div class="thumb-img">${img || esc(p.name.charAt(0).toUpperCase())}</div>
@@ -427,9 +453,9 @@ function lines(){
 function updateCart(){
   const ls = lines(), count = ls.reduce((a, l) => a + l.q, 0), total = ls.reduce((a, l) => a + l.sub, 0);
   $("bar").classList.toggle("show", count > 0);
-  $("barCount").textContent = count + (count === 1 ? " ITEM" : " ITEMS");
+  $("barCount").textContent = count + (count === 1 ? " producto" : " productos");
   $("barTotal").textContent = $("sheetTotal").textContent = money(total);
-  $("sheetMode").textContent = "TOTAL // " + (mode === "mayor" ? "AL MAYOR" : "AL DETAL");
+  $("sheetMode").textContent = "Total · " + (mode === "mayor" ? "Al Mayor" : "Al Detal");
   $("lines").innerHTML = ls.map(l => `<div class="line"><div><div class="n">${esc(l.p.name)}</div><div class="s">${l.q} × ${money(price(l.p))} = ${money(l.sub)}</div></div>
     <div class="step"><button data-act="minus" data-id="${esc(l.p.id)}">−</button><output>${l.q}</output><button data-act="plus" data-id="${esc(l.p.id)}" ${l.q >= l.p.stock ? "disabled" : ""}>+</button></div></div>`).join("");
   if (!count) closeSheet();
@@ -441,14 +467,14 @@ document.addEventListener("click", e => {
   const q = cart[p.id] || 0;
   if (b.dataset.act === "minus") q <= 1 ? delete cart[p.id] : cart[p.id] = q - 1;
   else if (q < p.stock) cart[p.id] = q + 1;
-  else toast("LÍMITE DE STOCK ALCANZADO");
+  else toast("Ya llegaste al máximo disponible");
   render();
 });
 $("seg").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   mode = b.dataset.mode; $("seg").dataset.mode = mode;
   document.querySelectorAll("#seg button").forEach(x => x.setAttribute("aria-selected", x === b));
-  $("hint").textContent = mode === "mayor" ? "MODO: Precios al por mayor (bulk)" : "MODO: Precios por unidad individual";
+  $("hint").textContent = mode === "mayor" ? "Precios para compras al por mayor" : "Precios para compras por unidad";
   render();
 });
 const openSheet = () => { $("sheet").classList.add("open"); $("bg").classList.add("open"); };
@@ -461,8 +487,8 @@ $("send").onclick = () => {
   const total = ls.reduce((a, l) => a + l.sub, 0);
   const name = $("name").value.trim(), zone = $("zone").value;
   const tipo = mode === "mayor" ? "Al Mayor" : "Al Detal";
-  const text = ["🍯 *PEDIDO CYBER - HONEY CREAM*", `Tipo: ${tipo}`, name ? `Cliente: ${name}` : "", `Destino: ${zone}`, "",
-    ...ls.map(l => `• ${l.q} × ${l.p.name} — ${money(l.sub)}`), "", `*TOTAL: ${money(total)}*`].filter((x, i) => x !== "" || i > 0).join("\n");
+  const text = ["🍯 *Pedido Honey Cream*", `Tipo: ${tipo}`, name ? `Nombre: ${name}` : "", `Entrega: ${zone}`, "",
+    ...ls.map(l => `• ${l.q} × ${l.p.name} — ${money(l.sub)}`), "", `*Total: ${money(total)}*`].filter((x, i) => x !== "" || i > 0).join("\n");
 
   const payload = {
     accion: "descontar_inventario", fecha: new Date().toISOString(), tipo, cliente: name, entrega: zone, total,
@@ -472,7 +498,7 @@ $("send").onclick = () => {
 
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`, "_blank");
   ls.forEach(l => l.p.stock = Math.max(0, l.p.stock - l.q));
-  cart = {}; closeSheet(); render(); toast("ORDEN TRANSMITIDA CON ÉXITO");
+  cart = {}; closeSheet(); render(); toast("Pedido enviado. Gracias por elegir Honey Cream");
 };
 
 load();

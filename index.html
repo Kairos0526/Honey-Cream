@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050507">
-<title>Honey Cream · 3D Holographic Bees</title>
+<title>Honey Cream · 3D Holographic Bees UI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@ body{
   line-height:1.55;overflow-x:hidden;position:relative;
 }
 
-/* Lienzo 3D de fondo con abejas holográficas y gotas de miel */
+/* Lienzo 3D con abejas articuladas y gotas de miel */
 #holo-canvas{
   position:fixed;inset:0;width:100%;height:100%;
   pointer-events:none;z-index:1;
@@ -145,7 +145,7 @@ h1{
   position:relative;overflow:hidden;
 }
 .floating-panel::before{
-  content:"HOLO_BEES // LIVE 3D";position:absolute;top:6px;right:16px;
+  content:"HOLO_SWARM // 3D ARTICULATED";position:absolute;top:6px;right:16px;
   font-size:8px;letter-spacing:2px;color:var(--silver);opacity:0.55;
 }
 .row{display:flex;gap:14px;padding:12px 0;align-items:flex-start}
@@ -402,8 +402,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyo7__4Q6VsGWTTcaGJg
 const WHATSAPP   = "584245284850";
 const MONEDA     = "$";
 
-/* ===== Motor 3D Three.js: Enjambre de Abejas Holográficas y Gotas de Miel Cahendo ===== */
-(function initHoloBees3D(){
+/* ===== Motor 3D Three.js: Abejas Holográficas Articuladas con Alas Batientes + Gotas Hexagonales de Miel ===== */
+(function initArticulatedBees3D(){
   const canvas = document.getElementById("holo-canvas");
   if(!window.THREE) return;
   const scene = new THREE.Scene();
@@ -414,93 +414,207 @@ const MONEDA     = "$";
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // Grupo Central del Enjambre Holográfico de Abejas
+  // Materiales holográficos translúcidos
+  const goldBodyMat = new THREE.MeshBasicMaterial({
+    color: 0xe3b04b,
+    transparent: true,
+    opacity: 0.72
+  });
+  const silverStripeMat = new THREE.MeshBasicMaterial({
+    color: 0xe2e8f0,
+    transparent: true,
+    opacity: 0.85
+  });
+  const wireOutlineMat = new THREE.MeshBasicMaterial({
+    color: 0xffe5a3,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.35
+  });
+  const wingMat = new THREE.MeshBasicMaterial({
+    color: 0xf8fafc,
+    transparent: true,
+    opacity: 0.42,
+    side: THREE.DoubleSide
+  });
+  const wingEdgeMat = new THREE.MeshBasicMaterial({
+    color: 0xe2e8f0,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.5
+  });
+
+  // Función constructora de una abeja 3D articulada con alas grandes definidas
+  function createHolographicBee(scale = 1){
+    const beeGroup = new THREE.Group();
+
+    // 1. Cabeza
+    const headGeo = new THREE.SphereGeometry(0.24, 12, 12);
+    const head = new THREE.Mesh(headGeo, silverStripeMat);
+    head.position.set(0, 0, 0.58);
+    beeGroup.add(head);
+
+    // Antenas delicadas
+    const antGeo = new THREE.CylinderGeometry(0.015, 0.015, 0.35, 6);
+    const antL = new THREE.Mesh(antGeo, goldBodyMat);
+    antL.position.set(-0.1, 0.22, 0.72);
+    antL.rotation.set(0.5, 0, 0.3);
+    const antR = new THREE.Mesh(antGeo, goldBodyMat);
+    antR.position.set(0.1, 0.22, 0.72);
+    antR.rotation.set(0.5, 0, -0.3);
+    beeGroup.add(antL, antR);
+
+    // 2. Tórax central
+    const thoraxGeo = new THREE.SphereGeometry(0.34, 14, 14);
+    thoraxGeo.scale(1, 0.95, 1.15);
+    const thorax = new THREE.Mesh(thoraxGeo, goldBodyMat);
+    thorax.position.set(0, 0, 0.2);
+    const thoraxWire = new THREE.Mesh(thoraxGeo, wireOutlineMat);
+    thoraxWire.position.copy(thorax.position);
+    beeGroup.add(thorax, thoraxWire);
+
+    // 3. Abdomen segmentado con franjas doradas y plateadas
+    const abdGroup = new THREE.Group();
+    abdGroup.position.set(0, -0.04, -0.42);
+
+    const seg1 = new THREE.Mesh(new THREE.SphereGeometry(0.38, 14, 14), silverStripeMat);
+    seg1.scale.set(1, 0.95, 0.8);
+    seg1.position.z = 0.16;
+
+    const seg2 = new THREE.Mesh(new THREE.SphereGeometry(0.41, 14, 14), goldBodyMat);
+    seg2.scale.set(1, 0.95, 0.9);
+    seg2.position.z = -0.05;
+
+    const seg3 = new THREE.Mesh(new THREE.SphereGeometry(0.34, 14, 14), silverStripeMat);
+    seg3.scale.set(1, 0.92, 0.95);
+    seg3.position.z = -0.26;
+
+    const stinger = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.35, 8), goldBodyMat);
+    stinger.rotation.x = -Math.PI / 2;
+    stinger.position.z = -0.52;
+
+    abdGroup.add(seg1, seg2, seg3, stinger);
+    beeGroup.add(abdGroup);
+
+    // 4. Alas translúcidas grandes y definidas con pivote en el tórax para aletear
+    const wingShape = new THREE.Shape();
+    wingShape.moveTo(0, 0);
+    wingShape.bezierCurveTo(0.4, 0.35, 1.35, 0.45, 1.55, 0.1);
+    wingShape.bezierCurveTo(1.65, -0.15, 0.95, -0.35, 0, -0.05);
+
+    const wingGeo = new THREE.ShapeGeometry(wingShape, 16);
+    wingGeo.rotateX(Math.PI / 2);
+
+    // Pivote Ala Izquierda
+    const leftWingPivot = new THREE.Group();
+    leftWingPivot.position.set(0.18, 0.28, 0.22);
+    const leftWingMesh = new THREE.Mesh(wingGeo, wingMat);
+    const leftWingWire = new THREE.Mesh(wingGeo, wingEdgeMat);
+    leftWingPivot.add(leftWingMesh, leftWingWire);
+
+    // Pivote Ala Derecha (espejada)
+    const rightWingPivot = new THREE.Group();
+    rightWingPivot.position.set(-0.18, 0.28, 0.22);
+    rightWingPivot.scale.x = -1;
+    const rightWingMesh = new THREE.Mesh(wingGeo, wingMat);
+    const rightWingWire = new THREE.Mesh(wingGeo, wingEdgeMat);
+    rightWingPivot.add(rightWingMesh, rightWingWire);
+
+    // Alas secundarias traseras más pequeñas
+    const hindWingPivotL = new THREE.Group();
+    hindWingPivotL.position.set(0.16, 0.24, 0.04);
+    hindWingPivotL.scale.set(0.65, 0.65, 0.65);
+    hindWingPivotL.rotation.y = -0.25;
+    hindWingPivotL.add(new THREE.Mesh(wingGeo, wingMat));
+
+    const hindWingPivotR = new THREE.Group();
+    hindWingPivotR.position.set(-0.16, 0.24, 0.04);
+    hindWingPivotR.scale.set(-0.65, 0.65, 0.65);
+    hindWingPivotR.rotation.y = 0.25;
+    hindWingPivotR.add(new THREE.Mesh(wingGeo, wingMat));
+
+    beeGroup.add(leftWingPivot, rightWingPivot, hindWingPivotL, hindWingPivotR);
+    beeGroup.scale.setScalar(scale);
+
+    return {
+      mesh: beeGroup,
+      leftWing: leftWingPivot,
+      rightWing: rightWingPivot,
+      hindL: hindWingPivotL,
+      hindR: hindWingPivotR
+    };
+  }
+
+  // Enjambre principal orbitando alrededor de la cabecera
   const swarmGroup = new THREE.Group();
-  swarmGroup.position.set(0, 4.5, -3);
+  swarmGroup.position.set(0, 4.8, -2);
   scene.add(swarmGroup);
 
-  // Crear modelos estilizados de abejas flotando (pequeños cristales dorados y plateados con alas)
-  const bees = [];
-  const beeGeo = new THREE.ConeGeometry(0.35, 0.8, 4);
-  beeGeo.rotateX(Math.PI / 2);
+  const orbitingBees = [];
+  const orbitCount = 7;
+  for(let i = 0; i < orbitCount; i++){
+    const scale = 0.85 + (i % 3) * 0.22;
+    const beeObj = createHolographicBee(scale);
+    const angle = (i / orbitCount) * Math.PI * 2;
+    const radius = 4.6 + (i % 2) * 1.4;
 
-  const goldBeeMat = new THREE.MeshBasicMaterial({ color: 0xe3b04b, wireframe: true, transparent: true, opacity: 0.65 });
-  const silverBeeMat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, wireframe: true, transparent: true, opacity: 0.55 });
-
-  for(let i = 0; i < 14; i++){
-    const mat = i % 2 === 0 ? goldBeeMat : silverBeeMat;
-    const bee = new THREE.Mesh(beeGeo, mat);
-    
-    // Posición inicial en órbita alrededor del logo
-    const angle = (i / 14) * Math.PI * 2;
-    const radius = 3.8 + Math.random() * 2.2;
-    bee.position.set(Math.cos(angle) * radius, (Math.random() - 0.5) * 2.5, Math.sin(angle) * radius);
-    
-    bee.userData = {
+    beeObj.orbitData = {
       angle: angle,
       radius: radius,
-      speed: 0.012 + Math.random() * 0.015,
-      yOff: Math.random() * Math.PI * 2,
-      ySpeed: 0.03 + Math.random() * 0.02
+      speed: 0.011 + (i % 3) * 0.003,
+      yBase: (i % 3 - 1) * 1.3,
+      yAmp: 0.6 + Math.random() * 0.5,
+      flapOffset: i * 1.1,
+      flapSpeed: 0.48 + Math.random() * 0.12
     };
-    swarmGroup.add(bee);
-    bees.push(bee);
+    swarmGroup.add(beeObj.mesh);
+    orbitingBees.push(beeObj);
   }
 
-  // Anillos orbitales de polen / estelas alrededor del enjambre
-  const ringGeo1 = new THREE.TorusGeometry(6.5, 0.03, 16, 100);
-  const ringMat1 = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.25 });
-  const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
-  ring1.rotation.x = Math.PI / 2.5;
-  swarmGroup.add(ring1);
+  // Abejas libres flotando y descendiendo suavemente por toda la pantalla
+  const freeBees = [];
+  for(let i = 0; i < 8; i++){
+    const beeObj = createHolographicBee(0.55 + Math.random() * 0.25);
+    beeObj.mesh.position.set(
+      (Math.random() - 0.5) * 24,
+      (Math.random() - 0.5) * 38,
+      (Math.random() - 0.5) * 10 - 3
+    );
+    beeObj.flightData = {
+      fallSpeed: 0.025 + Math.random() * 0.02,
+      swaySpeed: 0.02 + Math.random() * 0.015,
+      swayAmp: 1.8 + Math.random() * 1.5,
+      phase: Math.random() * Math.PI * 2,
+      flapSpeed: 0.52 + Math.random() * 0.1
+    };
+    scene.add(beeObj.mesh);
+    freeBees.push(beeObj);
+  }
 
-  const ringGeo2 = new THREE.TorusGeometry(7.8, 0.02, 16, 100);
-  const ringMat2 = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.22 });
-  const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
-  ring2.rotation.x = -Math.PI / 3;
-  ring2.rotation.y = Math.PI / 4;
-  swarmGroup.add(ring2);
+  // Gotas hexagonales de miel dorada y destellos plateados descendiendo
+  const dropCount = 120;
+  const dropGeo = new THREE.CylinderGeometry(0.14, 0.14, 0.05, 6);
+  dropGeo.rotateX(Math.PI / 2);
+  const honeyDropMat = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.55 });
+  const silverDropMat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.45 });
 
-  // Partículas de Gotas de Miel y Abejas menores cayendo / revoloteando
-  const pCount = 300;
-  const pGeo = new THREE.BufferGeometry();
-  const positions = new Float32Array(pCount * 3);
-  const colors = new Float32Array(pCount * 3);
-  const honeyVelocities = [];
-
-  const silverColor = new THREE.Color(0xe2e8f0);
-  const honeyGoldColor = new THREE.Color(0xe3b04b);
-
-  for(let i = 0; i < pCount; i++){
-    positions[i * 3]     = (Math.random() - 0.5) * 45;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 50;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 26 - 4;
-
-    const c = i % 3 === 0 ? silverColor : honeyGoldColor;
-    colors[i * 3]     = c.r;
-    colors[i * 3 + 1] = c.g;
-    colors[i * 3 + 2] = c.b;
-
-    honeyVelocities.push({
-      y: 0.02 + Math.random() * 0.04, // Velocidad de caída tipo gota de miel
-      x: (Math.random() - 0.5) * 0.015,
-      wobbleSpeed: 0.02 + Math.random() * 0.03,
-      wobbleDist: 0.4 + Math.random() * 0.8,
+  const honeyDrops = [];
+  for(let i = 0; i < dropCount; i++){
+    const drop = new THREE.Mesh(dropGeo, i % 3 === 0 ? silverDropMat : honeyDropMat);
+    drop.position.set(
+      (Math.random() - 0.5) * 40,
+      (Math.random() - 0.5) * 48,
+      (Math.random() - 0.5) * 22 - 4
+    );
+    drop.rotation.z = Math.random() * Math.PI;
+    drop.userData = {
+      vy: 0.022 + Math.random() * 0.032,
+      rotSpeed: (Math.random() - 0.5) * 0.03,
       phase: Math.random() * Math.PI * 2
-    });
+    };
+    scene.add(drop);
+    honeyDrops.push(drop);
   }
-  pGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  pGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-
-  const pMat = new THREE.PointsMaterial({
-    size: 0.25,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.78,
-    blending: THREE.AdditiveBlending
-  });
-  const particleSystem = new THREE.Points(pGeo, pMat);
-  scene.add(particleSystem);
 
   let mouseX = 0, mouseY = 0;
   window.addEventListener("mousemove", e => {
@@ -520,42 +634,70 @@ const MONEDA     = "$";
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  let clock = 0;
+  let tick = 0;
   function animate(){
     requestAnimationFrame(animate);
-    clock += 0.012;
+    tick += 1;
 
-    // Animar enjambre de abejas 3D en órbita viva
-    bees.forEach(bee => {
-      bee.userData.angle += bee.userData.speed;
-      const a = bee.userData.angle;
-      const r = bee.userData.radius;
-      bee.position.x = Math.cos(a) * r;
-      bee.position.z = Math.sin(a) * r;
-      bee.position.y = Math.sin(clock * bee.userData.ySpeed + bee.userData.yOff) * 1.5;
-      bee.rotation.y = -a;
+    // 1. Animar abejas orbitando alrededor del logo con aleteo rápido y definido
+    orbitingBees.forEach(b => {
+      const d = b.orbitData;
+      d.angle += d.speed;
+      const x = Math.cos(d.angle) * d.radius;
+      const z = Math.sin(d.angle) * d.radius;
+      const y = d.yBase + Math.sin(tick * 0.03 + d.flapOffset) * d.yAmp;
+
+      b.mesh.position.set(x, y, z);
+      // Orientar la cabeza hacia la dirección tangente del vuelo
+      b.mesh.rotation.y = -d.angle;
+      b.mesh.rotation.z = Math.sin(tick * 0.03 + d.flapOffset) * 0.15;
+
+      // Aleteo pronunciado de las 4 alas
+      const flap = Math.sin(tick * d.flapSpeed + d.flapOffset) * 0.72;
+      b.leftWing.rotation.z = flap;
+      b.rightWing.rotation.z = -flap;
+      b.hindL.rotation.z = flap * 0.85;
+      b.hindR.rotation.z = -flap * 0.85;
     });
 
-    ring1.rotation.z += 0.007;
-    ring2.rotation.z -= 0.005;
+    swarmGroup.rotation.y += (mouseX * 0.35 - swarmGroup.rotation.y) * 0.05;
+    swarmGroup.rotation.x += (mouseY * 0.25 - swarmGroup.rotation.x) * 0.05;
 
-    swarmGroup.position.y = 4.5 + Math.sin(clock * 1.2) * 0.5;
-    swarmGroup.rotation.y += (mouseX * 0.4 - swarmGroup.rotation.y) * 0.05;
-    swarmGroup.rotation.x += (mouseY * 0.3 - swarmGroup.rotation.x) * 0.05;
+    // 2. Animar abejas libres descendiendo en zigzag suave por la pantalla
+    freeBees.forEach(b => {
+      const f = b.flightData;
+      b.mesh.position.y -= f.fallSpeed;
+      const prevX = b.mesh.position.x;
+      b.mesh.position.x += Math.cos(tick * f.swaySpeed + f.phase) * 0.045;
+      const dx = b.mesh.position.x - prevX;
 
-    // Animar gotas de miel y partículas cayendo con oscilación suave
-    const posAttr = pGeo.attributes.position;
-    for(let i = 0; i < pCount; i++){
-      const v = honeyVelocities[i];
-      posAttr.array[i * 3 + 1] -= v.y; // Caída simulando densidad de miel / polen
-      posAttr.array[i * 3]     += Math.sin(clock * v.wobbleSpeed + v.phase) * 0.015;
+      // Inclinar la abeja según hacia dónde vuela
+      b.mesh.rotation.y = dx > 0 ? 0.45 : -0.45;
+      b.mesh.rotation.x = 0.25;
 
-      if(posAttr.array[i * 3 + 1] < -25) {
-        posAttr.array[i * 3 + 1] = 25;
-        posAttr.array[i * 3] = (Math.random() - 0.5) * 45;
+      const flap = Math.sin(tick * f.flapSpeed + f.phase) * 0.75;
+      b.leftWing.rotation.z = flap;
+      b.rightWing.rotation.z = -flap;
+      b.hindL.rotation.z = flap * 0.85;
+      b.hindR.rotation.z = -flap * 0.85;
+
+      if(b.mesh.position.y < -22){
+        b.mesh.position.y = 22;
+        b.mesh.position.x = (Math.random() - 0.5) * 24;
       }
-    }
-    posAttr.needsUpdate = true;
+    });
+
+    // 3. Animar gotas hexagonales de miel dorada y plateada
+    honeyDrops.forEach(drop => {
+      const u = drop.userData;
+      drop.position.y -= u.vy;
+      drop.position.x += Math.sin(tick * 0.02 + u.phase) * 0.015;
+      drop.rotation.z += u.rotSpeed;
+      if(drop.position.y < -25){
+        drop.position.y = 25;
+        drop.position.x = (Math.random() - 0.5) * 40;
+      }
+    });
 
     renderer.render(scene, camera);
   }
@@ -685,7 +827,7 @@ $("seg").addEventListener("click", e => {
 });
 const openSheet = () => { $("sheet").classList.add("open"); $("bg").classList.add("open"); };
 const closeSheet = () => { $("sheet").classList.remove("open"); $("bg").classList.remove("open"); };
-$("bar").onclick = openSheet; $("close").onclick = closeSheet; $("bg").onclick = openSheet; // Nota: corregido al cerrar
+$("bar").onclick = openSheet; $("close").onclick = closeSheet; $("bg").onclick = closeSheet;
 let tt; function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 2600); }
 
 $("send").onclick = () => {

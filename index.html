@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050507">
-<title>Honey Cream · Tienda Oficial</title>
+<title>Honey Cream · Tortas Artesanales</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 /* ==========================================
-   CONFIGURACIÓN Y VARIABLES DEL NEGOCIO
+   BLOQUE DE CONFIGURACIÓN DEL NEGOCIO
+   Edita aquí tus datos sin tocar el resto
    ========================================== */
 :root{
   --bg: #050507;
@@ -40,7 +41,6 @@ body{
   line-height:1.55;overflow-x:hidden;position:relative;
 }
 
-/* Enlace de accesibilidad para saltar al contenido */
 .skip-link{
   position:absolute;top:-40px;left:16px;background:var(--gold);color:#050507;padding:8px 16px;z-index:100;font-weight:700;border-radius:8px;transition:top 0.2s;
 }
@@ -75,7 +75,7 @@ body{
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;min-height:44px;min-width:44px}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-/* Sección 1: Portada y Cabecera */
+/* Sección 1: Portada */
 header{
   text-align:center;padding:34px 0 22px;
   perspective:1200px;position:relative;
@@ -128,7 +128,6 @@ h1{
   background:rgba(227,176,75,0.15);border:1px solid var(--gold);color:var(--gold-bright);
 }
 
-/* Paneles de vidrio flotantes */
 .floating-panel{
   background:var(--glass);
   backdrop-filter:blur(22px) saturate(135%);
@@ -140,58 +139,65 @@ h1{
 }
 .floating-panel h2{font-family:var(--serif);font-size:24px;color:var(--pearl);margin-bottom:12px;border-bottom:1px solid var(--silver-line);padding-bottom:6px}
 
-/* Sección 2: Menú en pestañas */
+/* Sección 2: Menú y Pestañas Detal / Mayor */
 .tabs-wrap{position:sticky;top:10px;z-index:20;padding:6px 0}
 .seg{
-  position:relative;display:grid;grid-template-columns:repeat(2, 1fr);
+  position:relative;display:grid;grid-template-columns:1fr 1fr;
   background:rgba(12, 13, 18, 0.85);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border:1px solid var(--silver-line);border-radius:16px;padding:5px;
   box-shadow:0 15px 35px rgba(0,0,0,0.85);
 }
+.seg .thumb{
+  position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);border-radius:12px;
+  background:linear-gradient(135deg, var(--gold-bright), var(--gold), var(--gold-deep));
+  border:1px solid #fff3c4;box-shadow:0 0 22px var(--gold-glow);
+  transition:transform .35s cubic-bezier(.3,.8,.3,1);
+}
+.seg[data-mode="mayor"] .thumb{transform:translateX(100%)}
 .seg button{
-  position:relative;z-index:1;padding:12px 6px;font-weight:600;font-size:13px;
+  position:relative;z-index:1;padding:11px 0;font-weight:600;font-size:13.5px;
   color:var(--silver);letter-spacing:0.5px;text-align:center;transition:color .25s;
 }
-.seg button[aria-selected="true"]{color:#050507;font-weight:750;background:var(--gold);border-radius:12px;box-shadow:0 0 15px var(--gold-glow)}
+.seg button[aria-selected="true"]{color:#050507;font-weight:750}
 .hint{font-size:13px;color:var(--silver);opacity:0.75;text-align:center;margin:8px 0 18px}
 
 .list{display:grid;gap:20px;perspective:1200px}
 .card{
-  position:relative;display:grid;grid-template-columns:90px 1fr;gap:14px;
+  position:relative;display:grid;grid-template-columns:100px 1fr;gap:16px;
   background:var(--glass-card);backdrop-filter:blur(22px);
   border:1px solid var(--silver-line);border-radius:22px;padding:16px;
   box-shadow:0 22px 45px -10px rgba(0,0,0,0.9);
 }
 .thumb-img{
-  width:90px;height:90px;border-radius:16px;
+  width:100px;height:100px;border-radius:18px;
   background:radial-gradient(circle at 30% 30%, rgba(45,48,60,0.8), rgba(10,11,15,0.95));
   border:1px solid rgba(226,232,240,0.35);
-  display:grid;place-items:center;font-family:var(--serif);font-size:32px;font-style:italic;color:var(--gold);
+  display:grid;place-items:center;font-family:var(--serif);font-size:36px;font-style:italic;color:var(--gold);
 }
 .body{display:flex;flex-direction:column;min-width:0}
-.body h3{font-family:var(--serif);font-size:22px;line-height:1.15;font-weight:700;color:var(--pearl)}
+.body h3{font-family:var(--serif);font-size:24px;line-height:1.15;font-weight:700;color:var(--pearl)}
 .desc{font-size:13px;color:var(--silver);opacity:0.8;margin-top:4px}
 .foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:12px}
-.price{font-weight:700;font-size:18px;color:var(--gold-bright);text-shadow:0 0 14px var(--gold-glow)}
+.price{font-weight:700;font-size:19px;color:var(--gold-bright);text-shadow:0 0 14px var(--gold-glow)}
 
 .add{
   background:linear-gradient(135deg, var(--gold-bright), var(--gold));
-  color:#050507;font-weight:700;font-size:13px;padding:10px 16px;border-radius:12px;
+  color:#050507;font-weight:700;font-size:13px;padding:10px 18px;border-radius:12px;
   box-shadow:0 6px 20px var(--gold-glow);
 }
 .step{
   display:flex;align-items:center;background:rgba(8,9,13,0.8);
   border:1px solid var(--silver-line);border-radius:12px;overflow:hidden;
 }
-.step button{width:36px;height:36px;font-size:18px;font-weight:700;color:var(--gold)}
-.step output{min-width:26px;text-align:center;font-weight:700;font-size:14px;color:var(--pearl)}
+.step button{width:38px;height:38px;font-size:19px;font-weight:700;color:var(--gold)}
+.step output{min-width:28px;text-align:center;font-weight:700;font-size:14px;color:var(--pearl)}
 
 /* Sección 3: Barra de Pedido Flotante */
 .bar{
   position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));
   transform:translate(-50%,190%);width:calc(100% - 32px);max-width:448px;z-index:30;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-radius:22px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 24px;border-radius:22px;
   background:rgba(14, 16, 24, 0.92);backdrop-filter:blur(26px);
   border:1px solid var(--silver-line);border-top:1px solid rgba(255,255,255,0.45);
   box-shadow:0 25px 55px rgba(0,0,0,0.95), 0 0 30px var(--gold-glow);
@@ -199,7 +205,7 @@ h1{
 }
 .bar.show{transform:translate(-50%,0)}
 .bar b{font-weight:600;font-size:13px;color:var(--silver)}
-.bar .tot{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--gold-bright)}
+.bar .tot{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--gold-bright)}
 
 /* Modal / Sheet del Pedido */
 .sheet-bg{position:fixed;inset:0;background:rgba(3, 4, 7, 0.82);backdrop-filter:blur(12px);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -208,24 +214,24 @@ h1{
   position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:100%;max-width:480px;max-height:88vh;overflow:auto;z-index:50;
   background:rgba(15, 17, 25, 0.95);backdrop-filter:blur(30px);
   border:1px solid var(--silver-line);border-top:1.5px solid var(--gold);
-  border-radius:30px 30px 0 0;padding:24px 22px calc(24px + env(safe-area-inset-bottom));
+  border-radius:30px 30px 0 0;padding:26px 22px calc(26px + env(safe-area-inset-bottom));
   box-shadow:0 -25px 65px rgba(0,0,0,0.95);transition:transform .4s cubic-bezier(.3,.8,.3,1);
 }
 .sheet.open{transform:translate(-50%,0)}
-.sheet h2{font-family:var(--serif);font-size:30px;color:var(--pearl);margin-bottom:10px}
-.line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid rgba(226,232,240,0.12)}
+.sheet h2{font-family:var(--serif);font-size:32px;color:var(--pearl);margin-bottom:10px}
+.line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0;border-top:1px solid rgba(226,232,240,0.12)}
 .field{
-  width:100%;margin-top:12px;background:rgba(5,6,9,0.75);color:var(--pearl);
-  border:1px solid var(--silver-line);border-radius:14px;padding:14px;font:inherit;font-size:15px;
+  width:100%;margin-top:14px;background:rgba(5,6,9,0.75);color:var(--pearl);
+  border:1px solid var(--silver-line);border-radius:14px;padding:15px;font:inherit;font-size:15px;
 }
 .field:focus{border-color:var(--gold);outline:none}
 .wa{
-  width:100%;padding:16px;border-radius:16px;margin-top:16px;
+  width:100%;padding:18px;border-radius:16px;margin-top:16px;
   background:linear-gradient(135deg, #25d366, #1ebe5d);color:#050507;
   font-weight:700;font-size:15px;display:flex;justify-content:center;align-items:center;gap:10px;
   box-shadow:0 0 30px rgba(37, 211, 102, 0.45);
 }
-.close{float:right;color:var(--silver);font-size:26px;cursor:pointer}
+.close{float:right;color:var(--silver);font-size:28px;cursor:pointer}
 
 /* Sección 4: Métodos de Pago */
 .pay-box{background:rgba(8,9,13,0.6);border:1px solid var(--silver-line);border-radius:16px;padding:14px;margin-top:10px;font-size:14px}
@@ -234,13 +240,13 @@ h1{
   box-shadow:0 0 15px var(--gold-glow);text-align:center;display:block;
 }
 
-/* Sección 5 a 10: Bloques informativos */
+/* Sección 5 a 10 */
 .info-block p{font-size:14px;color:var(--silver);margin-bottom:8px}
 .faq-item{margin-bottom:12px}
 .faq-item b{color:var(--gold-bright);display:block;margin-bottom:2px}
 footer{text-align:center;padding:30px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--silver-line);margin-top:40px}
 
-/* Botón flotante de Ayuda */
+/* Botón flotante de Ayuda (Sección 9) */
 .help-float{
   position:fixed;right:20px;bottom:90px;z-index:25;background:var(--gold);color:#050507;width:52px;height:52px;border-radius:50%;
   display:grid;place-items:center;font-weight:700;font-size:22px;box-shadow:0 0 25px var(--gold-glow);cursor:pointer;
@@ -249,7 +255,7 @@ footer{text-align:center;padding:30px 16px;font-size:12px;color:var(--muted);bor
 .toast{
   position:fixed;top:20px;left:50%;transform:translate(-50%,-200%);
   background:rgba(15, 17, 25, 0.95);border:1px solid var(--silver);
-  padding:12px 22px;border-radius:999px;font-size:14px;z-index:60;transition:transform .35s;
+  padding:13px 24px;border-radius:999px;font-size:14px;z-index:60;transition:transform .35s;
   color:var(--pearl);font-weight:600;box-shadow:0 0 30px var(--silver-glow);
 }
 .toast.show{transform:translate(-50%,0)}
@@ -266,32 +272,33 @@ footer{text-align:center;padding:30px 16px;font-size:12px;color:var(--muted);bor
     <div class="holo-stage">
       <div class="ring-silver"></div>
       <div class="ring-gold"></div>
-      <div class="logo" role="img" aria-label="Logotipo Honey Cream">
+      <div class="logo" role="img" aria-label="Logotipo de Tortas Honey Cream">
         <img src="logo.jpg" alt="Honey Cream Logo" onerror="this.src=''">
       </div>
     </div>
-    <h1>Honey Cream</h1>
-    <p class="tagline">Como la miel pero más rico...</p>
+    <h1 id="storeName">Honey Cream</h1>
+    <p class="tagline" id="storeTagline">Como la miel pero más rico...</p>
     <div class="status-badge" id="storeStatus">Calculando horario...</div>
   </header>
 
-  <!-- Panel de bienvenida / Accesos rápidos -->
   <section class="floating-panel">
     <h2>Bienvenidos</h2>
-    <p>Disfruta de nuestros postres artesanales con la mejor calidad y servicio a domicilio.</p>
+    <p id="storeWelcome">Las mejores tortas artesanales de San Felipe hechas con el toque único de la casa.</p>
     <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
       <a href="#menu-section" class="add" style="text-decoration:none;text-align:center;flex:1">Ver Menú</a>
       <a href="#pay-section" class="add" style="text-decoration:none;text-align:center;flex:1;background:var(--silver);color:#050507">Métodos de Pago</a>
     </div>
   </section>
 
-  <!-- 2. MENÚ EN PESTAÑAS POR CATÁLOGO -->
+  <!-- 2. MENÚ EN PESTAÑAS (Detal / Mayor) -->
   <div class="tabs-wrap" id="menu-section">
-    <div class="seg" id="seg" role="tablist" aria-label="Catálogos">
-      <!-- Se llena dinámicamente -->
+    <div class="seg" id="seg" data-mode="detal" role="tablist" aria-label="Tipo de compra">
+      <span class="thumb"></span>
+      <button role="tab" aria-selected="true" data-mode="detal">Al Detal</button>
+      <button role="tab" aria-selected="false" data-mode="mayor">Al Mayor</button>
     </div>
   </div>
-  <p class="hint" id="hint">Selecciona una categoría para ver los productos</p>
+  <p class="hint" id="hint">Precios para compras por unidad</p>
   <main class="list" id="list" aria-live="polite"></main>
 
   <!-- 4. PAGO -->
@@ -299,55 +306,68 @@ footer{text-align:center;padding:30px 16px;font-size:12px;color:var(--muted);bor
     <h2>Métodos de Pago</h2>
     <div class="pay-box">
       <b>Pago Móvil (Banco de Venezuela)</b>
-      <p>Teléfono: 0424-5284850 | C.I: 32.500.123</p>
+      <p id="payMovilInfo">Teléfono: 0424-5284850 | C.I: 32.500.123</p>
     </div>
     <div class="pay-box">
-      <b>Zelle / Binance Pay</b>
-      <p>Correo / Binance ID: pagos@honeycream.com</p>
+      <b>Bizum</b>
+      <p id="payBizumInfo">Teléfono / ID Bizum: +34 600 000 000</p>
     </div>
-    <button class="pay-btn" onclick="copyAllData()">Copiar todos los datos de pago</button>
-    <a href="https://wa.me/584245284850?text=Hola,%20adjunto%20mi%20comprobante%20de%20pago" target="_blank" class="pay-btn" style="background:#25d366;color:#050507;text-decoration:none;text-align:center">Pagar y reportar por WhatsApp</a>
+    <button class="pay-btn" onclick="copyPaymentData('one')">Copiar dato de Pago Móvil</button>
+    <button class="pay-btn" onclick="copyPaymentData('all')" style="background:var(--silver);color:#050507">Copiar todos los datos</button>
+    <a id="payWhatsappLink" href="#" target="_blank" class="pay-btn" style="background:#25d366;color:#050507;text-decoration:none;text-align:center">Reportar pago por WhatsApp</a>
   </section>
 
   <!-- 5. NOVEDADES (BLOG) -->
   <section class="floating-panel">
     <h2>Novedades</h2>
     <p><b>18 de Noviembre, 2026</b></p>
-    <p>¡Nuevos sabores de temporada disponibles este mes en helados y cremas de miel! Ven a probarlos en nuestra sede.</p>
+    <p>¡Nuevas tortas temáticas de temporada disponibles para encargos! Haz tu pedido con anticipación.</p>
   </section>
 
   <!-- 6. OPINIONES -->
   <section class="floating-panel">
     <h2>Opiniones de Clientes</h2>
-    <p>⭐️⭐️⭐️⭐️⭐️ "¡La mejor crema de miel de San Felipe sin duda alguna!" — Yulimar R.</p>
-    <a href="https://maps.google.com" target="_blank" style="color:var(--gold);font-size:13px;display:block;margin-top:10px">Dejar reseña en Google Maps</a>
+    <p style="color:var(--muted);font-style:italic">Espacio reservado para opiniones reales de nuestros clientes satisfechos.</p>
+    <a id="googleReviewLink" href="https://maps.google.com" target="_blank" style="color:var(--gold);font-size:13px;display:block;margin-top:10px">Dejar reseña en Google Maps</a>
   </section>
 
   <!-- 7. CONTACTO Y UBICACIÓN -->
   <section class="floating-panel">
     <h2>Contacto y Ubicación</h2>
-    <p>📍 Ciudadela, Zona 18, Edif. 4, Apto 3-6, San Felipe, Yaracuy.</p>
-    <p>📞 Teléfono / WhatsApp: +58 424-5284850</p>
+    <p id="storeAddress">📍 Ciudadela, Zona 18, Edif. 4, Apto 3-6, San Felipe, Yaracuy.</p>
+    <p id="storePhone">📞 Teléfono / WhatsApp: +58 424-5284850</p>
+    <p id="storeEmail">✉️ Correo: joseabdel@gmail.com</p>
     <a href="https://maps.google.com/?q=San+Felipe+Yaracuy" target="_blank" class="pay-btn" style="text-decoration:none;text-align:center">Cómo llegar (Google Maps)</a>
   </section>
 
   <!-- 8. HORARIO -->
   <section class="floating-panel">
     <h2>Horario de Atención</h2>
-    <p id="todaySchedule">Lunes a Sábado: 8:00 a.m. - 5:00 p.m.</p>
-    <p style="color:var(--muted);font-size:12px">Domingos: Cerrado</p>
+    <div id="scheduleContainer">
+      <p id="day-1">Lunes: 8:00 a.m. - 5:00 p.m.</p>
+      <p id="day-2">Martes: 8:00 a.m. - 5:00 p.m.</p>
+      <p id="day-3">Miércoles: 8:00 a.m. - 5:00 p.m.</p>
+      <p id="day-4">Jueves: 8:00 a.m. - 5:00 p.m.</p>
+      <p id="day-5">Viernes: 8:00 a.m. - 5:00 p.m.</p>
+      <p id="day-6">Sábado: 8:00 a.m. - 5:00 p.m.</p>
+      <p id="day-0" style="color:var(--danger)">Domingo: Cerrado</p>
+    </div>
   </section>
 
   <!-- 9. AYUDA / FAQ -->
   <section class="floating-panel">
     <h2>Preguntas Frecuentes</h2>
     <div class="faq-item">
-      <b>¿Tienen delivery?</b>
+      <b>¿Cuál es el horario de atención?</b>
+      <p>Atendemos de lunes a sábado de 8:00 a.m. a 5:00 p.m.</p>
+    </div>
+    <div class="faq-item">
+      <b>¿Tienen servicio de delivery?</b>
       <p>Sí, cubrimos Casco de San Felipe, Corotico, Marín y Albarico.</p>
     </div>
     <div class="faq-item">
-      <b>¿Cuáles son los métodos de pago aceptados?</b>
-      <p>Pago Móvil, Zelle, Binance y efectivo al retirar en tienda.</p>
+      <b>¿Cuáles son los métodos de pago?</b>
+      <p>Aceptamos Pago Móvil y Bizum.</p>
     </div>
   </section>
 
@@ -393,39 +413,61 @@ footer{text-align:center;padding:30px 16px;font-size:12px;color:var(--muted);bor
 <div class="toast" id="toast" role="status"></div>
 
 <script>
-/* ==========================================
-   DATOS DEL NEGOCIO Y CATÁLOGOS
-   ========================================== */
-const STORE_DATA = {
+/* ==========================================================
+   BLOQUE CONFIGURABLE: MODIFICA AQUÍ LOS DATOS FÁCILMENTE
+   ========================================================== */
+const CONFIG = {
+  nombreNegocio: "Honey Cream",
+  tagline: "Tortas artesanales hechas con amor...",
   whatsapp: "584245284850",
-  currency: "$",
-  catalogs: {
-    postres: {
-      name: "Postres y Cremas",
-      items: [
-        { id: "p1", name: "Crema de Miel Clásica", desc: "Tarro artesanal de 250g con miel pura de abeja.", price: 5.00, stock: 10 },
-        { id: "p2", name: "Helado Honey Cream", desc: "Base de crema de leche con infusión de miel orgánica.", price: 3.50, stock: 15 },
-        { id: "p3", name: "Alfajores de Miel", desc: "Pack x4 unidades rellenos con dulce de leche y miel.", price: 4.00, stock: 8 },
-        { id: "p4", name: "Barra Energética de Miel y Frutos", desc: "Snack natural saludable y nutritivo.", price: 2.50, stock: 20 }
-      ]
-    },
-    bebidas: {
-      name: "Bebidas y Infusiones",
-      items: [
-        { id: "b1", name: "Limonada con Miel y Jengibre", desc: "Refrescante bebida natural fría de 500ml.", price: 2.50, stock: 12 },
-        { id: "b2", name: "Infusión Té de Manzanilla y Miel", desc: "Té caliente relajante endulzado con miel pura.", price: 2.00, stock: 15 },
-        { id: "b3", name: "Smoothie Tropical Miel", desc: "Frutas de estación batidas con toque de miel.", price: 3.50, stock: 10 }
-      ]
-    }
-  }
+  email: "joseabdel@gmail.com",
+  direccion: "Ciudadela, Zona 18, Edif. 4, Apto 3-6, San Felipe, Yaracuy",
+  moneda: "$",
+  pagos: {
+    pagoMovil: "Banco de Venezuela | Tel: 0424-5284850 | C.I: 32.500.123",
+    bizum: "Teléfono / ID Bizum: +34 600 000 000"
+  },
+  // Catálogo exclusivo de tortas con precios Detal y Mayor
+  tortas: [
+    { id: "t1", name: "Torta de Chocolate Suprema", desc: "Bizcocho húmedo de cacao con doble relleno de fudge de chocolate.", detal: 15.00, mayor: 12.00, stock: 10 },
+    { id: "t2", name: "Torta Tres Leches Clásica", desc: "Esponjosa torta bañada en tres leches con merengue suizo tostado.", detal: 14.00, mayor: 11.00, stock: 8 },
+    { id: "t3", name: "Torta de Zanahoria y Nueces", desc: "Receta casera con especias aromáticas y crema de queso crema.", detal: 12.00, mayor: 9.50, stock: 12 },
+    { id: "t4", name: "Pie de Limón Artesanal", desc: "Base crujiente de galleta con crema cítrica y suspiro italiano.", detal: 10.00, mayor: 8.00, stock: 15 }
+  ]
 };
 
-let currentCatalog = Object.keys(STORE_DATA.catalogs)[0];
+let mode = "detal";
 let cart = {};
 
-/* ==========================================
-   MOTOR 3D THREE.JS (Panal Sólido + Enjambre + Lluvia)
-   ========================================== */
+/* Aplicar datos de configuración al HTML al cargar */
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("storeName").textContent = CONFIG.nombreNegocio;
+  document.getElementById("storeTagline").textContent = CONFIG.tagline;
+  document.getElementById("storePhone").textContent = `📞 Teléfono / WhatsApp: +${CONFIG.whatsapp}`;
+  document.getElementById("storeEmail").textContent = `✉️ Correo: ${CONFIG.email}`;
+  document.getElementById("storeAddress").textContent = `📍 ${CONFIG.direccion}`;
+  document.getElementById("payMovilInfo").textContent = CONFIG.pagos.pagoMovil;
+  document.getElementById("payBizumInfo").textContent = CONFIG.pagos.bizum;
+  document.getElementById("payWhatsappLink").href = `https://wa.me/${CONFIG.whatsapp}?text=Hola,%20adjunto%20mi%20comprobante%20de%20pago`;
+
+  // Resaltar día actual en el horario
+  const today = new Date().getDay(); // 0 es Domingo, 1 Lunes...
+  const dayEl = document.getElementById(`day-${today}`);
+  if(dayEl){
+    dayEl.style.fontWeight = "bold";
+    dayEl.style.color = "var(--gold-bright)";
+    dayEl.textContent += " (Hoy)";
+  }
+
+  // Estado abierto / cerrado
+  const hour = new Date().getHours();
+  const isOpen = hour >= 8 && hour < 17;
+  document.getElementById("storeStatus").textContent = isOpen ? "🟢 Abierto ahora (Cierra a las 5:00 p.m.)" : "🔴 Cerrado en este momento";
+});
+
+/* ==========================================================
+   MOTOR 3D THREE.JS (Panal Volumétrico + Enjambre + Lluvia)
+   ========================================================== */
 (function initHoloEngine(){
   const canvas = document.getElementById("holo-canvas");
   if(!window.THREE) return;
@@ -437,7 +479,7 @@ let cart = {};
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // Panal 3D Volumétrico
+  // Panal Volumétrico Sólido detrás del logo
   const hiveGroup = new THREE.Group();
   hiveGroup.position.set(0, 4.8, -3.8);
   scene.add(hiveGroup);
@@ -445,7 +487,6 @@ let cart = {};
   const cellGeo = new THREE.CylinderGeometry(0.7, 0.7, 1.3, 6);
   cellGeo.rotateX(Math.PI / 2);
   const solidCellMat = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.82 });
-  const innerGlowMat = new THREE.MeshBasicMaterial({ color: 0xffe5a3, transparent: true, opacity: 0.5 });
 
   for(let i = 0; i < 9; i++){
     const cellHolder = new THREE.Group();
@@ -461,7 +502,6 @@ let cart = {};
   // Materiales de abejas
   const goldBodyMat = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.82 });
   const silverStripeMat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.92 });
-  const wingMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc, transparent: true, opacity: 0.55, side: THREE.DoubleSide });
 
   function createBee(scale = 0.45){
     const group = new THREE.Group();
@@ -475,42 +515,42 @@ let cart = {};
     return group;
   }
 
-  // Enjambre libre por toda la interfaz
+  // Enjambre masivo por toda la interfaz (arriba, medio y abajo con WhatsApp)
   const freeBees = [];
-  for(let i = 0; i < 40; i++){
-    const bee = createBee(0.25 + Math.random() * 0.25);
-    bee.position.set((Math.random() - 0.5) * 30, (Math.random() - 0.5) * 85, (Math.random() - 0.5) * 15);
+  for(let i = 0; i < 50; i++){
+    const bee = createBee(0.22 + Math.random() * 0.28);
+    bee.position.set((Math.random() - 0.5) * 32, (Math.random() - 0.5) * 95, (Math.random() - 0.5) * 18);
     scene.add(bee);
-    freeBees.push({ mesh: bee, speed: 0.02 + Math.random() * 0.03, phase: Math.random() * Math.PI });
+    freeBees.push({ mesh: bee, speed: 0.022 + Math.random() * 0.035, phase: Math.random() * Math.PI });
   }
 
-  // Gotas de miel cayendo
+  // Lluvia abundante de gotas de miel
   const drops = [];
-  const dropGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.04, 6);
+  const dropGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.04, 6);
   dropGeo.rotateX(Math.PI / 2);
-  const dropMat = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.6 });
-  for(let i = 0; i < 150; i++){
+  const dropMat = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.65 });
+  for(let i = 0; i < 220; i++){
     const d = new THREE.Mesh(dropGeo, dropMat);
-    d.position.set((Math.random() - 0.5) * 40, (Math.random() - 0.5) * 90, (Math.random() - 0.5) * 20);
+    d.position.set((Math.random() - 0.5) * 44, (Math.random() - 0.5) * 105, (Math.random() - 0.5) * 24);
     scene.add(d);
-    drops.push({ mesh: d, vy: 0.025 + Math.random() * 0.035 });
+    drops.push({ mesh: d, vy: 0.028 + Math.random() * 0.04 });
   }
 
   let tick = 0;
   function animate(){
     requestAnimationFrame(animate);
     tick++;
-    hiveGroup.rotation.y += 0.004;
+    hiveGroup.rotation.y += 0.005;
 
     freeBees.forEach(b => {
       b.mesh.position.y -= b.speed;
-      b.mesh.position.x += Math.sin(tick * 0.02 + b.phase) * 0.04;
-      if(b.mesh.position.y < -40) b.mesh.position.y = 40;
+      b.mesh.position.x += Math.sin(tick * 0.02 + b.phase) * 0.05;
+      if(b.mesh.position.y < -45) b.mesh.position.y = 45;
     });
 
     drops.forEach(d => {
       d.mesh.position.y -= d.vy;
-      if(d.mesh.position.y < -45) d.mesh.position.y = 45;
+      if(d.mesh.position.y < -50) d.mesh.position.y = 50;
     });
 
     renderer.render(scene, camera);
@@ -518,38 +558,16 @@ let cart = {};
   animate();
 })();
 
-/* ==========================================
-   LÓGICA DE LA APLICACIÓN Y RENDERIZADO
-   ==========================================
-*/
+/* ==========================================================
+   LÓGICA COMERCIAL Y RENDERIZADO DEL MENÚ
+   ========================================================== */
 const $ = id => document.getElementById(id);
-const money = n => STORE_DATA.currency + Number(n).toFixed(2);
-
-function initApp(){
-  // Horario y estado
-  const now = new Date();
-  const hour = now.getHours();
-  const isStoreOpen = hour >= 8 && hour < 17;
-  $("storeStatus").textContent = isStoreOpen ? "🟢 Abierto ahora (Cierra a las 5:00 p.m.)" : "🔴 Cerrado en este momento";
-
-  // Renderizar pestañas de catálogos
-  const catalogsKeys = Object.keys(STORE_DATA.catalogs);
-  $("seg").innerHTML = catalogsKeys.map((key, idx) => `
-    <button role="tab" aria-selected="${key === currentCatalog}" onclick="switchCatalog('${key}')">${STORE_DATA.catalogs[key].name}</button>
-  `).join("");
-
-  renderProducts();
-}
-
-function switchCatalog(key){
-  currentCatalog = key;
-  initApp();
-}
+const money = n => CONFIG.moneda + Number(n).toFixed(2);
+const priceItem = item => mode === "mayor" ? item.mayor : item.detal;
 
 function renderProducts(){
-  const cat = STORE_DATA.catalogs[currentCatalog];
-  $("hint").textContent = `Mostrando productos de: ${cat.name}`;
-  $("list").innerHTML = cat.items.map(p => {
+  $("hint").textContent = mode === "mayor" ? "Precios especiales para compras al mayor" : "Precios para compras por unidad";
+  $("list").innerHTML = CONFIG.tortas.map(p => {
     const q = cart[p.id] || 0;
     const ctl = q === 0 ? `<button class="add" onclick="updateQty('${p.id}', 1)">Agregar</button>`
       : `<div class="step"><button onclick="updateQty('${p.id}', -1)">−</button><output>${q}</output><button onclick="updateQty('${p.id}', 1)">+</button></div>`;
@@ -558,7 +576,7 @@ function renderProducts(){
       <div class="body">
         <h3>${p.name}</h3>
         <p class="desc">${p.desc}</p>
-        <div class="foot"><span class="price">${money(p.price)}</span>${ctl}</div>
+        <div class="foot"><span class="price">${money(priceItem(p))}</span>${ctl}</div>
       </div>
     </article>`;
   }).join("");
@@ -572,13 +590,11 @@ function updateQty(id, delta){
 }
 
 function getAllCartItems(){
-  let items = [];
-  for(let catKey in STORE_DATA.catalogs){
-    STORE_DATA.catalogs[catKey].items.forEach(p => {
-      if(cart[p.id]) items.push({ product: p, qty: cart[p.id], sub: cart[p.id] * p.price });
-    });
-  }
-  return items;
+  return CONFIG.tortas.filter(p => cart[p.id]).map(p => ({
+    product: p,
+    qty: cart[p.id],
+    sub: cart[p.id] * priceItem(p)
+  }));
 }
 
 function updateCartBar(){
@@ -592,13 +608,23 @@ function updateCartBar(){
 
   $("lines").innerHTML = items.map(l => `
     <div class="line">
-      <div><b>${l.product.name}</b><br><small style="color:var(--silver)">${l.qty} × ${money(l.product.price)}</small></div>
+      <div><b>${l.product.name}</b><br><small style="color:var(--silver)">${l.qty} × ${money(priceItem(l.product))}</small></div>
       <div class="step"><button onclick="updateQty('${l.product.id}', -1)">−</button><output>${l.qty}</output><button onclick="updateQty('${l.product.id}', 1)">+</button></div>
     </div>
   `).join("");
 }
 
-// Modal actions
+/* Cambio entre Detal y Mayor */
+$("seg").addEventListener("click", e => {
+  const btn = e.target.closest("button");
+  if(!btn) return;
+  mode = btn.dataset.mode;
+  $("seg").dataset.mode = mode;
+  document.querySelectorAll("#seg button").forEach(x => x.setAttribute("aria-selected", x === btn));
+  renderProducts();
+});
+
+/* Modal de Pedido */
 $("bar").onclick = () => { $("sheet").classList.add("open"); $("bg").classList.add("open"); };
 $("close").onclick = $("bg").onclick = () => { $("sheet").classList.remove("open"); $("bg").classList.remove("open"); };
 
@@ -608,12 +634,13 @@ $("send").onclick = () => {
   const total = items.reduce((a, b) => a + b.sub, 0);
   const name = $("name").value.trim();
   const zone = $("zone").value;
+  const tipoCompra = mode === "mayor" ? "Al Mayor" : "Al Detal";
 
-  let text = `🍯 *Pedido Honey Cream*\n` + (name ? `Cliente: ${name}\n` : ``) + `Entrega: ${zone}\n\n`;
+  let text = `🎂 *Pedido ${CONFIG.nombreNegocio} (${tipoCompra})*\n` + (name ? `Cliente: ${name}\n` : ``) + `Entrega: ${zone}\n\n`;
   items.forEach(l => { text += `• ${l.qty} × ${l.product.name} — ${money(l.sub)}\n`; });
   text += `\n*Total: ${money(total)}*`;
 
-  window.open(`https://wa.me/${STORE_DATA.whatsapp}?text=${encodeURIComponent(text)}`, "_blank");
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`, "_blank");
   cart = {};
   $("sheet").classList.remove("open");
   $("bg").classList.remove("open");
@@ -621,10 +648,11 @@ $("send").onclick = () => {
   showToast("¡Pedido enviado con éxito!");
 };
 
-function copyAllData(){
-  const info = "Banco: Venezuela\nTeléfono: 04245284850\nC.I: 32500123\nZelle/Binance: pagos@honeycream.com";
-  navigator.clipboard.writeText(info);
-  showToast("¡Datos de pago copiado al portapapeles!");
+/* Copiar datos de pago */
+function copyPaymentData(type){
+  let textToCopy = type === 'one' ? CONFIG.pagos.pagoMovil : `Pago Móvil:\n${CONFIG.pagos.pagoMovil}\n\nBizum:\n${CONFIG.pagos.bizum}`;
+  navigator.clipboard.writeText(textToCopy);
+  showToast(type === 'one' ? "¡Datos de Pago Móvil copiados!" : "¡Todos los datos de pago copiados!");
 }
 
 function showToast(msg){
@@ -634,7 +662,7 @@ function showToast(msg){
   setTimeout(() => t.classList.remove("show"), 2500);
 }
 
-initApp();
+renderProducts();
 </script>
 </body>
 </html>

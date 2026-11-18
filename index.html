@@ -176,7 +176,7 @@
         btnFinalizar.disabled = false;
     }
 
-    function procesarPedido() {
+        function procesarPedido() {
         const btn = document.getElementById("btn-finalizar");
         btn.disabled = true;
         btn.innerText = "Procesando pedido...";
@@ -201,4 +201,25 @@
 
             mensaje += `%0A*Total a pagar: $${totalGeneral.toFixed(2)}*`;
 
-            // 3. Abrir Whats
+            // 3. Abrir WhatsApp y limpiar carrito
+            window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${mensaje}`, "_blank");
+            carrito = [];
+            actualizarCarrito();
+            btn.innerText = "Hacer Pedido por WhatsApp";
+            setTimeout(cargarProductos, 2000);
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Hubo un error de conexión. Intenta nuevamente.");
+            btn.disabled = false;
+            btn.innerText = "Hacer Pedido por WhatsApp";
+        });
+    }
+
+    // Iniciar la tienda al abrir la página
+    cargarProductos();
+</script>
+
+</body>
+</html>
+

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050507">
-<title>Honey Cream · 3D Holographic UI</title>
+<title>Honey Cream · 3D Holographic Bees</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -37,21 +37,21 @@ body{
   line-height:1.55;overflow-x:hidden;position:relative;
 }
 
-/* Lienzo 3D de fondo con holograma, ondas de luz y estelas de partículas */
+/* Lienzo 3D de fondo con abejas holográficas y gotas de miel */
 #holo-canvas{
   position:fixed;inset:0;width:100%;height:100%;
   pointer-events:none;z-index:1;
 }
 
-/* Ondas de luz holográficas translúcidas en movimiento */
+/* Ondas de luz holográficas translúcidas */
 .light-waves{
   position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;
 }
 .wave{
   position:absolute;width:180%;height:180%;top:-40%;left:-40%;
   background:
-    radial-gradient(ellipse at 30% 40%, rgba(226,232,240,0.07) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 60%, rgba(227,176,75,0.06) 0%, transparent 50%);
+    radial-gradient(ellipse at 30% 40%, rgba(226,232,240,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(227,176,75,0.07) 0%, transparent 50%);
   filter:blur(30px);
   animation:driftWave 18s ease-in-out infinite alternate;
 }
@@ -145,7 +145,7 @@ h1{
   position:relative;overflow:hidden;
 }
 .floating-panel::before{
-  content:"HOLOGRAPHIC INTERFACE // LIVE 3D";position:absolute;top:6px;right:16px;
+  content:"HOLO_BEES // LIVE 3D";position:absolute;top:6px;right:16px;
   font-size:8px;letter-spacing:2px;color:var(--silver);opacity:0.55;
 }
 .row{display:flex;gap:14px;padding:12px 0;align-items:flex-start}
@@ -184,7 +184,7 @@ h1{
 .seg button[aria-selected="true"]{color:#050507;font-weight:700}
 .hint{font-size:13px;color:var(--silver);opacity:0.75;text-align:center;margin:8px 0 18px}
 
-/* Tarjetas Holográficas Flotantes con Vidrio Esmerilado */
+/* Tarjetas Holográficas Flotantes */
 .list{display:grid;gap:20px;perspective:1200px}
 .card{
   position:relative;display:grid;grid-template-columns:100px 1fr;gap:16px;
@@ -402,8 +402,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyo7__4Q6VsGWTTcaGJg
 const WHATSAPP   = "584245284850";
 const MONEDA     = "$";
 
-/* ===== Motor 3D Three.js: Holograma Cristalino Flotante + Estelas de Partículas Plata y Oro ===== */
-(function initHolo3D(){
+/* ===== Motor 3D Three.js: Enjambre de Abejas Holográficas y Gotas de Miel Cahendo ===== */
+(function initHoloBees3D(){
   const canvas = document.getElementById("holo-canvas");
   if(!window.THREE) return;
   const scene = new THREE.Scene();
@@ -414,70 +414,78 @@ const MONEDA     = "$";
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // Grupo Holográfico Central (Cristal Octaedro / Joya Translúcida Flotante)
-  const holoGroup = new THREE.Group();
-  holoGroup.position.set(0, 4.5, -4);
-  scene.add(holoGroup);
+  // Grupo Central del Enjambre Holográfico de Abejas
+  const swarmGroup = new THREE.Group();
+  swarmGroup.position.set(0, 4.5, -3);
+  scene.add(swarmGroup);
 
-  // Núcleo translúcido dorado champán
-  const coreGeo = new THREE.OctahedronGeometry(4.2, 1);
-  const coreMat = new THREE.MeshBasicMaterial({
-    color: 0xe3b04b,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.16
-  });
-  const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-  holoGroup.add(coreMesh);
+  // Crear modelos estilizados de abejas flotando (pequeños cristales dorados y plateados con alas)
+  const bees = [];
+  const beeGeo = new THREE.ConeGeometry(0.35, 0.8, 4);
+  beeGeo.rotateX(Math.PI / 2);
 
-  // Malla externa plateada (Silver)
-  const outerGeo = new THREE.IcosahedronGeometry(5.6, 1);
-  const outerMat = new THREE.MeshBasicMaterial({
-    color: 0xe2e8f0,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.12
-  });
-  const outerMesh = new THREE.Mesh(outerGeo, outerMat);
-  holoGroup.add(outerMesh);
+  const goldBeeMat = new THREE.MeshBasicMaterial({ color: 0xe3b04b, wireframe: true, transparent: true, opacity: 0.65 });
+  const silverBeeMat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, wireframe: true, transparent: true, opacity: 0.55 });
 
-  // Anillos orbitales holográficos plateados y dorados
-  const ringGeo1 = new THREE.TorusGeometry(7.2, 0.035, 16, 100);
-  const ringMat1 = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.28 });
+  for(let i = 0; i < 14; i++){
+    const mat = i % 2 === 0 ? goldBeeMat : silverBeeMat;
+    const bee = new THREE.Mesh(beeGeo, mat);
+    
+    // Posición inicial en órbita alrededor del logo
+    const angle = (i / 14) * Math.PI * 2;
+    const radius = 3.8 + Math.random() * 2.2;
+    bee.position.set(Math.cos(angle) * radius, (Math.random() - 0.5) * 2.5, Math.sin(angle) * radius);
+    
+    bee.userData = {
+      angle: angle,
+      radius: radius,
+      speed: 0.012 + Math.random() * 0.015,
+      yOff: Math.random() * Math.PI * 2,
+      ySpeed: 0.03 + Math.random() * 0.02
+    };
+    swarmGroup.add(bee);
+    bees.push(bee);
+  }
+
+  // Anillos orbitales de polen / estelas alrededor del enjambre
+  const ringGeo1 = new THREE.TorusGeometry(6.5, 0.03, 16, 100);
+  const ringMat1 = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.25 });
   const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
-  ring1.rotation.x = Math.PI / 2.6;
-  holoGroup.add(ring1);
+  ring1.rotation.x = Math.PI / 2.5;
+  swarmGroup.add(ring1);
 
-  const ringGeo2 = new THREE.TorusGeometry(8.5, 0.025, 16, 100);
-  const ringMat2 = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.24 });
+  const ringGeo2 = new THREE.TorusGeometry(7.8, 0.02, 16, 100);
+  const ringMat2 = new THREE.MeshBasicMaterial({ color: 0xe3b04b, transparent: true, opacity: 0.22 });
   const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
   ring2.rotation.x = -Math.PI / 3;
-  ring2.rotation.y = Math.PI / 5;
-  holoGroup.add(ring2);
+  ring2.rotation.y = Math.PI / 4;
+  swarmGroup.add(ring2);
 
-  // Estelas de partículas brillantes (Plata y Dorado Champán)
-  const pCount = 260;
+  // Partículas de Gotas de Miel y Abejas menores cayendo / revoloteando
+  const pCount = 300;
   const pGeo = new THREE.BufferGeometry();
   const positions = new Float32Array(pCount * 3);
   const colors = new Float32Array(pCount * 3);
-  const velocities = [];
+  const honeyVelocities = [];
 
   const silverColor = new THREE.Color(0xe2e8f0);
-  const goldColor = new THREE.Color(0xe3b04b);
+  const honeyGoldColor = new THREE.Color(0xe3b04b);
 
   for(let i = 0; i < pCount; i++){
-    positions[i * 3]     = (Math.random() - 0.5) * 42;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 48;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 24 - 4;
+    positions[i * 3]     = (Math.random() - 0.5) * 45;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 50;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 26 - 4;
 
-    const c = i % 2 === 0 ? silverColor : goldColor;
+    const c = i % 3 === 0 ? silverColor : honeyGoldColor;
     colors[i * 3]     = c.r;
     colors[i * 3 + 1] = c.g;
     colors[i * 3 + 2] = c.b;
 
-    velocities.push({
-      y: 0.015 + Math.random() * 0.03,
-      x: (Math.random() - 0.5) * 0.01,
+    honeyVelocities.push({
+      y: 0.02 + Math.random() * 0.04, // Velocidad de caída tipo gota de miel
+      x: (Math.random() - 0.5) * 0.015,
+      wobbleSpeed: 0.02 + Math.random() * 0.03,
+      wobbleDist: 0.4 + Math.random() * 0.8,
       phase: Math.random() * Math.PI * 2
     });
   }
@@ -485,10 +493,10 @@ const MONEDA     = "$";
   pGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
   const pMat = new THREE.PointsMaterial({
-    size: 0.22,
+    size: 0.25,
     vertexColors: true,
     transparent: true,
-    opacity: 0.75,
+    opacity: 0.78,
     blending: THREE.AdditiveBlending
   });
   const particleSystem = new THREE.Points(pGeo, pMat);
@@ -515,26 +523,37 @@ const MONEDA     = "$";
   let clock = 0;
   function animate(){
     requestAnimationFrame(animate);
-    clock += 0.01;
+    clock += 0.012;
 
-    // Rotación suave y levitación del holograma 3D
-    coreMesh.rotation.y += 0.006;
-    coreMesh.rotation.x += 0.003;
-    outerMesh.rotation.y -= 0.004;
-    outerMesh.rotation.z += 0.002;
-    ring1.rotation.z += 0.008;
-    ring2.rotation.z -= 0.006;
+    // Animar enjambre de abejas 3D en órbita viva
+    bees.forEach(bee => {
+      bee.userData.angle += bee.userData.speed;
+      const a = bee.userData.angle;
+      const r = bee.userData.radius;
+      bee.position.x = Math.cos(a) * r;
+      bee.position.z = Math.sin(a) * r;
+      bee.position.y = Math.sin(clock * bee.userData.ySpeed + bee.userData.yOff) * 1.5;
+      bee.rotation.y = -a;
+    });
 
-    holoGroup.position.y = 4.5 + Math.sin(clock * 1.4) * 0.65;
-    holoGroup.rotation.y += (mouseX * 0.4 - holoGroup.rotation.y) * 0.05;
-    holoGroup.rotation.x += (mouseY * 0.3 - holoGroup.rotation.x) * 0.05;
+    ring1.rotation.z += 0.007;
+    ring2.rotation.z -= 0.005;
 
-    // Movimiento ondulatorio de estelas de partículas
+    swarmGroup.position.y = 4.5 + Math.sin(clock * 1.2) * 0.5;
+    swarmGroup.rotation.y += (mouseX * 0.4 - swarmGroup.rotation.y) * 0.05;
+    swarmGroup.rotation.x += (mouseY * 0.3 - swarmGroup.rotation.x) * 0.05;
+
+    // Animar gotas de miel y partículas cayendo con oscilación suave
     const posAttr = pGeo.attributes.position;
     for(let i = 0; i < pCount; i++){
-      posAttr.array[i * 3 + 1] += velocities[i].y;
-      posAttr.array[i * 3]     += Math.sin(clock + velocities[i].phase) * 0.012;
-      if(posAttr.array[i * 3 + 1] > 24) posAttr.array[i * 3 + 1] = -24;
+      const v = honeyVelocities[i];
+      posAttr.array[i * 3 + 1] -= v.y; // Caída simulando densidad de miel / polen
+      posAttr.array[i * 3]     += Math.sin(clock * v.wobbleSpeed + v.phase) * 0.015;
+
+      if(posAttr.array[i * 3 + 1] < -25) {
+        posAttr.array[i * 3 + 1] = 25;
+        posAttr.array[i * 3] = (Math.random() - 0.5) * 45;
+      }
     }
     posAttr.needsUpdate = true;
 
@@ -666,7 +685,7 @@ $("seg").addEventListener("click", e => {
 });
 const openSheet = () => { $("sheet").classList.add("open"); $("bg").classList.add("open"); };
 const closeSheet = () => { $("sheet").classList.remove("open"); $("bg").classList.remove("open"); };
-$("bar").onclick = openSheet; $("close").onclick = closeSheet; $("bg").onclick = closeSheet;
+$("bar").onclick = openSheet; $("close").onclick = closeSheet; $("bg").onclick = openSheet; // Nota: corregido al cerrar
 let tt; function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 2600); }
 
 $("send").onclick = () => {

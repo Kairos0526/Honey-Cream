@@ -8,7 +8,8 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fffdf7; color: #333; margin: 0; padding: 20px; }
         .container { max-width: 800px; margin: 0 auto; }
         header { text-align: center; padding: 20px 0; border-bottom: 2px solid #f3c65f; margin-bottom: 30px; }
-        h1 { color: #d98a16; margin: 0; }
+        .logo-tienda { max-width: 150px; height: auto; border-radius: 50%; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { color: #d98a16; margin: 0; display: none; /* Ocultamos el texto ya que tenemos el logo visual */ }
         .productos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .producto-card { background: #fff; border: 1px solid #fae3a8; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .producto-card h3 { margin: 10px 0; color: #5c3a00; }
@@ -34,7 +35,8 @@
 
 <div class="container">
     <header>
-        <h1>🍯 Honey Cream</h1>
+        <!-- Aquí se carga tu imagen de logotipo -->
+        <img src="logo.jpg" alt="Honey Cream Logo" class="logo-tienda">
         <p>Productos artesanales de miel</p>
     </header>
 
@@ -89,7 +91,7 @@
             }).filter(item => item !== null && item.producto !== "");
 
             renderizarCatalogo();
-            actualizarCarrito(); // Para mantener sincronizadas las cantidades visuales
+            actualizarCarrito();
         } catch (error) {
             document.getElementById("catalogo").innerHTML = "<p>Error al cargar el inventario.</p>";
             console.error(error);
@@ -203,7 +205,7 @@
         actualizarCarrito();
     }
 
-    function procesarPedido() {
+        function procesarPedido() {
         const btn = document.getElementById("btn-finalizar");
         btn.disabled = true;
         btn.innerText = "Procesando pedido...";
@@ -235,7 +237,7 @@
         .catch(err => {
             console.error(err);
             alert("Hubo un error de conexión. Intenta nuevamente.");
-            btn.disabled.get = false;
+            btn.disabled = false;
             btn.innerText = "Hacer Pedido por WhatsApp";
         });
     }
@@ -245,3 +247,5 @@
 
 </body>
 </html>
+
+                

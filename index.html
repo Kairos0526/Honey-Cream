@@ -5,51 +5,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Honey Cream - Tienda Oficial</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fffdf7; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        header { text-align: center; padding: 20px 0; border-bottom: 2px solid #f3c65f; margin-bottom: 30px; }
-        .logo-tienda { max-width: 150px; height: auto; border-radius: 50%; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { color: #d98a16; margin: 0; display: none; /* Ocultamos el texto ya que tenemos el logo visual */ }
-        .productos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .producto-card { background: #fff; border: 1px solid #fae3a8; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .producto-card h3 { margin: 10px 0; color: #5c3a00; }
-        .precio { font-size: 1.2em; font-weight: bold; color: #d98a16; margin: 5px 0; }
-        .stock { font-size: 0.9em; color: #666; margin-bottom: 15px; }
-        .agotado { color: #d9534f; font-weight: bold; }
-        
-        /* Controles de cantidad (+ / -) */
-        .contador-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
-        .btn-control { background-color: #f3a825; color: white; border: none; width: 35px; height: 35px; border-radius: 5px; cursor: pointer; font-size: 1.2em; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .btn-control:disabled { background-color: #ccc; cursor: not-allowed; }
-        .cantidad-display { font-size: 1.1em; font-weight: bold; min-width: 25px; text-align: center; }
+        :root {
+            --bg-primary: #0f0f11;
+            --bg-card: #18181b;
+            --border-color: #27272a;
+            --accent-gold: #f59e0b;
+            --accent-hover: #d97706;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --whatsapp-green: #22c55e;
+        }
 
-        .carrito { margin-top: 40px; background: #fff; padding: 20px; border-radius: 10px; border: 2px solid #f3c65f; }
-        .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; flex-wrap: wrap; gap: 10px; }
-        .item-controles { display: flex; align-items: center; gap: 8px; }
-        .btn-whatsapp { background-color: #25D366; color: white; border: none; margin-top: 20px; font-size: 1.1em; padding: 15px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
-        .btn-whatsapp:hover { background-color: #1ebe57; }
-        .btn-whatsapp:disabled { background-color: #ccc; cursor: not-allowed; }
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background-color: var(--bg-primary); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 16px; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container { max-width: 550px; margin: 0 auto; padding-bottom: 40px; }
+
+        /* Cabecera Estilizada */
+        header { 
+            text-align: center; 
+            padding: 24px 16px; 
+            background: linear-gradient(180deg, rgba(245,158,11,0.1) 0%, rgba(15,15,17,0) 100%);
+            border-bottom: 1px solid var(--border-color); 
+            margin-bottom: 20px; 
+            border-radius: 16px;
+        }
+        .logo-tienda { 
+            width: 100px; 
+            height: 100px; 
+            object-fit: cover; 
+            border-radius: 50%; 
+            border: 2px solid var(--accent-gold); 
+            margin-bottom: 12px; 
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2); 
+        }
+        h1 { color: var(--accent-gold); font-size: 1.6em; margin: 0 0 4px 0; font-weight: 700; letter-spacing: 0.5px; }
+        .subtitulo-slogan { color: var(--text-muted); font-style: italic; font-size: 0.9em; margin: 0; }
+
+        /* Tarjeta de Información */
+        .info-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color); 
+            border-radius: 14px; 
+            padding: 16px; 
+            margin-bottom: 20px; 
+            font-size: 0.88em; 
+            color: var(--text-muted); 
+            line-height: 1.6; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+        }
+        .info-card p { margin: 6px 0; display: flex; align-items: flex-start; gap: 8px; }
+
+        /* Pestañas de Precios */
+        .tabs-container { display: flex; gap: 8px; margin-bottom: 20px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .tab-btn { 
+            flex: 1; 
+            background: transparent; 
+            color: var(--text-muted); 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            text-align: center; 
+            transition: all 0.3s ease; 
+            font-size: 0.95em;
+        }
+        .tab-btn.active { background: var(--accent-gold); color: #000; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
+
+        /* Catálogo de Productos */
+        .productos-grid { display: flex; flex-direction: column; gap: 12px; }
+        .producto-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color); 
+            border-radius: 14px; 
+            padding: 16px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+            transition: border-color 0.2s;
+        }
+        .producto-card:hover { border-color: rgba(245, 158, 11, 0.4); }
+        .producto-info { flex: 1; padding-right: 12px; }
+        .producto-info h3 { margin: 0 0 6px 0; color: var(--text-main); font-size: 1.05em; font-weight: 600; }
+        .precio { font-size: 1.1em; font-weight: 700; color: var(--accent-gold); margin: 0; }
+        .stock-txt { font-size: 0.8em; color: var(--text-muted); margin-top: 4px; }
+        .agotado { color: #ef4444; font-weight: 500; }
+
+        /* Controles de cantidad (+ / -) */
+        .contador-container { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .btn-control { 
+            background-color: var(--accent-gold); 
+            color: #000; 
+            border: none; 
+            width: 32px; 
+            height: 32px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 1.1em; 
+            font-weight: bold; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: background 0.2s;
+        }
+        .btn-control:hover:not(:disabled) { background-color: var(--accent-hover); }
+        .btn-control:disabled { background-color: #27272a; color: #52525b; cursor: not-allowed; }
+        .cantidad-display { font-size: 1.05em; font-weight: 700; min-width: 20px; text-align: center; color: var(--text-main); }
+
+        /* Carrito flotante / sección inferior */
+        .carrito { 
+            margin-top: 30px; 
+            background: var(--bg-card); 
+            padding: 20px; 
+            border-radius: 16px; 
+            border: 1px solid var(--accent-gold); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+        }
+        .carrito h2 { color: var(--accent-gold); margin-top: 0; font-size: 1.2em; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 0.9em; }
+        .total-container { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; font-size: 1.2em; font-weight: bold; color: var(--text-main); }
+        .total-precio { color: var(--accent-gold); }
+        
+        .btn-whatsapp { 
+            background-color: var(--whatsapp-green); 
+            color: white; 
+            border: none; 
+            font-size: 1.1em; 
+            padding: 16px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            text-align: center; 
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            transition: opacity 0.2s;
+        }
+        .btn-whatsapp:hover { opacity: 0.9; }
+        .btn-whatsapp:disabled { background-color: #27272a; color: var(--text-muted); box-shadow: none; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <!-- Aquí se carga tu imagen de logotipo -->
         <img src="logo.jpg" alt="Honey Cream Logo" class="logo-tienda">
-        <p>Productos artesanales de miel</p>
+        <h1>HONEY CREAM</h1>
+        <p class="subtitulo-slogan">"Como la miel pero más rico..."</p>
     </header>
 
+    <div class="info-card">
+        <p>📍 <strong>Dirección:</strong> Ciudadela, Zona 18, Edif. 4, Apto 3-6</p>
+        <p>🛵 <strong>Delivery:</strong> Casco de San Felipe, Corotico, Marín y Albarico</p>
+        <p>⏰ <strong>Horario:</strong> Lunes a Sábado: 8:00 a.m. - 5:00 p.m.</p>
+    </div>
+
+    <!-- Pestañas de modo de compra -->
+    <div class="tabs-container">
+        <button class="tab-btn active" id="btn-detal" onclick="cambiarModo('detal')">Al Detal</button>
+        <button class="tab-btn" id="btn-mayor" onclick="cambiarModo('mayor')">Al Mayor</button>
+    </div>
+
     <div id="catalogo" class="productos-grid">
-        <p>Cargando productos desde el inventario...</p>
+        <p style="text-align: center; color: var(--text-muted); padding: 20px;">Cargando productos desde el inventario...</p>
     </div>
 
     <div class="carrito">
         <h2>🛒 Tu Pedido</h2>
         <div id="lista-carrito">
-            <p>El carrito está vacío.</p>
+            <p style="color: var(--text-muted); font-size: 0.9em; text-align: center; margin: 10px 0;">El carrito está vacío.</p>
         </div>
-        <h3 id="total-carrito">Total: $0.00</h3>
+        <div class="total-container">
+            <span>Total a Pagar:</span>
+            <span id="total-carrito" class="total-precio">$0.00</span>
+        </div>
         <button id="btn-finalizar" class="btn-whatsapp" onclick="procesarPedido()" disabled>Hacer Pedido por WhatsApp</button>
     </div>
 </div>
@@ -61,6 +198,7 @@
 
     let inventario = [];
     let carrito = [];
+    let modoPrecio = 'detal';
 
     function obtenerEnlaceCSV(url) {
         const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
@@ -79,12 +217,13 @@
             
             inventario = filas.map(fila => {
                 const columnas = fila.split(",");
-                if (columnas.length >= 4) {
+                if (columnas.length >= 6) {
                     return {
                         producto: columnas[0].trim(),
                         descripcion: columnas[1].trim(),
-                        precio: parseFloat(columnas[2].trim()) || 0,
-                        disponible: parseInt(columnas[3].trim()) || 0
+                        precioDetal: parseFloat(columnas[2].trim()) || 0,
+                        precioMayor: parseFloat(columnas[3].trim()) || 0,
+                        disponible: parseInt(columnas[5].trim()) || 0
                     };
                 }
                 return null;
@@ -93,9 +232,25 @@
             renderizarCatalogo();
             actualizarCarrito();
         } catch (error) {
-            document.getElementById("catalogo").innerHTML = "<p>Error al cargar el inventario.</p>";
+            document.getElementById("catalogo").innerHTML = "<p style='color: #ef4444; text-align: center;'>Error al conectar con el inventario.</p>";
             console.error(error);
         }
+    }
+
+    function cambiarModo(modo) {
+        modoPrecio = modo;
+        document.getElementById('btn-detal').classList.toggle('active', modo === 'detal');
+        document.getElementById('btn-mayor').classList.toggle('active', modo === 'mayor');
+        
+        carrito.forEach(item => {
+            const prod = inventario.find(i => i.producto === item.producto);
+            if (prod) {
+                item.precio = modo === 'detal' ? prod.precioDetal : prod.precioMayor;
+            }
+        });
+        
+        renderizarCatalogo();
+        actualizarCarrito();
     }
 
     function renderizarCatalogo() {
@@ -106,19 +261,21 @@
             const card = document.createElement("div");
             card.className = "producto-card";
             
+            const precioActual = modoPrecio === 'detal' ? item.precioDetal : item.precioMayor;
             const sinStock = item.disponible <= 0;
             const enCarrito = carrito.find(c => c.producto === item.producto);
             const cantidadEnCarrito = enCarrito ? enCarrito.cantidad : 0;
 
             card.innerHTML = `
-                <h3>${item.producto}</h3>
-                <p>${item.descripcion}</p>
-                <div class="precio">$${item.precio.toFixed(2)}</div>
-                <div class="stock ${sinStock ? 'agotado' : ''}">
-                    ${sinStock ? 'Agotado' : 'Disponibles: ' + item.disponible}
+                <div class="producto-info">
+                    <h3>${item.producto}</h3>
+                    <p class="precio">$${precioActual.toFixed(2)} <span style="font-size:0.75em; color:var(--text-muted); font-weight:normal;">c/u (${modoPrecio})</span></p>
+                    <div class="stock-txt ${sinStock ? 'agotado' : ''}">
+                        ${sinStock ? 'Agotado' : 'Disponibles: ' + item.disponible}
+                    </div>
                 </div>
                 <div class="contador-container">
-                    <button class="btn-control" onclick="cambiarCantidadCatalogo(${index}, -1)">-</button>
+                    <button class="btn-control" onclick="cambiarCantidadCatalogo(${index}, -1)" ${cantidadEnCarrito === 0 ? 'disabled' : ''}>-</button>
                     <span class="cantidad-display">${cantidadEnCarrito}</span>
                     <button class="btn-control" onclick="cambiarCantidadCatalogo(${index}, 1)" ${cantidadEnCarrito >= item.disponible || sinStock ? 'disabled' : ''}>+</button>
                 </div>
@@ -130,14 +287,16 @@
     function cambiarCantidadCatalogo(index, cambio) {
         const prod = inventario[index];
         let enCarrito = carrito.find(c => c.producto === prod.producto);
+        const precioSeleccionado = modoPrecio === 'detal' ? prod.precioDetal : prod.precioMayor;
 
         if (!enCarrito && cambio > 0) {
             carrito.push({
                 producto: prod.producto,
-                precio: prod.precio,
+                precio: precioSeleccionado,
                 cantidad: 1
             });
         } else if (enCarrito) {
+            enCarrito.precio = precioSeleccionado;
             enCarrito.cantidad += cambio;
             if (enCarrito.cantidad <= 0) {
                 carrito = carrito.filter(c => c.producto !== prod.producto);
@@ -156,8 +315,8 @@
         const btnFinalizar = document.getElementById("btn-finalizar");
 
         if (carrito.length === 0) {
-            lista.innerHTML = "<p>El carrito está vacío.</p>";
-            totalEl.innerText = "Total: $0.00";
+            lista.innerHTML = "<p style='color: var(--text-muted); font-size: 0.9em; text-align: center; margin: 10px 0;'>El carrito está vacío.</p>";
+            totalEl.innerText = "$0.00";
             btnFinalizar.disabled = true;
             renderizarCatalogo();
             return;
@@ -169,43 +328,24 @@
         carrito.forEach((item) => {
             const subtotal = item.precio * item.cantidad;
             total += subtotal;
-            const itemInventario = inventario.find(inv => inv.producto === item.producto);
-            const stockMax = itemInventario ? itemInventario.disponible : item.cantidad;
-
+            
             lista.innerHTML += `
                 <div class="item-carrito">
-                    <span><strong>${item.producto}</strong> ($${subtotal.toFixed(2)})</span>
-                    <div class="item-controles">
-                        <button class="btn-control" style="width:30px; height:30px; font-size:1em;" onclick="modificarDesdeCarrito('${item.producto}', -1)">-</button>
-                        <span class="cantidad-display">${item.cantidad}</span>
-                        <button class="btn-control" style="width:30px; height:30px; font-size:1em;" onclick="modificarDesdeCarrito('${item.producto}', 1)" ${item.cantidad >= stockMax ? 'disabled' : ''}>+</button>
+                    <div>
+                        <strong>${item.cantidad}x</strong> ${item.producto}
+                        <div style="font-size: 0.8em; color: var(--text-muted);">$${item.precio.toFixed(2)} c/u</div>
                     </div>
+                    <div style="font-weight: bold; color: var(--accent-gold);">$${subtotal.toFixed(2)}</div>
                 </div>
             `;
         });
 
-        totalEl.innerText = `Total: $${total.toFixed(2)}`;
+        totalEl.innerText = `$${total.toFixed(2)}`;
         btnFinalizar.disabled = false;
         renderizarCatalogo();
     }
 
-    function modificarDesdeCarrito(nombreProducto, cambio) {
-        let enCarrito = carrito.find(c => c.producto === nombreProducto);
-        const prod = inventario.find(inv => inv.producto === nombreProducto);
-
-        if (enCarrito) {
-            enCarrito.cantidad += cambio;
-            if (enCarrito.cantidad <= 0) {
-                carrito = carrito.filter(c => c.producto !== nombreProducto);
-            } else if (prod && enCarrito.cantidad > prod.disponible) {
-                enCarrito.cantidad = prod.disponible;
-                alert("Has alcanzado el límite de stock disponible.");
-            }
-        }
-        actualizarCarrito();
-    }
-
-        function procesarPedido() {
+    function procesarPedido() {
         const btn = document.getElementById("btn-finalizar");
         btn.disabled = true;
         btn.innerText = "Procesando pedido...";
@@ -217,13 +357,13 @@
             body: JSON.stringify({ items: carrito })
         })
         .then(() => {
-            let mensaje = "¡Hola! Quiero hacer el siguiente pedido en *Honey Cream*:%0A%0A";
+            let mensaje = `¡Hola! Quiero hacer el siguiente pedido en *Honey Cream* (${modoPrecio.toUpperCase()})%3A%0A%0A`;
             let totalGeneral = 0;
 
             carrito.forEach(item => {
                 let subtotal = item.precio * item.cantidad;
                 totalGeneral += subtotal;
-                mensaje += `• ${item.cantidad}x ${item.producto} - $${subtotal.toFixed(2)}%0A`;
+                mensaje += `%E2%80%A2 ${item.cantidad}x ${item.producto} - $${subtotal.toFixed(2)}%0A`;
             });
 
             mensaje += `%0A*Total a pagar: $${totalGeneral.toFixed(2)}*`;
@@ -247,5 +387,3 @@
 
 </body>
 </html>
-
-                

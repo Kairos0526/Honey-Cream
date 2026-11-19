@@ -33,8 +33,9 @@ a{color:var(--gl)}
 .chip{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(227,176,75,.4);background:rgba(20,22,30,.8);color:var(--gl);font:600 .9rem Figtree,sans-serif;cursor:pointer}
 .chip[aria-pressed=true]{background:var(--g);color:#1b1203}
 .hero{text-align:center;margin-top:6px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49'%3E%3Cpath d='M14 2l12 7v14l-12 7-12-7V9zM14 30v8l12 7M14 38l-12 7' fill='none' stroke='%23e3b04b' stroke-opacity='.12'/%3E%3C/svg%3E")}
-.logo{width:108px;height:108px;margin:0 auto 14px;border-radius:50%;border:3px solid var(--g);background:radial-gradient(circle,#2b1e08,#0a0805);display:grid;place-items:center;box-shadow:0 0 32px rgba(227,176,75,.35)}
+.logo{position:relative;width:108px;height:108px;margin:0 auto 14px;border-radius:50%;border:3px solid var(--g);background:radial-gradient(circle,#2b1e08,#0a0805);display:grid;place-items:center;overflow:hidden;box-shadow:0 0 32px rgba(227,176,75,.35)}
 .logo svg{width:68px;height:68px}
+.logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 h1{font-size:clamp(2.5rem,13vw,3.6rem);font-weight:800;color:var(--gl)}
 .tag{color:var(--g);font-weight:600;margin:4px 0 14px}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(5,5,7,.6);border:1px solid rgba(227,176,75,.3);font-weight:600;font-size:.92rem;margin-bottom:16px}
@@ -103,7 +104,7 @@ details p{color:var(--mu);padding-bottom:8px}
 
 <section id="inicio" style="padding-top:12px">
 <div class="card hero">
-<div class="logo" role="img" aria-label="Logo de Honey Cream"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#bee"/></svg></div>
+<div class="logo" role="img" aria-label="Logo de Honey Cream"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#bee"/></svg><img id="logoImg" alt="Logo de Honey Cream" onerror="this.remove()"></div>
 <h1>Honey Cream</h1>
 <p class="tag">Como la miel pero más rico...</p>
 <p id="st" class="pill" role="status"></p><br>
@@ -164,31 +165,8 @@ details p{color:var(--mu);padding-bottom:8px}
 
 <script>
 /* ============ EDITA AQUÍ ============ */
-const APPS_SCRIPT_URL='PEGA_AQUI_LA_URL_DE_TU_APPS_SCRIPT'; // URL /exec de tu aplicación web en Google Apps Script
-/* Hoja de Google Sheets con 4 columnas: nombre | precio detal | precio mayor | stock (fila 1 = encabezados).
-   Código base de Apps Script (doGet para leer tortas y doPost para descontar stock al enviar pedido):
-   function doGet(){
-     const rows=SpreadsheetApp.getActiveSpreadsheet().getSheets()[0].getDataRange().getValues().slice(1);
-     const data=rows.filter(r=>r[0]).map(r=>({nombre:r[0],detal:r[1],mayor:r[2],stock:Number(r[3]||0)}));
-     return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
-   }
-   function doPost(e){
-     const lock=LockService.getScriptLock();lock.waitLock(5000);
-     try{
-       const items=JSON.parse(e.postData.contents).items||[];
-       const sheet=SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
-       const values=sheet.getDataRange().getValues();
-       items.forEach(it=>{
-         for(let i=1;i<values.length;i++){
-           if(String(values[i][0]).trim()===String(it.nombre).trim()){
-             const actual=Number(values[i][3]||0);
-             sheet.getRange(i+1,4).setValue(Math.max(0,actual-Number(it.cantidad||0)));
-           }
-         }
-       });
-       return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
-     }finally{lock.releaseLock()}
-   } */
+const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyo7__4Q6VsGWTTcaGJgPWw6w7Evt083ny3uxGUHnHqc2I869M2bPYHGQC8bqT5L2ojcQ/exec';
+const LOGO_SRC='logo.jpg'; // Sube logo.jpg junto a index.html; si no existe, se muestra el ícono de abeja
 const NEG={
   nombre:'Honey Cream',
   tel:'+58 424-5284850', wa:'584245284850',
@@ -203,14 +181,7 @@ const PAGO=[
   ['Pago Móvil',[['Banco','Banco de Venezuela (0102)'],['Teléfono','0412-5770565'],['Cédula','20.890.298']]]
 ];
 const RESENAS=[];
-const RESPALDO=[ // [nombre, precio detal, precio mayor, stock]
-  ['Torta de vainilla y miel',18,14,10],
-  ['Torta de chocolate',20,16,10],
-  ['Torta tres leches',22,17,10],
-  ['Torta de zanahoria',20,16,10],
-  ['Torta de limón',19,15,10],
-  ['Torta red velvet',24,19,10]
-];
+const RESPALDO=[];
 /* ============ FIN DE LO EDITABLE ============ */
 
 const $=i=>document.getElementById(i),DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
@@ -221,6 +192,7 @@ const waURL=t=>'https://wa.me/'+NEG.wa+(t?'?text='+encodeURIComponent(t):'');
 const mapQ=encodeURIComponent(NEG.dir);
 let P=[],mode='a',cart={},lf,tt;
 const price=p=>mode=='a'?p.a:(p.m||p.a),ml=()=>mode=='a'?'Al Detal':'Al Mayor';
+if(LOGO_SRC)$('logoImg').src=LOGO_SRC;else $('logoImg').remove();
 
 /* ---- Catálogo (4 columnas: nombre | precio detal | precio mayor | stock) ---- */
 function norm(r){
@@ -240,7 +212,7 @@ async function cargar(){
   }
   if(!ok){try{P=JSON.parse(localStorage.getItem('hc')||'[]')}catch(e){P=[]}}
   if(!P.length)P=RESPALDO.map(norm);
-  $('ms').textContent=ok?'':'Mostrando precios guardados: pueden no estar actualizados.';
+  $('ms').textContent=P.length?(ok?'':'Mostrando precios guardados: pueden no estar actualizados.'):'Cargando catálogo desde Google Sheets...';
   pintar();barra();
 }
 function pintar(){

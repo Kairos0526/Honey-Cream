@@ -165,8 +165,8 @@ details p{color:var(--mu);padding-bottom:8px}
 
 <script>
 /* ============ EDITA AQUÍ ============ */
-const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyo7__4Q6VsGWTTcaGJgPWw6w7Evt083ny3uxGUHnHqc2I869M2bPYHGQC8bqT5L2ojcQ/exec';
-const SHEET_ID='11gpTcGFAPMcElmUwwHpCeKTWIDSCBjZZXbFTtOLlrzc';
+const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxCNsjIRD6nsdleMEfdL7OELN0mUpdLJwOVbI_ICsMwbhmlybjCnO9VfsFbCEmzfg6NCg/exec';
+const SHEET_ID='11gpTcGFAPMcElmUwwHpCeKTWIDSCBjZZxbFTtOLIrzc';
 const LOGO_SRC='logo.jpg';
 const NEG={
   nombre:'Honey Cream',
@@ -183,7 +183,7 @@ const PAGO=[
 ];
 const RESENAS=[];
 const RESPALDO=[
-  ['Torta de tres leches',4,2.5,6],
+  ['Torta de tres leches',4,2.5,10],
   ['Triple Chocolate',4,2.5,5],
   ['Pastel Imposible',4,2.5,6],
   ['Choco Quesillo',4,2.5,5],
@@ -267,10 +267,11 @@ async function descontarInventario(items){
   try{
     await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({items})});
     items.forEach(it=>{
-      const prod=P.find(x=>x.n===it.producto);
-      if(prod&&prod.s>0)prod.s=Math.max(0,prod.s-it.cantidad);
+      const prod=P.find(x=>x.n.toLowerCase()===String(it.producto||'').toLowerCase());
+      if(prod)prod.s=Math.max(0,prod.s-it.cantidad);
     });
-    pintar();
+    try{localStorage.setItem('hc',JSON.stringify(P))}catch(e){}
+    pintar();barra();
   }catch(e){}
 }
 
@@ -283,7 +284,11 @@ function pedido(){
   const l=P.filter(p=>cart[p.n]),t=barra()[1];
   const msg='Hola '+NEG.nombre+', quiero hacer este pedido ('+ml()+'):\n'+l.map(p=>'• '+cart[p.n]+' x '+p.n+' — '+money(cart[p.n]*price(p))).join('\n')+'\nTotal: '+money(t)+'\n\nNombre:\nDirección de entrega (o retiro):';
   sheet('Tu pedido · '+ml(),'<ul class="rows">'+l.map(p=>'<li><span>'+cart[p.n]+' × '+esc(p.n)+'</span><b>'+money(cart[p.n]*price(p))+'</b></li>').join('')+'<li><b>Total</b><b>'+money(t)+'</b></li></ul><a class="btn p w" id="sendWa" target="_blank" rel="noopener" href="'+waURL(msg)+'">Enviar pedido por WhatsApp</a><button class="btn w" id="clr">Vaciar pedido</button>');
-  $('sendWa').onclick=()=>descontarInventario(l.map(p=>({producto:p.n,cantidad:cart[p.n]})));
+  $('sendWa').onclick=()=>{
+    const items=l.map(p=>({producto:p.n,cantidad:cart[p.n]}));
+    cart={};
+    descontarInventario(items);
+  };
   $('clr').onclick=()=>{cart={};pintar();barra();cerrar()};
 }
 function ayuda(){

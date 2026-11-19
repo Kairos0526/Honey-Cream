@@ -201,7 +201,7 @@ const money=n=>NEG.moneda+n.toFixed(2),num=v=>parseFloat(String(v).replace(/[^\d
 const f12=h=>(h%12||12)+':00 '+(h<12?'a.m.':'p.m.');
 const waURL=t=>'https://wa.me/'+NEG.wa+(t?'?text='+encodeURIComponent(t):'');
 const mapQ=encodeURIComponent(NEG.dir);
-let P=[],mode='a',cart={},lf,tt;
+let P=[],mode='a',cart={},lf,tt,firmaInventario='',consultando=false;
 const price=p=>mode=='a'?p.a:(p.m||p.a),ml=()=>mode=='a'?'Al Detal':'Al Mayor';
 if(LOGO_SRC)$('logoImg').src=LOGO_SRC;else $('logoImg').remove();
 
@@ -220,27 +220,51 @@ async function leerSheetDirecto(){
     return norm([c[0]?c[0].v:'',c[1]?c[1].v:0,c[2]?c[2].v:0,c[3]?c[3].v:0]);
   }).filter(p=>p.n&&p.n.toLowerCase()!=='producto'&&(p.a||p.m));
 }
-async function cargar(){
-  let ok=false;
-  if(/^https?:\/\//.test(APPS_SCRIPT_URL)){
-    try{
-      const c=new AbortController(),t=setTimeout(()=>c.abort(),7000);
-      const j=await(await fetch(APPS_SCRIPT_URL,{signal:c.signal})).json();clearTimeout(t);
-      const x=(Array.isArray(j)?j:j.tortas||j.data||j.items||[]).map(norm).filter(p=>p.n&&(p.a||p.m));
-      if(x.length){P=x;ok=true}
-    }catch(e){}
+async function cargar(esActualizacionFondo=false){
+  if(consultando)return;
+  consultando=true;
+  let ok=false,nuevos=null;
+
+  try{
+    if(/^https?:\/\//.test(APPS_SCRIPT_URL)){
+      try{
+        const c=new AbortController(),t=setTimeout(()=>c.abort(),4500);
+        const res=await fetch(APPS_SCRIPT_URL+'?t='+Date.now(),{signal:c.signal,cache:'no-store'});
+        const j=await res.json();
+        clearTimeout(t);
+        const x=(Array.isArray(j)?j:j.tortas||j.data||j.items||[]).map(norm).filter(p=>p.n&&(p.a||p.m));
+        if(x.length){nuevos=x;ok=true}
+      }catch(e){}
+    }
+
+    if(!ok&&SHEET_ID){
+      try{
+        const x=await leerSheetDirecto();
+        if(x.length){nuevos=x;ok=true}
+      }catch(e){}
+    }
+
+    if(ok&&nuevos){
+      const nuevaFirma=JSON.stringify(nuevos.map(p=>[p.n,p.a,p.m,p.s]));
+      if(nuevaFirma!==firmaInventario){
+        firmaInventario=nuevaFirma;
+        P=nuevos;
+        try{localStorage.setItem('hc',JSON.stringify(P))}catch(e){}
+        pintar();
+        barra();
+      }
+      $('ms').textContent='';
+    }else if(!esActualizacionFondo){
+      try{P=JSON.parse(localStorage.getItem('hc')||'[]')}catch(e){P=[]}
+      if(!P.length)P=RESPALDO.map(norm);
+      firmaInventario=JSON.stringify(P.map(p=>[p.n,p.a,p.m,p.s]));
+      $('ms').textContent='Mostrando precios guardados: pueden no estar actualizados.';
+      pintar();
+      barra();
+    }
+  }finally{
+    consultando=false;
   }
-  if(!ok&&SHEET_ID){
-    try{
-      const x=await leerSheetDirecto();
-      if(x.length){P=x;ok=true}
-    }catch(e){}
-  }
-  if(ok){try{localStorage.setItem('hc',JSON.stringify(P))}catch(e){}}
-  else{try{P=JSON.parse(localStorage.getItem('hc')||'[]')}catch(e){P=[]}}
-  if(!P.length)P=RESPALDO.map(norm);
-  $('ms').textContent=ok?'':'Mostrando precios guardados: pueden no estar actualizados.';
-  pintar();barra();
 }
 function pintar(){
   $('list').innerHTML=P.map((p,i)=>'<li class="card it"><div><h3>'+esc(p.n)+'</h3><p>Disponibles: '+p.s+'</p><b>'+money(price(p))+'</b></div><div class="q"><button data-i="'+i+'" data-d="-1" aria-label="Quitar una '+esc(p.n)+'">−</button><output id="q'+i+'">'+(cart[p.n]||0)+'</output><button data-i="'+i+'" data-d="1" aria-label="Agregar una '+esc(p.n)+'">+</button></div></li>').join('');
@@ -270,6 +294,7 @@ async function descontarInventario(items){
       const prod=P.find(x=>x.n.toLowerCase()===String(it.producto||'').toLowerCase());
       if(prod)prod.s=Math.max(0,prod.s-it.cantidad);
     });
+    firmaInventario=JSON.stringify(P.map(p=>[p.n,p.a,p.m,p.s]));
     try{localStorage.setItem('hc',JSON.stringify(P))}catch(e){}
     pintar();barra();
   }catch(e){}
@@ -334,6 +359,7 @@ $('map').src='https://www.google.com/maps?q='+mapQ+'&output=embed';
 document.querySelectorAll('[data-rv]').forEach(a=>{a.href=RV;a.target='_blank';a.rel='noopener'});
 document.querySelectorAll('[data-wa]').forEach(a=>{a.href=waURL('Hola '+NEG.nombre+', quisiera hacer un pedido');a.target='_blank';a.rel='noopener'});
 estado();setInterval(estado,6e4);pagos();cargar();
+setInterval(()=>{if(!document.hidden)cargar(true)},5000);
 
 /* ---- Fondo WebGL: panales, gotas de miel y abejas ---- */
 (()=>{

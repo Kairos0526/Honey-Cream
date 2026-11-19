@@ -166,7 +166,8 @@ details p{color:var(--mu);padding-bottom:8px}
 <script>
 /* ============ EDITA AQUÍ ============ */
 const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyo7__4Q6VsGWTTcaGJgPWw6w7Evt083ny3uxGUHnHqc2I869M2bPYHGQC8bqT5L2ojcQ/exec';
-const LOGO_SRC='logo.jpg'; // Sube logo.jpg junto a index.html; si no existe, se muestra el ícono de abeja
+const SHEET_ID='11gpTcGFAPMcElmUwwHpCeKTWIDSCBjZZXbFTtOLlrzc';
+const LOGO_SRC='logo.jpg';
 const NEG={
   nombre:'Honey Cream',
   tel:'+58 424-5284850', wa:'584245284850',
@@ -181,7 +182,17 @@ const PAGO=[
   ['Pago Móvil',[['Banco','Banco de Venezuela (0102)'],['Teléfono','0412-5770565'],['Cédula','20.890.298']]]
 ];
 const RESENAS=[];
-const RESPALDO=[];
+const RESPALDO=[
+  ['Torta de tres leches',4,2.5,6],
+  ['Triple Chocolate',4,2.5,5],
+  ['Pastel Imposible',4,2.5,6],
+  ['Choco Quesillo',4,2.5,5],
+  ['Torta Samba',4,2.5,4],
+  ['Torta de quesillo',4,2.5,5],
+  ['Torta de Zanahoria',4,2.5,5],
+  ['Chocomantecado',4,2.5,5],
+  ['Torta fría',4,2.5,7]
+];
 /* ============ FIN DE LO EDITABLE ============ */
 
 const $=i=>document.getElementById(i),DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
@@ -194,25 +205,41 @@ let P=[],mode='a',cart={},lf,tt;
 const price=p=>mode=='a'?p.a:(p.m||p.a),ml=()=>mode=='a'?'Al Detal':'Al Mayor';
 if(LOGO_SRC)$('logoImg').src=LOGO_SRC;else $('logoImg').remove();
 
-/* ---- Catálogo (4 columnas: nombre | precio detal | precio mayor | stock) ---- */
+/* ---- Catálogo (columnas: Producto | Precio_detal | Precio_mayor | Disponible) ---- */
 function norm(r){
-  if(Array.isArray(r))return{n:r[0],a:num(r[1]),m:num(r[2]),s:Math.max(0,parseInt(r[3],10)||0)};
+  if(Array.isArray(r))return{n:String(r[0]||'').trim(),a:num(r[1]),m:num(r[2]),s:Math.max(0,parseInt(r[3],10)||0)};
   const g=re=>{const k=Object.keys(r).find(x=>re.test(x.toLowerCase()));return k?r[k]:''};
-  return{n:g(/nom|tit/),a:num(g(/detal/)),m:num(g(/mayor/)),s:Math.max(0,parseInt(g(/stock|disp|cant/),10)||0)};
+  return{n:String(g(/prod|nom|tit/)||'').trim(),a:num(g(/detal/)),m:num(g(/mayor/)),s:Math.max(0,parseInt(g(/disp|stock|cant/),10)||0)};
+}
+async function leerSheetDirecto(){
+  const url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json';
+  const txt=await(await fetch(url)).text();
+  const json=JSON.parse(txt.substring(txt.indexOf('{'),txt.lastIndexOf('}')+1));
+  return(json.table.rows||[]).map(row=>{
+    const c=row.c||[];
+    return norm([c[0]?c[0].v:'',c[1]?c[1].v:0,c[2]?c[2].v:0,c[3]?c[3].v:0]);
+  }).filter(p=>p.n&&p.n.toLowerCase()!=='producto'&&(p.a||p.m));
 }
 async function cargar(){
   let ok=false;
   if(/^https?:\/\//.test(APPS_SCRIPT_URL)){
     try{
-      const c=new AbortController(),t=setTimeout(()=>c.abort(),9000);
+      const c=new AbortController(),t=setTimeout(()=>c.abort(),7000);
       const j=await(await fetch(APPS_SCRIPT_URL,{signal:c.signal})).json();clearTimeout(t);
       const x=(Array.isArray(j)?j:j.tortas||j.data||j.items||[]).map(norm).filter(p=>p.n&&(p.a||p.m));
-      if(x.length){P=x;ok=true;try{localStorage.setItem('hc',JSON.stringify(x))}catch(e){}}
+      if(x.length){P=x;ok=true}
     }catch(e){}
   }
-  if(!ok){try{P=JSON.parse(localStorage.getItem('hc')||'[]')}catch(e){P=[]}}
+  if(!ok&&SHEET_ID){
+    try{
+      const x=await leerSheetDirecto();
+      if(x.length){P=x;ok=true}
+    }catch(e){}
+  }
+  if(ok){try{localStorage.setItem('hc',JSON.stringify(P))}catch(e){}}
+  else{try{P=JSON.parse(localStorage.getItem('hc')||'[]')}catch(e){P=[]}}
   if(!P.length)P=RESPALDO.map(norm);
-  $('ms').textContent=P.length?(ok?'':'Mostrando precios guardados: pueden no estar actualizados.'):'Cargando catálogo desde Google Sheets...';
+  $('ms').textContent=ok?'':'Mostrando precios guardados: pueden no estar actualizados.';
   pintar();barra();
 }
 function pintar(){
@@ -240,7 +267,7 @@ async function descontarInventario(items){
   try{
     await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({items})});
     items.forEach(it=>{
-      const prod=P.find(x=>x.n===it.nombre);
+      const prod=P.find(x=>x.n===it.producto);
       if(prod&&prod.s>0)prod.s=Math.max(0,prod.s-it.cantidad);
     });
     pintar();
@@ -256,7 +283,7 @@ function pedido(){
   const l=P.filter(p=>cart[p.n]),t=barra()[1];
   const msg='Hola '+NEG.nombre+', quiero hacer este pedido ('+ml()+'):\n'+l.map(p=>'• '+cart[p.n]+' x '+p.n+' — '+money(cart[p.n]*price(p))).join('\n')+'\nTotal: '+money(t)+'\n\nNombre:\nDirección de entrega (o retiro):';
   sheet('Tu pedido · '+ml(),'<ul class="rows">'+l.map(p=>'<li><span>'+cart[p.n]+' × '+esc(p.n)+'</span><b>'+money(cart[p.n]*price(p))+'</b></li>').join('')+'<li><b>Total</b><b>'+money(t)+'</b></li></ul><a class="btn p w" id="sendWa" target="_blank" rel="noopener" href="'+waURL(msg)+'">Enviar pedido por WhatsApp</a><button class="btn w" id="clr">Vaciar pedido</button>');
-  $('sendWa').onclick=()=>descontarInventario(l.map(p=>({nombre:p.n,cantidad:cart[p.n]})));
+  $('sendWa').onclick=()=>descontarInventario(l.map(p=>({producto:p.n,cantidad:cart[p.n]})));
   $('clr').onclick=()=>{cart={};pintar();barra();cerrar()};
 }
 function ayuda(){
